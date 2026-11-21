@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#059669">
+<title>M7 ERP</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="M7 ERP">
+<style>
+:root{--bg:#f3f5f7;--card:#fff;--tx:#1f2937;--mu:#6b7280;--bd:#e5e7eb;--g:#059669;--gl:#d1fae5;--r:#e5484d;--rl:#fee2e2;--a:#d97706;--al:#fef3c7;--b:#2563eb;--bl:#dbeafe;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1417;--card:#192024;--tx:#e8edf0;--mu:#97a3ab;--bd:#2a343a;--gl:#0b3b2e;--rl:#42191b;--al:#43300d;--bl:#13284f;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1417;--card:#192024;--tx:#e8edf0;--mu:#97a3ab;--bd:#2a343a;--gl:#0b3b2e;--rl:#42191b;--al:#43300d;--bl:#13284f;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:84px}
+header{background:var(--g);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+header b{font-size:20px;letter-spacing:.2px}header small{opacity:.88;display:block;font-size:11px}.brand{display:flex;flex-direction:column;gap:1px}.brand b{line-height:1.15}
+main{max-width:960px;margin:0 auto;padding:14px}
+.tab{display:none}.tab.on{display:block}
+.grid{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+@media(min-width:720px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:10px}
+.grid .card{margin:0}
+.k{font-size:12px;color:var(--mu)}.v{font-size:21px;font-weight:700;margin-top:2px}
+.g{color:var(--g)}.r{color:var(--r)}.a{color:var(--a)}.b{color:var(--b)}
+.wide{grid-column:1/-1}
+.row2{display:flex;gap:10px;margin:12px 0}
+button,.btn{font:inherit;border:0;border-radius:12px;padding:12px 14px;font-weight:600;cursor:pointer;color:#fff;background:var(--g)}
+button.red{background:var(--r)}button.amb{background:var(--a)}button.gh{background:var(--bd);color:var(--tx)}button.sm{padding:7px 10px;font-size:13px;border-radius:9px}
+.row2 button{flex:1}
+label{display:block;font-size:12px;color:var(--mu);margin:10px 0 3px}
+input,select{width:100%;font:inherit;padding:11px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx)}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+h2{font-size:17px;margin:4px 0 10px}h3{font-size:14px;margin:14px 0 6px;color:var(--mu)}
+.it{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd)}
+.it:last-child{border:0}.it small{color:var(--mu);display:block}.it .amt{font-weight:700;white-space:nowrap;text-align:right}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;font-weight:600}
+.t-a{background:var(--al);color:var(--a)}.t-r{background:var(--rl);color:var(--r)}.t-b{background:var(--bl);color:var(--b)}.t-g{background:var(--gl);color:var(--g)}
+.chips{display:flex;gap:6px;overflow-x:auto;margin:8px 0}
+.chip{flex:none;background:var(--card);border:1px solid var(--bd);color:var(--tx);padding:8px 13px;border-radius:99px;font-weight:500}
+.chip.on{background:var(--g);color:#fff;border-color:var(--g)}
+.acts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.alert{background:var(--al);border-left:4px solid var(--a);padding:10px;border-radius:10px;margin-bottom:6px;font-size:14px}
+.alert.late{background:var(--rl);border-color:var(--r)}
+.bar{height:9px;border-radius:9px;background:var(--bd);overflow:hidden;margin-top:4px}.bar i{display:block;height:100%;background:var(--r)}
+.empty{text-align:center;color:var(--mu);padding:18px}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--bd);display:flex;justify-content:flex-start;overflow-x:auto;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
+nav button{flex:1 0 72px;max-width:140px;background:none;color:var(--mu);font-size:11px;padding:6px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;font-weight:600}
+nav button span{font-size:20px}nav button.on{color:var(--g)}
+dialog{border:1px solid var(--bd);border-radius:16px;background:var(--card);color:var(--tx);width:min(92vw,380px)}
+dialog::backdrop{background:#0008}
+#stock-move-dlg,#stock-history-dlg,#purchase-receive-dlg{width:min(94vw,560px);max-height:88vh;overflow:auto}
+.stock-row{padding:10px 0;border-bottom:1px solid var(--bd)}.stock-row:last-child{border:0}
+#tenant-loading{display:none;position:fixed;inset:0;z-index:100;background:var(--bg);align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:24px;text-align:center}body.tenant-switching #tenant-loading{display:flex}body.tenant-switching main,body.tenant-switching nav,body.tenant-switching footer{visibility:hidden}
+#lock{position:fixed;inset:0;background:var(--bg);z-index:99;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:24px;text-align:center}#lock input{max-width:220px;text-align:center;font-size:22px;letter-spacing:6px}
+footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:99px;font-size:14px;display:none;z-index:9}
+@media print{body.pr main,body.pr footer{display:none!important}dialog{border:0!important}header,nav,.noprint,.tab:not(#t-rel),footer{display:none!important}.tab#t-rel{display:block!important}body{background:#fff;padding:0}.card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header><div class="brand"><b>M7 ERP</b><small>Gestão integrada · M7 TECH</small></div><button class="sm gh" id="theme" aria-label="Alternar tema">🌓</button></header>
+<div id="tenant-loading"><div style="font-size:38px">🔐</div><h2>Validando empresa</h2><p class="k" id="tenant-loading-msg">Aguarde enquanto carregamos os dados da conta correta…</p><button id="tenant-logout" type="button" class="gh">Sair da conta</button></div>
+<main>
+<section class="tab on" id="t-res">
+ <div class="grid">
+  <div class="card wide"><div class="k">Saldo realizado no mês</div><div class="v" id="d-saldo">–</div></div>
+  <div class="card"><div class="k">Entradas hoje</div><div class="v g" id="d-in">–</div></div>
+  <div class="card"><div class="k">Gastos hoje</div><div class="v r" id="d-out">–</div></div>
+  <div class="card"><div class="k">Fiados / a receber</div><div class="v a" id="d-pend">–</div></div>
+  <div class="card wide"><div class="k">Previsão de recebimentos futuros</div><div class="v b" id="d-prev">–</div></div>
+ </div>
+ <div class="row2"><button data-go="ent">+ Nova Entrada/Venda</button><button class="red" data-go="gas">– Novo Gasto</button></div>
+ <h2>Vencimentos</h2><div id="d-alert"></div>
+ <h2>Últimas movimentações</h2><div class="card" id="d-last"></div>
+</section>
+
+<section class="tab" id="t-ent">
+ <div class="card"><h2>Nova entrada / venda</h2>
+  <div class="f2"><div><label>Produto (opcional)</label><select id="e-prod"><option value="">—</option></select></div><div><label>Qtd.</label><input id="e-qty" type="number" min="1" value="1" inputmode="numeric"></div></div>
+  <div class="row2" style="margin:8px 0"><button class="gh" id="e-add" type="button">+ Adicionar item à venda</button></div><div id="e-cart"></div><label>Desconto (R$, opcional)</label><input id="e-disc" type="number" min="0" step="0.01" inputmode="decimal">
+  <label>Descrição</label><input id="e-desc" placeholder="Ex.: Venda de bolo">
+  <div class="f2"><div><label>Valor (R$)</label><input id="e-val" type="number" step="0.01" inputmode="decimal"></div><div><label>Data</label><input id="e-date" type="date"></div></div>
+  <div class="f2"><div><label>Cliente (opcional)</label><input id="e-cli" list="cl-dl"><datalist id="cl-dl"></datalist></div><div><label>WhatsApp (opcional)</label><input id="e-tel" inputmode="tel" placeholder="(11) 99999-9999"></div></div>
+  <label>Forma de pagamento</label>
+  <select id="e-met"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option value="Futuro">Parcelado/Futuro</option><option value="Fiado">Fiado</option></select>
+  <div id="e-dueBox" style="display:none"><label>Data de vencimento (obrigatória)</label><input id="e-due" type="date"><div id="e-parBox" style="display:none"><label>Nº de parcelas (vencimentos mensais)</label><input id="e-par" type="number" min="1" max="24" value="1" inputmode="numeric"></div><p class="k">Fica em Recebimentos e só entra no caixa quando for pago.</p></div>
+  <div class="row2"><button id="e-save">Salvar entrada</button></div><div class="row2" id="e-pending-row" style="display:none"><button id="e-retry" class="amb" type="button">↻ Retomar venda pendente</button></div><p class="k" id="e-remote-status" aria-live="polite">No modo conectado, a confirmação da venda é feita no servidor antes de entrar no caixa.</p>
+ </div>
+</section>
+
+<section class="tab" id="t-rec">
+ <h2>Recebimentos & Fiados</h2>
+ <div class="row2" id="r-pending-row" style="display:none"><button id="r-retry" class="amb" type="button">↻ Retomar recebimento pendente</button></div><p class="k" id="r-remote-status" aria-live="polite"></p>
+ <input id="r-q" placeholder="Buscar cliente…">
+ <div class="chips" id="r-f"><button class="chip on" data-f="todos">Todos</button><button class="chip" data-f="fiado">Fiados</button><button class="chip" data-f="futuro">Futuros</button><button class="chip" data-f="atrasado">Atrasados</button></div>
+ <button class="sm amb" id="mass-btn" style="margin-bottom:10px">📣 Cobrar todos os atrasados</button>
+ <div id="r-list"></div>
+</section>
+
+<section class="tab" id="t-gas">
+ <div class="card"><h2>Novo gasto</h2>
+  <label>Descrição</label><input id="g-desc" placeholder="Ex.: Compra de farinha">
+  <div class="f2"><div><label>Valor (R$)</label><input id="g-val" type="number" step="0.01" inputmode="decimal"></div><div><label>Data</label><input id="g-date" type="date"></div></div>
+  <label>Categoria</label><select id="g-cat"></select>
+  <label>Forma de pagamento</label><select id="g-method"><option value="cash">Dinheiro</option><option value="pix">Pix</option><option value="card">Cartão</option></select>
+  <div class="row2"><button class="red" id="g-save">Salvar gasto</button></div>
+ </div>
+ <div class="f2"><div><label>Mês</label><input id="g-fm" type="month"></div><div><label>Categoria</label><select id="g-fc"></select></div></div>
+ <div class="card" style="margin-top:10px"><div class="k">Total filtrado</div><div class="v r" id="g-tot">–</div><div id="g-list"></div></div>
+</section>
+
+<section class="tab" id="t-rel">
+ <h2>Relatórios</h2>
+ <div class="chips noprint" id="p-f"><button class="chip" data-p="hoje">Hoje</button><button class="chip" data-p="semana">Esta semana</button><button class="chip on" data-p="mes">Este mês</button><button class="chip" data-p="custom">Intervalo</button></div>
+ <div class="f2 noprint" id="p-c" style="display:none"><div><label>De</label><input id="p-a" type="date"></div><div><label>Até</label><input id="p-b" type="date"></div></div>
+ <p class="k" id="p-lab"></p>
+ <div class="grid" style="margin-top:8px">
+  <div class="card"><div class="k">Entradas recebidas</div><div class="v g" id="p-in">–</div></div>
+  <div class="card"><div class="k">Gastos</div><div class="v r" id="p-out">–</div></div>
+  <div class="card"><div class="k" id="p-ll">Lucro líquido</div><div class="v" id="p-lu">–</div></div>
+  <div class="card wide"><div class="k">Total pendente a receber (geral)</div><div class="v a" id="p-pe">–</div></div>
+  <div class="card wide"><div class="k">Lucro bruto estimado (vendas com produto e custo)</div><div class="v g" id="p-mg">–</div></div>
+ </div>
+ <h3>Gastos por categoria</h3><div class="card" id="p-cat"></div>
+ <div class="row2 noprint"><button class="gh" id="p-print">🖨 Imprimir / Salvar PDF</button><button id="p-copy">Copiar para WhatsApp</button></div>
+ <div class="card" style="margin-top:12px"><h2>Fechamento de caixa</h2><div class="f2"><div><label>Dia</label><input id="cx-d" type="date"></div><div><label>Troco inicial (R$)</label><input id="cx-i" type="number" min="0" step="0.01" inputmode="decimal"></div></div><label>Dinheiro contado na gaveta (R$)</label><input id="cx-c" type="number" min="0" step="0.01" inputmode="decimal"><div id="cx-out" style="margin-top:8px"></div><p class="k">Dinheiro esperado = troco inicial + recebimentos em dinheiro − despesas em dinheiro − pagamentos a fornecedores em dinheiro + reembolsos de fornecedores em dinheiro. Pix, transferências e cartão não alteram o saldo físico da gaveta. Sincronize as despesas pendentes antes de fechar.</p><p class="k" id="cx-remote-status">Fechamento local. Entre na empresa para apurar e salvar no servidor.</p><div class="row2 noprint"><button id="cx-save-remote" type="button" disabled>Salvar fechamento no servidor</button><button class="gh" id="cx-copy">Copiar fechamento</button></div><div id="cx-history" class="k" style="margin-top:10px">O histórico de versões aparecerá após carregar o fechamento remoto.</div></div>
+</section>
+<section class="tab" id="t-comp">
+ <div class="card"><h2>Fornecedores</h2><input id="sup-id" type="hidden"><label>Nome / razão social</label><input id="sup-name" maxlength="180" placeholder="Nome do fornecedor"><div class="f2"><div><label>CNPJ / CPF</label><input id="sup-doc" maxlength="30"></div><div><label>Telefone / WhatsApp</label><input id="sup-phone" maxlength="40"></div></div><div class="f2"><div><label>E-mail</label><input id="sup-email" type="email" maxlength="180"></div><div><label>Nome fantasia</label><input id="sup-trade" maxlength="180"></div></div><label>Observações</label><input id="sup-notes" maxlength="1000"><div class="row2"><button id="sup-save">Salvar fornecedor</button><button class="gh" id="sup-cancel" type="button">Limpar</button></div><p class="k" id="sup-status">Fornecedores são armazenados na empresa conectada.</p><div id="sup-list"></div></div>
+ <div class="card"><h2>Novo pedido de compra</h2><label>Fornecedor</label><select id="po-supplier"><option value="">Selecione</option></select><div class="f2"><div><label>Data do pedido</label><input id="po-date" type="date"></div><div><label>Previsão de entrega</label><input id="po-expected" type="date"></div></div><label>Observação</label><input id="po-notes" maxlength="1000" placeholder="Número do orçamento ou observações"><h3>Itens do pedido</h3><div class="f2"><div><label>Produto</label><select id="po-product"><option value="">Selecione</option></select></div><div><label>Quantidade</label><input id="po-qty" type="number" min="0.001" step="0.001" inputmode="decimal"></div></div><div class="f2"><div><label>Custo unitário (R$)</label><input id="po-cost" type="number" min="0" step="0.01" inputmode="decimal"></div><div style="display:flex;align-items:end"><button class="gh" id="po-add-item" type="button" style="width:100%">Adicionar item</button></div></div><div id="po-cart"></div><p class="k" id="po-total">Total: R$ 0,00</p><div class="row2"><button id="po-save">Criar pedido</button></div><p class="k" id="po-status">O pedido só altera o estoque quando o recebimento for confirmado.</p></div>
+ <div class="card"><h2>Pedidos e recebimentos</h2><div class="row2"><button class="gh" id="po-refresh" type="button">Atualizar lista</button></div><div id="po-list"></div><p class="k" id="po-list-status"></p></div>
+ <div class="card"><h2>💳 Contas a pagar — fornecedores</h2><p class="k">Cada recebimento confirmado gera um título e suas parcelas. Pagamentos e compensações ficam registrados no histórico. Créditos de devolução não movimentam dinheiro.</p><div id="purchase-payables-list"></div><p class="k" id="purchase-payables-status"></p><h3>Créditos de devoluções</h3><div id="purchase-supplier-credits-list"></div></div>
+ <div class="card"><h2>↩️ Devoluções de compras</h2><p class="k">A devolução deve apontar para o recebimento original. O sistema valida o saldo devolvível, registra a saída no livro de estoque e gera crédito auditável do fornecedor sem apagar pagamentos anteriores.</p><label>Recebimento original</label><select id="purchase-return-receipt"><option value="">Selecione um recebimento</option></select><div id="purchase-return-items"></div><div class="f2"><div><label>Data da devolução</label><input id="purchase-return-date" type="date"></div><div><label>Motivo</label><input id="purchase-return-reason" maxlength="500" placeholder="Ex.: produto avariado / divergência"></div></div><div class="row2"><button id="purchase-return-save" type="button">Registrar devolução</button><button class="gh" id="purchase-return-refresh" type="button">Atualizar</button></div><p class="k" id="purchase-return-form-status" aria-live="polite">O crédito fica registrado para compensação ou reembolso em operação própria.</p><h3>Histórico de devoluções</h3><div id="purchase-returns-history"></div><p class="k" id="purchase-returns-status"></p></div>
+</section>
+<section class="tab" id="t-cad">
+ <div class="card"><h2>Minha loja</h2><label>Nome (aparece no recibo)</label><input id="s-name" placeholder="Ex.: Mercadinho do João"></div>
+ <div class="card"><h2>Clientes</h2><div class="f2"><div><label>Nome</label><input id="c-n"></div><div><label>WhatsApp</label><input id="c-t" inputmode="tel"></div></div><div class="row2"><button id="c-add">Adicionar cliente</button><button class="gh" id="c-cancel" style="display:none">Cancelar</button></div><div id="c-list"></div></div>
+ <div class="card"><h2>Produtos</h2><div class="f2"><div><label>Nome</label><input id="pr-n"></div><div><label>Preço (R$)</label><input id="pr-p" type="number" min="0" step="0.01" inputmode="decimal"></div></div><div class="f2"><div><label>Custo (R$, opcional)</label><input id="pr-c" type="number" min="0" step="0.01" inputmode="decimal"><p class="k" id="pr-cost-help">Para produto remoto, o custo é atualizado pelo recebimento de compras.</p></div><div><label>Estoque inicial (opcional)</label><input id="pr-s" type="number" min="0" inputmode="numeric"></div></div><div class="row2"><button id="pr-add">Adicionar produto</button><button class="gh" id="pr-cancel" style="display:none">Cancelar</button></div><div id="pr-list"></div></div>
+ <div class="card"><h2>Conexão M7 ERP</h2><p class="k">Vendas, recebimentos, produtos, clientes, despesas e fechamentos de caixa podem ser sincronizados com o servidor.</p><p id="sb-status" class="k">Verificando disponibilidade da conexão…</p><label>E-mail da conta</label><input id="sb-email" type="email" autocomplete="username" placeholder="seu@email.com"><label>Senha</label><input id="sb-pass" type="password" autocomplete="current-password" placeholder="Senha da conta Supabase"><div class="row2"><button id="sb-login" type="button">Entrar na conta</button><button class="gh" id="sb-logout" type="button">Sair</button></div><p id="sb-user" class="k">Não conectado</p><div class="row2"><button id="sb-sync" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar clientes">Sincronizar clientes</button><button id="sb-sync-products" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar o catálogo">Sincronizar produtos</button></div><p id="sb-sync-status" class="k">Entre na conta e valide a empresa para sincronizar clientes com segurança.</p><p id="sb-product-sync-status" class="k">Entre na conta e valide a empresa para sincronizar o catálogo com segurança.</p><div class="row2"><button id="sb-sync-expenses" type="button" class="gh" disabled>Sincronizar despesas</button></div><p id="sb-expense-sync-status" class="k">As despesas antigas só serão enviadas quando você solicitar a sincronização.</p></div>
+ <div class="card"><h2>Segurança</h2><label>PIN de acesso (4 a 6 números)</label><input id="pin-n" type="password" inputmode="numeric" maxlength="6" autocomplete="off"><div class="row2"><button id="pin-set">Definir PIN</button><button class="gh" id="pin-off">Remover</button><button class="gh" id="pin-lock">Bloquear</button></div><p class="k" id="pin-st"></p></div>
+</section>
+</main>
+<footer class="noprint"><div class="row2" style="max-width:420px;margin:0 auto 10px"><button class="sm gh" id="bk-copy">Copiar backup</button><button class="sm gh" id="bk-load">Restaurar backup</button></div>M7 ERP · desenvolvido pela M7 TECH · histórico local e vendas remotas quando conectado</footer>
+<nav id="nav">
+ <button class="on" data-go="res"><span>📊</span>Resumo</button><button data-go="ent"><span>💰</span>Entradas</button><button data-go="rec"><span>⏳</span>Fiados</button><button data-go="gas"><span>💸</span>Gastos</button><button data-go="rel"><span>📈</span>Relatórios</button><button data-go="comp"><span>🛒</span>Compras</button><button data-go="cad"><span>👥</span>Cadastros</button>
+</nav>
+<div id="lock"><div style="font-size:42px">🔒</div><h2>M7 ERP</h2><p class="k">Digite o PIN para entrar</p><input id="lk-in" type="password" inputmode="numeric" maxlength="6" autocomplete="off"><button id="lk-ok">Entrar</button></div>
+<dialog id="dlg"><h2 id="dl-t">Confirmar recebimento</h2><p class="k" id="dl-i"></p>
+ <label>Valor recebido (R$)</label><input id="dl-v" type="number" step="0.01" inputmode="decimal">
+ <label>Data do pagamento</label><input id="dl-d" type="date">
+ <label>Forma</label><select id="dl-m"><option>Pix</option><option>Dinheiro</option><option>Cartão</option></select>
+ <div class="row2"><button class="gh" id="dl-x">Cancelar</button><button id="dl-ok">Confirmar</button></div></dialog>
+<dialog id="xdlg"><h2 id="x-t"></h2><div id="x-b"></div><div class="row2"><button class="gh" id="x-x">Fechar</button><button id="x-wa">Enviar no WhatsApp</button></div></dialog>
+<dialog id="bdlg"><h2>Cobrança de atrasados</h2><p class="k">Toque em cada cliente para abrir a mensagem no WhatsApp.</p><div id="b-b"></div><div class="row2"><button class="gh" id="b-x">Fechar</button></div></dialog>
+<dialog id="edlg"><h2>Editar lançamento</h2><label>Descrição</label><input id="ed-desc"><div class="f2"><div><label>Valor (R$)</label><input id="ed-val" type="number" step="0.01" inputmode="decimal"></div><div><label>Data</label><input id="ed-date" type="date"></div></div><div id="ed-clib"><label>Cliente</label><input id="ed-cli" list="cl-dl"></div><label id="ed-sl">Forma</label><select id="ed-sel"></select><div id="ed-method-box" style="display:none"><label>Forma de pagamento</label><select id="ed-method"><option value="cash">Dinheiro</option><option value="pix">Pix</option><option value="card">Cartão</option></select></div><div class="row2"><button class="gh" id="ed-x">Cancelar</button><button id="ed-ok">Salvar</button></div></dialog>
+<dialog id="stock-move-dlg"><h2>📦 Movimentar estoque</h2><p class="k" id="stock-move-product"></p><p class="k" id="stock-move-balance"></p><label>Tipo de movimentação</label><select id="stock-move-type"><option value="entry">Entrada</option><option value="exit">Saída</option><option value="loss">Perda / avaria</option><option value="return">Devolução de cliente</option><option value="adjustment">Ajuste para saldo contado</option></select><label id="stock-move-qty-label">Quantidade</label><input id="stock-move-qty" type="number" min="0" step="0.001" inputmode="decimal"><label>Classificação do motivo</label><select id="stock-move-code"><option value="purchase">Compra / reposição</option><option value="customer_return">Devolução de cliente</option><option value="supplier_return">Devolução a fornecedor</option><option value="damage">Avaria / danificado</option><option value="expired">Vencimento / perda</option><option value="internal_use">Uso interno</option><option value="inventory_count">Contagem física</option><option value="correction">Correção</option><option value="other">Outro</option></select><label>Motivo detalhado (obrigatório)</label><input id="stock-move-reason" maxlength="500" placeholder="Explique por que o saldo está sendo alterado"><label>Observação adicional (opcional)</label><input id="stock-move-notes" maxlength="1000" placeholder="Documento, lote ou referência"><div class="row2"><button class="gh" id="stock-move-close" type="button">Cancelar</button><button id="stock-move-save" type="button">Registrar movimentação</button></div><p class="k" id="stock-move-status" aria-live="polite">A movimentação será gravada no servidor e não poderá ser apagada.</p></dialog>
+<dialog id="purchase-receive-dlg"><h2>📦 Receber compra</h2><p class="k" id="purchase-receive-title"></p><div id="purchase-receive-items"></div><label>Justificativa do recebimento</label><input id="purchase-receive-reason" maxlength="500" placeholder="Ex.: mercadoria conferida conforme nota fiscal"><div class="f2"><div><label>Primeiro vencimento</label><input id="purchase-receive-due" type="date"></div><div><label>Quantidade de parcelas</label><input id="purchase-receive-installments" type="number" min="1" max="24" step="1" value="1"></div></div><p class="k">O recebimento gera um título a pagar vinculado ao fornecedor e ao estoque, com parcelas iguais e ajuste dos centavos na última.</p><div class="row2"><button class="gh" id="purchase-receive-close" type="button">Cancelar</button><button id="purchase-receive-save" type="button">Confirmar recebimento</button></div><p class="k" id="purchase-receive-status"></p></dialog>
+<dialog id="purchase-payable-payment-dlg"><h2>💳 Registrar pagamento</h2><p class="k" id="purchase-payable-payment-title"></p><label>Valor pago (R$)</label><input id="purchase-payable-payment-amount" type="number" min="0.01" step="0.01" inputmode="decimal"><div class="f2"><div><label>Data do pagamento</label><input id="purchase-payable-payment-date" type="date"></div><div><label>Forma de pagamento</label><select id="purchase-payable-payment-method"><option value="cash">Dinheiro</option><option value="pix">Pix</option><option value="bank_transfer">Transferência bancária</option><option value="card">Cartão</option><option value="other">Outro</option></select></div></div><label>Observação (opcional)</label><input id="purchase-payable-payment-notes" maxlength="500"><div class="row2"><button class="gh" id="purchase-payable-payment-close" type="button">Cancelar</button><button id="purchase-payable-payment-save" type="button">Confirmar pagamento</button></div><p class="k" id="purchase-payable-payment-status" aria-live="polite"></p></dialog>
+<dialog id="purchase-credit-refund-dlg"><h2>Registrar reembolso do fornecedor</h2><p class="k" id="purchase-credit-refund-title"></p><label>Valor efetivamente recebido (R$)</label><input id="purchase-credit-refund-amount" type="number" min="0.01" step="0.01" inputmode="decimal"><div class="f2"><div><label>Data do recebimento</label><input id="purchase-credit-refund-date" type="date"></div><div><label>Forma de recebimento</label><select id="purchase-credit-refund-method"><option value="cash">Dinheiro</option><option value="pix">Pix</option><option value="bank_transfer">Transferência bancária</option><option value="card">Cartão</option><option value="other">Outro</option></select></div></div><label>Observação (opcional)</label><input id="purchase-credit-refund-notes" maxlength="500"><div class="row2"><button class="gh" id="purchase-credit-refund-close" type="button">Cancelar</button><button id="purchase-credit-refund-save" type="button">Confirmar reembolso</button></div><p class="k" id="purchase-credit-refund-status" aria-live="polite"></p></dialog>
+<dialog id="purchase-credit-apply-dlg"><h2>Compensar crédito do fornecedor</h2><p class="k" id="purchase-credit-apply-title"></p><label>Parcela do mesmo fornecedor</label><select id="purchase-credit-installment"></select><label>Valor a compensar (R$)</label><input id="purchase-credit-amount" type="number" min="0.01" step="0.01" inputmode="decimal"><div class="f2"><div><label>Data da compensação</label><input id="purchase-credit-date" type="date"></div><div><label>Observação</label><input id="purchase-credit-notes" maxlength="500"></div></div><div class="row2"><button class="gh" id="purchase-credit-close" type="button">Cancelar</button><button id="purchase-credit-save" type="button">Confirmar compensação</button></div><p class="k" id="purchase-credit-status" aria-live="polite"></p></dialog>
+<dialog id="stock-history-dlg"><h2>📚 Histórico de estoque</h2><p class="k" id="stock-history-product"></p><div id="stock-history-list"></div><div class="row2"><button class="gh" id="stock-history-close" type="button">Fechar</button><button id="stock-history-more" type="button" class="gh" style="display:none">Carregar mais</button></div><p class="k" id="stock-history-status" aria-live="polite"></p></dialog>
+<dialog id="rdlg"><h2>🧾 Recibo</h2><pre id="rc-body" style="white-space:pre-wrap;font:14px/1.5 ui-monospace,monospace;background:var(--bg);padding:12px;border-radius:10px;margin:0"></pre><div class="noprint"><label>WhatsApp do cliente</label><input id="rc-tel" inputmode="tel"><div class="row2"><button class="gh" id="rc-x">Fechar</button><button class="gh" id="rc-pr">Imprimir</button><button id="rc-wa">WhatsApp</button></div></div></dialog>
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL="https://tedauuvxjgouyqvzztlx.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_dZOk7GvffyRJ-bHwIodj0w_BRG7ClWD";
+let sb=null;
+let activeCompanyRole=null;
+const sbStatus=(msg)=>{const el=document.getElementById("sb-status");if(el)el.textContent=msg};
+const sbUser=(msg)=>{const el=document.getElementById("sb-user");if(el)el.textContent=msg};
+if(window.supabase?.createClient){
+ sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+ sbStatus("Biblioteca carregada. Testando conexão com o servidor…");
+ fetch(SUPABASE_URL+"/auth/v1/health",{headers:{apikey:SUPABASE_PUBLISHABLE_KEY}}).then(r=>{if(!r.ok)throw Error("HTTP "+r.status);sbStatus("Servidor Supabase conectado. Faça login para validar sua conta.")}).catch(()=>sbStatus("Não foi possível alcançar o Supabase. Verifique a internet e tente novamente."));
+ sb.auth.getSession().then(({data})=>{
+  if(data.session){
+   sbUser("Conectado: "+(data.session.user.email||"usuário autenticado"));
+   document.body.classList.add("tenant-switching");
+   activateCompanyStorage(data.session);
+  }
+ });
+ sb.auth.onAuthStateChange((event,session)=>{
+  sbUser(session?"Conectado: "+(session.user.email||"usuário autenticado"):"Não conectado");
+  if(session && event!=="TOKEN_REFRESHED"){
+   document.body.classList.add("tenant-switching");
+   setTimeout(()=>activateCompanyStorage(session),0);
+  }else if(!session){
+   const productSyncButton=document.getElementById("sb-sync-products");if(productSyncButton)productSyncButton.disabled=true;const expenseSyncButton=document.getElementById("sb-sync-expenses");if(expenseSyncButton)expenseSyncButton.disabled=true;const customerSyncButton=document.getElementById("sb-sync");if(customerSyncButton)customerSyncButton.disabled=true;const cashCloseButton=document.getElementById("cx-save-remote");if(cashCloseButton)cashCloseButton.disabled=true;
+   storageSwitchToken++;
+   activeCompanyRole=null;activateGuestStorage();
+   document.body.classList.remove("tenant-switching");
+   sbUser("Não conectado · modo local");
+  }
+ });
+}else{sbStatus("Biblioteca de conexão indisponível. Confira a internet e recarregue o aplicativo.")}
+document.addEventListener("DOMContentLoaded",()=>{
+ const login=document.getElementById("sb-login"),logout=document.getElementById("sb-logout");
+ if(login)login.onclick=async()=>{if(!sb)return sbStatus("Conexão indisponível. Recarregue com internet.");const email=document.getElementById("sb-email").value.trim(),password=document.getElementById("sb-pass").value;if(!email||!password)return sbStatus("Informe e-mail e senha.");login.disabled=true;try{const{error}=await sb.auth.signInWithPassword({email,password});if(error)throw error;document.getElementById("sb-pass").value="";sbStatus("Login realizado com sucesso.")}catch(e){sbStatus("Falha no login: "+(e.message||"verifique e-mail e senha"))}finally{login.disabled=false}};
+ if(logout)logout.onclick=async()=>{if(!sb)return;const{error}=await sb.auth.signOut();sbStatus(error?"Erro ao sair: "+error.message:"Sessão encerrada.")};
+ const tenantLogout=document.getElementById("tenant-logout");
+ if(tenantLogout)tenantLogout.onclick=async()=>{if(!sb)return;tenantLogout.disabled=true;try{const{error}=await sb.auth.signOut();if(error)throw error;}catch(e){sbStatus("Não foi possível sair: "+(e.message||"erro desconhecido"));tenantLogout.disabled=false;}};
+ const syncBtn=document.getElementById("sb-sync");
+ if(syncBtn){syncBtn.disabled=!activeStorageKey.startsWith("m7c:v2:company:");syncBtn.onclick=async()=>{
+  syncBtn.disabled=true;
+  try{const r=await syncCustomers();document.getElementById("sb-sync-status").textContent=r.message;}
+  catch(e){document.getElementById("sb-sync-status").textContent="Falha na sincronização: "+(e.message||"verifique conexão e permissões");}
+  finally{syncBtn.disabled=!activeStorageKey.startsWith("m7c:v2:company:");}
+ };}
+ const productBtn=document.getElementById("sb-sync-products");
+ if(productBtn){productBtn.disabled=!activeStorageKey.startsWith("m7c:v2:company:");productBtn.onclick=async()=>{productBtn.disabled=true;try{const r=await syncProducts();$("sb-product-sync-status").textContent=r.message;}catch(e){$("sb-product-sync-status").textContent="Falha: "+(e.message||"verifique conexão e permissões");}finally{productBtn.disabled=!activeStorageKey.startsWith("m7c:v2:company:");}};}
+ const expenseBtn=document.getElementById("sb-sync-expenses");
+ if(expenseBtn){expenseBtn.disabled=!activeStorageKey.startsWith("m7c:v2:company:");expenseBtn.onclick=async()=>{expenseBtn.disabled=true;try{const r=await syncExpenses();$("sb-expense-sync-status").textContent=r.message;}catch(e){$("sb-expense-sync-status").textContent="Falha: "+(e.message||"verifique conexão e permissões");}finally{expenseBtn.disabled=!activeStorageKey.startsWith("m7c:v2:company:");}};}
+});
+const $=id=>document.getElementById(id);
+const CATS=["Fornecedores","Aluguel/Contas","Pessoal","Manutenção","Outros"];
+// Armazenamento local versionado por empresa. A chave antiga "m7c" é preservada.
+const LEGACY_OWNER_USER_ID="ac3a6011-3238-4ed1-9ead-3aa71a6b441d";
+const LEGACY_OWNER_COMPANY_ID="5c2dcc98-9640-42a2-ba98-936535e560a6";
+const emptyState=()=>({tx:[],rc:[],cx:{},cl:[],pr:[],stock_pending:[],shop:""});
+const companyStorageKey=companyId=>"m7c:v2:company:"+companyId;
+// Antes de validar uma sessão, o app abre somente o espaço local de visitante.
+// Nunca restaura a última empresa automaticamente na inicialização.
+const GUEST_STORAGE_KEY="m7c:v2:guest";
+let activeStorageKey=GUEST_STORAGE_KEY;
+let S=emptyState();
+function readLocalState(key){
+ try{const raw=localStorage.getItem(key);if(!raw)return emptyState();const parsed=JSON.parse(raw);if(!parsed||typeof parsed!=="object")return emptyState();return parsed;}
+ catch(e){console.warn("Não foi possível ler o armazenamento local",key,e);return emptyState();}
+}
+function normalizeState(){
+ const plain=o=>o!==null&&typeof o==="object"&&!Array.isArray(o);
+ S=plain(S)?S:emptyState();
+ for(const key of ["tx","rc","cl","pr","stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"]){
+  if(S[key]!==undefined&&!Array.isArray(S[key]))S[key]=[];
+  if(Array.isArray(S[key]))S[key]=S[key].filter(plain);
+ }
+ S.tx=Array.isArray(S.tx)?S.tx:[]; S.rc=Array.isArray(S.rc)?S.rc:[];
+ S.cx=plain(S.cx)?S.cx:{};
+ S.cl=Array.isArray(S.cl)?S.cl:[]; S.pr=Array.isArray(S.pr)?S.pr:[];
+ S.shop=typeof S.shop==="string"?S.shop:"";
+ S.stock_pending=Array.isArray(S.stock_pending)?S.stock_pending.filter(x=>plain(x)&&typeof x.product_id==="string"&&typeof x.operation_id==="string"&&plain(x.payload)&&typeof x.payload.type==="string"&&Number.isFinite(Number(x.payload.quantity))&&typeof x.payload.reason_code==="string"&&typeof x.payload.reason==="string"):[];
+ S.purchase_pending=Array.isArray(S.purchase_pending)?S.purchase_pending.filter(x=>plain(x)&&["supplier","create","receive","payable_payment","payable_credit","payable_cancel","purchase_return","credit_refund"].includes(x.kind)&&typeof x.operation_id==="string"&&/^[0-9a-f-]{36}$/i.test(x.operation_id)&&plain(x.payload)):[];
+ if(S.pendingSale!==undefined&&(!S.pendingSale||typeof S.pendingSale!=="object"||!S.pendingSale.payload||!S.pendingSale.input))delete S.pendingSale;
+ if(S.pendingReceipt!==undefined&&(!S.pendingReceipt||typeof S.pendingReceipt!=="object"||!S.pendingReceipt.payload||!S.pendingReceipt.receivable_id))delete S.pendingReceipt;
+}
+S=readLocalState(activeStorageKey); normalizeState();
+const save=()=>{try{localStorage.setItem(activeStorageKey,JSON.stringify(S));}catch(e){console.error("Falha ao salvar os dados locais do M7",e);toast("Não foi possível salvar. Verifique o espaço do aparelho.");}};
+let storageSwitchToken=0;
+function activateGuestStorage(){
+ const productSyncButton=document.getElementById("sb-sync-products");if(productSyncButton)productSyncButton.disabled=true;const expenseSyncButton=document.getElementById("sb-sync-expenses");if(expenseSyncButton)expenseSyncButton.disabled=true;const cashCloseButton=document.getElementById("cx-save-remote");if(cashCloseButton)cashCloseButton.disabled=true;
+ activeCompanyRole=null;activeStorageKey=GUEST_STORAGE_KEY;
+ S=readLocalState(GUEST_STORAGE_KEY); normalizeState();
+ const shopInput=document.getElementById("s-name"); if(shopInput)shopInput.value=S.shop||"";
+ render();
+}
+function isNetworkFailure(error){
+ const message=String(error?.message||error||"");
+ return navigator.onLine===false || error instanceof TypeError || /failed to fetch|fetch failed|network|offline|timeout|load failed/i.test(message);
+}
+function handleCompanyStorageError(session,error,allowOfflineFallback=false){
+ const msg=error?.message||"erro desconhecido";
+ // Cache offline só pode ser usado para a mesma conta e em falha de rede.
+ // Falta de vínculo, múltiplas empresas ou erro de autorização nunca liberam cache antigo.
+ const lastKey=localStorage.getItem("m7c:last_company_scope");
+ if(allowOfflineFallback && localStorage.getItem("m7c:last_user_id")===session?.user?.id && lastKey?.startsWith("m7c:v2:company:")){
+  activeStorageKey=lastKey; S=readLocalState(lastKey); normalizeState();
+  const shopInput=document.getElementById("s-name"); if(shopInput)shopInput.value=S.shop||"";
+  render(); document.body.classList.remove("tenant-switching");
+  sbStatus("Sem conexão. Mantendo temporariamente o cache local desta conta.");
+ }else{
+  const productSyncButton=document.getElementById("sb-sync-products");if(productSyncButton)productSyncButton.disabled=true;
+  const el=document.getElementById("tenant-loading-msg");
+  if(el)el.textContent="Não foi possível validar o vínculo da empresa: "+msg+". Reconecte-se ou saia da conta.";
+  sbStatus("Acesso aos dados suspenso até validar a empresa: "+msg);
+ }
+}
+async function activateCompanyStorage(session){
+ if(!sb||!session?.user?.id)return;
+ activeCompanyRole=null;
+ const productSyncButton=document.getElementById("sb-sync-products");if(productSyncButton)productSyncButton.disabled=true;const expenseSyncButton=document.getElementById("sb-sync-expenses");if(expenseSyncButton)expenseSyncButton.disabled=true;const cashCloseButton=document.getElementById("cx-save-remote");if(cashCloseButton)cashCloseButton.disabled=true;
+ const token=++storageSwitchToken, user=session.user;let allowOfflineFallback=false;
+ try{
+  const{data:members,error}=await sb.from("company_memberships").select("company_id,role,status").eq("user_id",user.id).eq("status","active");
+  if(error){allowOfflineFallback=isNetworkFailure(error);throw error;}
+  if(!members?.length)throw Error("Usuário sem vínculo ativo com empresa.");
+  if(members.length!==1)throw Error("Há mais de uma empresa vinculada; é necessário escolher a empresa.");
+  const companyId=members[0].company_id;activeCompanyRole=members[0].role;
+  if(token!==storageSwitchToken)return;
+  const targetKey=companyStorageKey(companyId);
+  let targetRaw=localStorage.getItem(targetKey);
+  if(!targetRaw && user.id===LEGACY_OWNER_USER_ID && companyId===LEGACY_OWNER_COMPANY_ID){
+   // Migração única e restrita: somente o proprietário original recebe os dados legados.
+   // A chave "m7c" original não é apagada nem sobrescrita.
+   const legacyRaw=localStorage.getItem("m7c");
+   if(legacyRaw){JSON.parse(legacyRaw);localStorage.setItem(targetKey,legacyRaw);targetRaw=legacyRaw;}
+  }
+  if(token!==storageSwitchToken)return;
+  if(activeStorageKey!==targetKey){
+   activeStorageKey=targetKey; localStorage.setItem("m7c:last_company_scope",targetKey);
+   S=targetRaw?readLocalState(targetKey):emptyState(); normalizeState();
+   const shopInput=document.getElementById("s-name"); if(shopInput)shopInput.value=S.shop||"";
+   render();
+  }
+  localStorage.setItem("m7c:last_user_id",user.id);
+  document.body.classList.remove("tenant-switching");
+  sbUser("Conectado: "+(user.email||"usuário autenticado")+" · dados separados por empresa");
+  sbStatus("Empresa identificada. Armazenamento local isolado por empresa.");
+  const productSyncButton=document.getElementById("sb-sync-products");if(productSyncButton)productSyncButton.disabled=false;const expenseSyncButton=document.getElementById("sb-sync-expenses");if(expenseSyncButton)expenseSyncButton.disabled=false;const customerSyncButton=document.getElementById("sb-sync");if(customerSyncButton)customerSyncButton.disabled=false;const cashCloseButton=document.getElementById("cx-save-remote");if(cashCloseButton)cashCloseButton.disabled=false;
+  if(navigator.onLine)setTimeout(async()=>{
+   try{if(S.pendingSale)await executePendingRemoteSale();else if(S.pendingReceipt)await executePendingRemoteReceipt();await refreshRemoteSalesLedger(companyId);await loadRemoteCashClosing($("cx-d").value||today(),true);}
+   catch(e){console.warn("Reconciliação remota pendente",e);}
+  },0);
+ }catch(e){
+  // Uma resposta atrasada de outra sessão nunca pode trocar a empresa visível.
+  if(token===storageSwitchToken)handleCompanyStorageError(session,e,allowOfflineFallback);
+ }
+}
+
+// Despesas são lançamentos imutáveis: retries idempotentes e estorno remoto auditável.
+let expenseSyncRunning=false;
+async function syncExpenses(){
+ if(!sb||!navigator.onLine)throw Error("Sem conexão com a internet.");
+ if(expenseSyncRunning) return {message:"Sincronização de despesas já está em andamento."};
+ expenseSyncRunning=true;const out=$("sb-expense-sync-status"),say=m=>{if(out)out.textContent=m};
+ try{
+  const{companyId}=await getActiveCompany();let sent=0,unchanged=0;
+  const localExpenses=(S.tx||[]).filter(t=>t.type==="out"&&!t.remote_expense);
+  for(const t of localExpenses){
+   const legacyId=String(t.legacy_id||t.id),description=String(t.desc||"").trim(),amount=Number(t.amount),date=String(t.date||""),category=String(t.cat||"Outros");
+   if(!legacyId||!description||!Number.isFinite(amount)||amount<=0||Math.abs(amount*100-Math.round(amount*100))>1e-7||!/^\d{4}-\d{2}-\d{2}$/.test(date)||!category)throw Error("Há uma despesa local inválida. Corrija o lançamento antes de sincronizar.");
+   const methodMap={cash:"cash",pix:"pix",card:"card",Dinheiro:"cash",Pix:"pix",Cartão:"card"};
+   const paymentMethod=methodMap[t.method]||"cash";
+   const{data,error}=await sb.rpc("sync_expense_v2",{p_company_id:companyId,p_legacy_id:legacyId,p_description:description,p_amount:amount,p_expense_date:date,p_category:category,p_payment_method:paymentMethod});
+   if(error)throw error;const result=Array.isArray(data)?data[0]:data;if(!result?.expense_id||!["created","unchanged"].includes(result.sync_status))throw Error("Resposta inválida ao sincronizar despesa.");
+   t.id=result.expense_id;t.remote_id=result.expense_id;t.legacy_id=legacyId;t.remote_expense=true;if(result.sync_status==="created")sent++;else unchanged++;save();
+  }
+  await refreshRemoteSalesLedger(companyId);
+  const message=`Despesas sincronizadas: ${sent} novas, ${unchanged} já confirmadas. Histórico remoto atualizado.`;say(message);return{message,sent,unchanged};
+ }finally{expenseSyncRunning=false;}
+}
+
+// Sincronização incremental de clientes: pendências permanecem no aparelho até confirmação do servidor.
+let customerSyncTimer=null,customerSyncRunning=false,customerSyncReschedule=false,suppressCustomerSync=false;
+const markCustomerPending=c=>{if(!c)return;c._sync_pending=true;c._sync_updated_at=new Date().toISOString();delete c._sync_conflict;save();scheduleCustomerSync()};
+function scheduleCustomerSync(){
+ if(customerSyncTimer)clearTimeout(customerSyncTimer);
+ if(customerSyncRunning){customerSyncReschedule=true;return;}
+ if(!sb||!navigator.onLine||!isCompanyWorkspace())return;
+ if(!(S.cl||[]).some(c=>c._sync_pending)&&(S.cl_deleted||[]).length===0)return;
+ customerSyncTimer=setTimeout(()=>syncCustomers().catch(e=>{console.warn("Sincronização automática de clientes pendente",e);}),1400);
+}
+async function getActiveCompany(){
+ const{data:{user},error:ue}=await sb.auth.getUser();if(ue||!user)throw Error("Entre na sua conta para sincronizar.");
+ const{data:members,error}=await sb.from("company_memberships").select("company_id,role,status").eq("user_id",user.id).eq("status","active");
+ if(error)throw error;if(!members?.length)throw Error("Usuário sem vínculo ativo com empresa.");
+ if(members.length!==1)throw Error("Há mais de uma empresa vinculada; selecione a empresa antes de sincronizar.");
+ const companyId=members[0].company_id;activeCompanyRole=members[0].role;
+ if(activeStorageKey!==companyStorageKey(companyId))throw Error("A área local ativa não corresponde à empresa validada. Saia e entre novamente antes de sincronizar.");
+ return{user,companyId};
+}
+let remoteLedgerRefreshRunning=false,remoteLedgerMutationVersion=0;
+async function fetchPagedRows(makeQuery){
+ const all=[];let offset=0;
+ while(true){const{data,error}=await makeQuery().range(offset,offset+499);if(error)throw error;const page=data||[];all.push(...page);if(page.length<500)break;offset+=500;}
+ return all;
+}
+async function fetchRowsForSales(table,columns,companyId,saleIds){
+ const all=[];
+ for(let i=0;i<saleIds.length;i+=100){const ids=saleIds.slice(i,i+100);const rows=await fetchPagedRows(()=>sb.from(table).select(columns).eq("company_id",companyId).in("sale_id",ids).order("id",{ascending:true}));all.push(...rows);}
+ return all;
+}
+async function refreshRemoteSalesLedger(companyId){
+ if(!sb||!navigator.onLine||!isCompanyWorkspace()||S.pendingSale||S.pendingReceipt||remoteLedgerRefreshRunning)return;
+ remoteLedgerRefreshRunning=true;
+ const refreshVersion=remoteLedgerMutationVersion;
+ try{
+  const active=await getActiveCompany();if(active.companyId!==companyId||activeStorageKey!==companyStorageKey(companyId))return;
+  const sales=await fetchPagedRows(()=>sb.from("sales").select("id,operation_id,customer_id,description,sale_date,payment_method,status,subtotal,discount,total,notes").eq("company_id",companyId).order("sale_date",{ascending:false}).order("created_at",{ascending:false}).order("id",{ascending:true}));
+  const activeSales=sales.filter(s=>s.status!=="cancelled"),saleIds=activeSales.map(s=>s.id);
+  const remoteExpenses=await fetchPagedRows(()=>sb.from("expenses").select("id,legacy_id,description,amount,expense_date,category,payment_method,status,created_at,void_reason,voided_at,voided_by").eq("company_id",companyId).order("expense_date",{ascending:false}).order("id",{ascending:true}));
+  let items=[],receivables=[],payments=[];
+  if(saleIds.length){
+   [items,receivables,payments]=await Promise.all([
+    fetchRowsForSales("sale_items","id,sale_id,product_id,product_name,quantity,unit_price,line_total,unit_cost,total_cost,created_at",companyId,saleIds),
+    fetchRowsForSales("sale_receivables","id,sale_id,installment_number,due_date,amount,paid_amount,status",companyId,saleIds),
+    fetchRowsForSales("sale_payments","id,sale_id,receivable_id,operation_id,payment_method,amount,received_at,created_at",companyId,saleIds)
+   ]);
+  }
+  const customerIds=[...new Set(activeSales.map(s=>s.customer_id).filter(Boolean))],customers=[];
+  for(let i=0;i<customerIds.length;i+=100){const ids=customerIds.slice(i,i+100);const{data,error}=await sb.from("customers").select("id,name,phone,whatsapp").eq("company_id",companyId).in("id",ids);if(error)throw error;customers.push(...(data||[]));}
+  if(activeStorageKey!==companyStorageKey(companyId)||S.pendingSale||S.pendingReceipt||refreshVersion!==remoteLedgerMutationVersion)return;
+  const customerById=new Map(customers.map(c=>[c.id,c]));
+  const itemsBySale=new Map(),receivablesBySale=new Map(),paymentsBySale=new Map();
+  for(const item of items){if(!itemsBySale.has(item.sale_id))itemsBySale.set(item.sale_id,[]);itemsBySale.get(item.sale_id).push(item);}
+  for(const r of receivables){if(!receivablesBySale.has(r.sale_id))receivablesBySale.set(r.sale_id,[]);receivablesBySale.get(r.sale_id).push(r);}
+  for(const payment of payments){if(!paymentsBySale.has(payment.sale_id))paymentsBySale.set(payment.sale_id,[]);paymentsBySale.get(payment.sale_id).push(payment);}
+  const methodLabel={pix:"Pix",cash:"Dinheiro",card:"Cartão"},remoteTx=[],remoteRc=[];
+  for(const sale of activeSales){
+   const saleItems=(itemsBySale.get(sale.id)||[]).sort((a,b)=>String(a.created_at||"").localeCompare(String(b.created_at||"")));
+   const saleReceivables=(receivablesBySale.get(sale.id)||[]).sort((a,b)=>a.installment_number-b.installment_number);
+   const salePayments=(paymentsBySale.get(sale.id)||[]).sort((a,b)=>String(a.received_at).localeCompare(String(b.received_at))||String(a.created_at||"").localeCompare(String(b.created_at||"")));
+   const customer=customerById.get(sale.customer_id);
+   const noteText=String(sale.notes||"");
+   const noteCustomer=noteText.match(/Cliente informado na venda:\s*([^|]+)/i)?.[1]?.trim()||"";
+   const notePhone=noteText.match(/WhatsApp informado:\s*([^|]+)/i)?.[1]?.trim()||"";
+   const client=customer?.name||noteCustomer,tel=customer?.whatsapp||customer?.phone||notePhone;
+   const costKnown=saleItems.some(i=>i.total_cost!=null);
+   const totalCostCents=costKnown?saleItems.reduce((sum,i)=>sum+(i.total_cost==null?0:Math.round(Number(i.total_cost)*100)),0):null;
+   const itemSnapshots=saleItems.map(i=>{const local=(S.pr||[]).find(p=>p.remote_id===i.product_id);return{product_id:local?.id??i.product_id??null,name:i.product_name,qty:Number(i.quantity),unit_price:Number(i.unit_price),line_total:Number(i.line_total)}});
+   const costByReceivable=new Map();let costAllocated=0;
+   saleReceivables.forEach((r,index)=>{const cents=totalCostCents==null?null:(index===saleReceivables.length-1?totalCostCents-costAllocated:(Number(sale.total)>0?Math.round(totalCostCents*Number(r.amount)/Number(sale.total)):0));if(cents!=null)costAllocated+=cents;costByReceivable.set(r.id,cents);});
+   for(const r of saleReceivables){
+    if(r.status==="paid")continue;
+    const kind=sale.payment_method==="fiado"?"fiado":"futuro";
+    remoteRc.push({id:r.id,sale_id:sale.id,operation_id:sale.operation_id,installment:r.installment_number,desc:saleReceivables.length>1?sale.description+" ("+r.installment_number+"/"+saleReceivables.length+")":sale.description,client,tel,total:Number(r.amount),paid:Number(r.paid_amount),due:r.due_date,kind,date:sale.sale_date,cost:costByReceivable.get(r.id)==null?undefined:costByReceivable.get(r.id)/100,disc:Number(sale.discount),remote_ledger:true});
+   }
+   const paidByReceivable=new Map();
+   for(const payment of salePayments){
+    let paymentCost=null,isPartial=false;
+    if(payment.receivable_id){
+     const r=saleReceivables.find(x=>x.id===payment.receivable_id),cost=costByReceivable.get(payment.receivable_id);
+     if(r){const before=paidByReceivable.get(r.id)||0,amount=Math.round(Number(payment.amount)*100),after=before+amount,total=Math.round(Number(r.amount)*100);isPartial=after<total;if(cost!=null){const costBefore=Math.round(cost*before/total),costAfter=after>=total?cost:Math.round(cost*after/total);paymentCost=costAfter-costBefore;}paidByReceivable.set(r.id,after);}
+    }else if(totalCostCents!=null)paymentCost=totalCostCents;
+    remoteTx.push({id:payment.id,operation_id:payment.operation_id,sale_id:sale.id,receivable_id:payment.receivable_id||undefined,type:"in",desc:sale.description+(isPartial?" (parcial)":" (recebido)"),amount:Number(payment.amount),date:payment.received_at,method:methodLabel[payment.payment_method]||payment.payment_method,client,tel,cost:paymentCost==null?undefined:paymentCost/100,disc:payment.receivable_id?undefined:Number(sale.discount),subtotal:payment.receivable_id?undefined:Number(sale.subtotal),items:payment.receivable_id?undefined:itemSnapshots,remote_ledger:true});
+   }
+  }
+  const remoteExpenseTx=remoteExpenses.map(e=>({id:e.id,legacy_id:e.legacy_id,remote_id:e.id,type:"out",desc:e.description,amount:Number(e.amount),date:e.expense_date,cat:e.category,method:({cash:"Dinheiro",pix:"Pix",card:"Cartão"}[e.payment_method]||"Dinheiro"),status:e.status,void_reason:e.void_reason,voided_at:e.voided_at,voided_by:e.voided_by,remote_expense:true}));
+  const next={...S,tx:[...(S.tx||[]).filter(t=>!t.remote_ledger&&!t.remote_expense&&!t.remote_id),...remoteTx,...remoteExpenseTx],rc:[...(S.rc||[]).filter(r=>!r.remote_ledger),...remoteRc]};
+  localStorage.setItem(activeStorageKey,JSON.stringify(next));S=next;render();sbStatus("Vendas, recebimentos e despesas remotos atualizados para esta empresa.");
+ }catch(error){console.warn("Falha ao atualizar ledger remoto",error);sbStatus("Não foi possível atualizar o histórico remoto agora. O cache local foi preservado.");}
+ finally{remoteLedgerRefreshRunning=false;}
+}
+async function syncCustomers(){
+ if(!sb||!navigator.onLine)throw Error("Sem conexão com a internet.");
+ if(customerSyncRunning)return{message:"Sincronização já está em andamento."};
+ customerSyncRunning=true;const out=$("sb-sync-status"),say=m=>{if(out)out.textContent=m};
+ try{
+  const{companyId}=await getActiveCompany();let sent=0,deleted=0,received=0,updated=0,conflicts=0;
+  S.cl_deleted=S.cl_deleted||[];S.cl_archived_remote=S.cl_archived_remote||[];
+  // Clientes locais antigos sem vínculo remoto entram na fila de importação, sem force-push.
+  for(const c of (S.cl||[]))if(!c.remote_id&&!c._sync_pending){c._sync_pending=true;c._sync_updated_at=new Date().toISOString();}
+  save();
+  // Cada exclusão só sai da fila depois da confirmação da RPC no servidor.
+  for(const d of [...S.cl_deleted]){
+   if(!d.remote_id&&!d.legacy_id)continue;
+   const{data,error}=await sb.rpc("deactivate_customer",{p_company_id:companyId,p_customer_id:d.remote_id||null,p_legacy_id:d.legacy_id==null?null:String(d.legacy_id)});
+   if(error)throw error;
+   const result=Array.isArray(data)?data[0]:data;
+   if(!result||(!result.customer_id&&!result.already_inactive))throw Error("O servidor não confirmou a inativação do cliente.");
+   S.cl_archived_remote.push(result.customer_id||String(d.legacy_id||""));
+   const ix=S.cl_deleted.indexOf(d);if(ix>=0)S.cl_deleted.splice(ix,1);
+   save();deleted++;
+  }
+  for(const c of (S.cl||[])){
+   if(!c._sync_pending)continue;
+   const legacyId=String(c.id),name=String(c.name||"").trim(),phoneSnapshot=c.tel||null,pendingVersion=c._sync_updated_at;
+   if(!name)throw Error("Há cliente pendente sem nome; corrija o cadastro antes de sincronizar.");
+   const{data,error}=await sb.rpc("sync_customer_v2",{
+    p_company_id:companyId,p_customer_id:c.remote_id||null,p_legacy_id:legacyId,
+    p_name:name,p_phone:phoneSnapshot,p_whatsapp:phoneSnapshot,
+    p_expected_updated_at:c._remote_updated_at||null
+   });
+   if(error)throw error;
+   const result=Array.isArray(data)?data[0]:data;
+   if(!result?.customer_id||!result.sync_status)throw Error("Resposta inválida ao sincronizar cliente.");
+   c.remote_id=result.customer_id;
+   const changedDuringRequest=c._sync_updated_at!==pendingVersion||String(c.name||"").trim()!==name||(c.tel||null)!==phoneSnapshot;
+   if(result.sync_status==="conflict"){
+    c._sync_conflict={updated_at:result.updated_at,name:result.server_name,phone:result.server_phone,whatsapp:result.server_whatsapp,status:result.server_status};
+    conflicts++;save();continue;
+   }
+   if(!["created","updated","unchanged"].includes(result.sync_status))throw Error("Estado de sincronização não reconhecido: "+result.sync_status);
+   c._remote_updated_at=result.updated_at;
+   if(!changedDuringRequest){delete c._sync_pending;delete c._sync_updated_at;delete c._sync_conflict;sent++;}
+   else{c._sync_pending=true;customerSyncReschedule=true;}
+   save();
+  }
+  say("Conferindo alterações remotas dos clientes…");
+  const remote=await fetchPagedRows(()=>sb.from("customers").select("id,legacy_id,name,phone,whatsapp,status,updated_at").eq("company_id",companyId).order("name").order("id"));
+  suppressCustomerSync=true;
+  for(const r of remote){
+   let local=(S.cl||[]).find(x=>String(x.id)===String(r.legacy_id)||x.remote_id===r.id);
+   if(r.status==="inactive"){
+    if(local&&!local._sync_pending){local.status="inactive";local.remote_id=r.id;local._remote_updated_at=r.updated_at;}
+    else if(local&&local._sync_pending){local.remote_id=r.id;local._sync_conflict={updated_at:r.updated_at,name:r.name,phone:r.phone,whatsapp:r.whatsapp,status:r.status};conflicts++;}
+    continue;
+   }
+   if(!local){S.cl.push({id:r.legacy_id||("sb-"+r.id),remote_id:r.id,name:r.name,tel:r.whatsapp||r.phone||"",status:r.status||"active",_remote_updated_at:r.updated_at});received++;continue;}
+   local.remote_id=r.id;
+   if(local._sync_pending){
+    if(local._remote_updated_at&&local._remote_updated_at!==r.updated_at&&local._sync_conflict?.updated_at!==r.updated_at){local._sync_conflict={updated_at:r.updated_at,name:r.name,phone:r.phone,whatsapp:r.whatsapp,status:r.status};conflicts++;}
+    continue;
+   }
+   if(local.name!==r.name||local.tel!==(r.whatsapp||r.phone||"")||local.status!==(r.status||"active"))updated++;
+   local.name=r.name;local.tel=r.whatsapp||r.phone||"";local.status=r.status||"active";local._remote_updated_at=r.updated_at;
+  }
+  save();render();suppressCustomerSync=false;
+  const message=`Sincronização concluída. ${sent} enviado(s)/confirmado(s); ${received} recebido(s); ${updated} atualizado(s); ${deleted} inativado(s); ${conflicts} conflito(s) para revisão.`;
+  say(message);return{message,conflicts};
+ }finally{suppressCustomerSync=false;customerSyncRunning=false;if(customerSyncReschedule){customerSyncReschedule=false;scheduleCustomerSync();}}
+}
+window.addEventListener("online",scheduleCustomerSync);
+// Produtos: sincronização incremental. O saldo remoto é alterado somente pela função transacional do banco.
+let productSyncTimer=null,productSyncRunning=false,suppressProductSync=false;
+function markProductPending(p){if(!p)return;p._sync_pending=true;p._sync_updated_at=new Date().toISOString();save();scheduleProductSync()}
+function scheduleProductSync(){return;} // Pausado até concluir a auditoria dos vínculos remotos.
+async function stockRpc(companyId,productId,type,quantity,operationId,notes){const{data,error}=await sb.rpc("register_stock_movement",{p_company_id:companyId,p_product_id:productId,p_movement_type:type,p_quantity:quantity,p_operation_id:operationId,p_source:"m7_controle",p_reference_id:null,p_notes:notes||null});if(error)throw error;if(!Array.isArray(data)||!data[0]?.movement_id)throw Error("O banco não confirmou a movimentação de estoque.");return data[0]}
+async function syncProducts(){
+ if(!sb||!navigator.onLine)throw Error("Sem conexão com a internet.");
+ if(productSyncRunning)return{message:"Sincronização de produtos já está em andamento."};
+ productSyncRunning=true;
+ const out=$("sb-product-sync-status"),say=m=>{if(out)out.textContent=m};
+ try{
+  const{user,companyId}=await getActiveCompany();let sent=0,received=0,updated=0,movements=0,deleted=0;
+  S.pr=S.pr||[];S.pr_deleted=S.pr_deleted||[];
+  // Exclusão remota é sempre soft delete e só é confirmada localmente após resposta do servidor.
+  for(const d of [...S.pr_deleted]){
+   let row=null;
+   if(d.remote_id){const{data,error}=await sb.from("products").select("id,status").eq("id",d.remote_id).eq("company_id",companyId).maybeSingle();if(error)throw error;row=data;}
+   else if(d.legacy_id){const{data,error}=await sb.from("products").select("id,status").eq("legacy_id",String(d.legacy_id)).eq("company_id",companyId).maybeSingle();if(error)throw error;row=data;}
+   if(row&&row.status!=="inactive"){
+    const{data,error}=await sb.rpc("deactivate_product",{p_company_id:companyId,p_product_id:row.id});
+    if(error)throw error;const result=Array.isArray(data)?data[0]:data;
+    if(!result?.product_id)throw Error("O servidor não confirmou a inativação do produto.");deleted++;
+   }
+   S.pr_deleted=S.pr_deleted.filter(x=>x!==d);save();
+  }
+  // Envia apenas alterações explicitamente pendentes. Nunca faz force-push de cache antigo.
+  for(const p of S.pr){
+   if(!p._sync_pending)continue;
+   const legacyId=String(p.id||"").trim();
+   const name=String(p.name||"").trim();
+   const salePrice=moneyToCents(p.price??0,"Preço de venda")/100;
+   const costPrice=p.cost==null||p.cost===""?null:moneyToCents(p.cost,"Custo")/100;
+   const stockControl=p.stock!=null;
+   const initialStock=stockControl?Number(p.stock):0;
+   if(!legacyId||legacyId.length>120)throw Error("Identificador local inválido para o produto "+name+".");
+   if(!name||name.length>240)throw Error("Nome inválido para o produto.");
+   if(!Number.isFinite(initialStock)||initialStock<0||Math.round(initialStock*1000)!==initialStock*1000)throw Error("Estoque inicial inválido para "+name+".");
+   const metadata={name,sku:String(p.sku||"").trim()||null,barcode:String(p.barcode||"").trim()||null,description:String(p.description||"").trim()||null,sale_price:salePrice,unit:String(p.unit||"UN").trim().toUpperCase()||"UN"};
+   let remoteId=p.remote_id;
+   if(!remoteId){
+    // A chave e o payload ficam persistidos antes da RPC: se a resposta se perder, o retry
+    // usa o mesmo legacy_id e a RPC retorna o registro existente sem duplicar estoque.
+    p._stock_operation_id=p._stock_operation_id||crypto.randomUUID();save();
+    const{data,error}=await sb.rpc("create_product",{p_company_id:companyId,p_legacy_id:legacyId,p_name:metadata.name,p_sku:metadata.sku,p_barcode:metadata.barcode,p_description:metadata.description,p_sale_price:salePrice,p_cost_price:costPrice,p_stock_control:stockControl,p_initial_stock:initialStock,p_unit:metadata.unit,p_operation_id:p._stock_operation_id});
+    if(error)throw error;
+    const created=Array.isArray(data)?data[0]:data;
+    if(!created?.product_id)throw Error("O banco não confirmou o cadastro do produto.");
+    remoteId=created.product_id;p.remote_id=remoteId;p._stock_initialized=true;
+    if(!created.already_processed&&initialStock>0)movements++;
+    delete p._stock_operation_id;delete p._stock_target;
+   }else{
+    // Atualiza somente metadados. Saldo e controle de estoque nunca são escritos por REST.
+    const{data:remote,error:re}=await sb.from("products").select("id,stock_control,current_stock,status").eq("id",remoteId).eq("company_id",companyId).maybeSingle();
+    if(re)throw re;if(!remote)throw Error("Produto remoto não encontrado na empresa validada: "+name+".");
+    if(remote.status!=="active")throw Error("O produto "+name+" está inativo no servidor. Reative-o por um fluxo administrativo antes de sincronizar.");
+    if(Boolean(remote.stock_control)!==stockControl)throw Error("Não é permitido alterar o controle de estoque de "+name+" por sincronização. Faça essa alteração por um procedimento específico.");
+    const{data:updatedRow,error:ue}=await sb.from("products").update(metadata).eq("id",remoteId).eq("company_id",companyId).select("id").maybeSingle();
+    if(ue)throw ue;if(!updatedRow)throw Error("O servidor não confirmou a atualização de metadados de "+name+".");
+    if(p._stock_target!=null){
+     const target=Number(p._stock_target);
+     if(!Number.isFinite(target)||target<0||Math.round(target*1000)!==target*1000)throw Error("Saldo de estoque desejado inválido para "+name+".");
+     if(target!==Number(remote.current_stock)){
+      p._stock_operation_id=p._stock_operation_id||crypto.randomUUID();save();
+      await stockRpc(companyId,remoteId,"adjustment",target,p._stock_operation_id,"Ajuste de saldo pelo cadastro do M7 ERP");movements++;
+     }
+     p.stock=target;delete p._stock_target;delete p._stock_operation_id;
+    }
+   }
+   p.remote_id=remoteId;delete p._sync_pending;delete p._sync_updated_at;save();sent++;
+  }
+  say("Buscando catálogo remoto da empresa…");
+  const remote=await fetchPagedRows(()=>sb.from("products").select("id,legacy_id,sku,barcode,name,description,sale_price,cost_price,stock_control,current_stock,minimum_stock,unit,status,updated_at").eq("company_id",companyId).order("name"));
+  suppressProductSync=true;
+  for(const r of remote){
+   let local=S.pr.find(x=>x.remote_id===r.id)||(r.legacy_id?S.pr.find(x=>String(x.id)===String(r.legacy_id)):null);
+   if(r.status==="inactive"){
+    if(local&&!local._sync_pending)S.pr=S.pr.filter(x=>x!==local);
+    continue;
+   }
+   if(!local){
+    S.pr.push({id:r.legacy_id||("sb-"+r.id),remote_id:r.id,sku:r.sku||"",barcode:r.barcode||"",name:r.name,description:r.description||"",price:Number(r.sale_price)||0,cost:r.cost_price==null?null:Number(r.cost_price),stock:r.stock_control?Number(r.current_stock):null,unit:r.unit||"UN",status:r.status||"active",_stock_initialized:true});received++;
+    continue;
+   }
+   local.remote_id=r.id;
+   if(!local._sync_pending){
+    if(local.name!==r.name||Number(local.price)!==Number(r.sale_price)||Number(local.cost??-1)!==Number(r.cost_price??-1))updated++;
+    local.name=r.name;local.sku=r.sku||"";local.barcode=r.barcode||"";local.description=r.description||"";local.price=Number(r.sale_price)||0;local.cost=r.cost_price==null?null:Number(r.cost_price);local.stock=r.stock_control?Number(r.current_stock):null;local.unit=r.unit||"UN";local.status=r.status||"active";local._stock_initialized=true;
+   }
+  }
+  save();render();suppressProductSync=false;
+  const message=`Catálogo sincronizado. ${sent} enviado(s); ${received} recebido(s); ${updated} atualizado(s); ${deleted} inativado(s); ${movements} movimentação(ões) de estoque.`;
+  say(message);return{message};
+ }finally{suppressProductSync=false;productSyncRunning=false;}
+}
+window.addEventListener("online",async()=>{scheduleCustomerSync();try{if(S.pendingSale)await executePendingRemoteSale();else if(S.pendingReceipt)await executePendingRemoteReceipt();if(isCompanyWorkspace())await refreshRemoteSalesLedger(activeStorageKey.slice("m7c:v2:company:".length));}catch(e){console.warn("Reconciliação remota pendente",e);}});
+
+const iso=d=>{const x=new Date(d.getTime()-d.getTimezoneOffset()*6e4);return x.toISOString().slice(0,10)};
+const today=()=>iso(new Date());
+S.cx=S.cx||{};S.cl=S.cl||[];S.pr=S.pr||[];S.shop=S.shop||"";
+const R=n=>(n<0?"-":"")+"R$ "+Math.abs(n).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2});
+const D=s=>s?s.split("-").reverse().join("/"):"";
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const esc=s=>String(s??"").replace(/[&<>"\']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;", "\'":"&#39;"}[c]));
+const rem=r=>Math.max(0,Math.round((Number(r.total||0)-Number(r.paid||0))*100)/100);
+const sum=a=>a.reduce((s,x)=>s+x,0);
+// Quantidades operacionais devem ser inteiras e seguras; nunca truncar entradas decimais.
+function positiveInteger(value){const n=Number(value);return Number.isSafeInteger(n)&&n>0?n:null;}
+function moneyToCents(value,label="Valor"){
+ const n=Number(value);
+ if(!Number.isFinite(n)||n<0)throw Error(label+" inválido.");
+ const scaled=n*100,cents=Math.round(scaled);
+ if(!Number.isSafeInteger(cents)||Math.abs(scaled-cents)>1e-7)throw Error(label+" deve ter no máximo duas casas decimais.");
+ return cents;
+}
+function centsToMoney(cents){return cents/100}
+function addInstallmentMonth(date,offset){
+ const [year,month,day]=date.split("-").map(Number);
+ const target=new Date(Date.UTC(year,month-1+offset,1));
+ const last=new Date(Date.UTC(target.getUTCFullYear(),target.getUTCMonth()+1,0)).getUTCDate();
+ const d=Math.min(day,last);
+ return target.getUTCFullYear()+"-"+String(target.getUTCMonth()+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
+}
+// Vendas autenticadas usam a RPC transacional. O rascunho persistido mantém o mesmo operation_id
+// para que uma resposta perdida possa ser repetida sem duplicar venda ou baixa de estoque.
+let remoteSaleRunning=false;
+function isCompanyWorkspace(){return activeStorageKey.startsWith("m7c:v2:company:")}
+function updatePendingSaleUI(){
+ const row=$("e-pending-row"),button=$("e-retry"),status=$("e-remote-status");
+ const pending=!!S.pendingSale;
+ if(row)row.style.display=pending?"flex":"none";
+ if(button)button.disabled=remoteSaleRunning;
+ if(status)status.textContent=pending?"Existe uma venda aguardando confirmação do servidor. Não crie outra antes de retomar esta operação.":isCompanyWorkspace()?"Vendas da conta conectada são confirmadas no servidor antes de entrar no caixa.":"Modo local: os lançamentos ficam somente neste aparelho.";
+}
+function updatePendingReceiptUI(){
+ const row=$("r-pending-row"),button=$("r-retry"),status=$("r-remote-status");
+ const pending=!!S.pendingReceipt;
+ if(row)row.style.display=pending?"flex":"none";
+ if(button)button.disabled=remoteReceiptRunning;
+ if(status)status.textContent=pending?"Existe um recebimento aguardando confirmação. Retome esta operação antes de lançar outro.":isCompanyWorkspace()?"Recebimentos vinculados às vendas remotas são confirmados no servidor.":"";
+}
+function uuidOrNull(value){return typeof value==="string"&&/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)?value:null}
+async function resolveRemoteSalePayload(input,operationId,companyId,user){
+ const sourceItems=Array.isArray(input.items)?input.items:[];
+ const remoteItems=[];
+ if(sourceItems.length){
+  const localProducts=sourceItems.map(item=>{
+   const p=(S.pr||[]).find(x=>String(x.id)===String(item.id));
+   if(!p)throw Error("Um produto do carrinho não existe mais no cadastro local.");
+   return p;
+  });
+  for(const p of localProducts){
+   if(!uuidOrNull(p.remote_id)){
+    const{data,error}=await sb.from("products").select("id").eq("company_id",companyId).eq("legacy_id",String(p.id)).eq("status","active").maybeSingle();
+    if(error)throw error;
+    if(data)p.remote_id=data.id;
+   }
+   if(!uuidOrNull(p.remote_id))throw Error("O produto \""+p.name+"\" ainda não está vinculado ao catálogo remoto. Não registrei a venda para evitar divergência de preço ou estoque.");
+  }
+  const ids=[...new Set(localProducts.map(p=>p.remote_id))];
+  const{data:remoteProducts,error}=await sb.from("products").select("id,name,sale_price,cost_price,stock_control,current_stock,status").eq("company_id",companyId).in("id",ids);
+  if(error)throw error;
+  if((remoteProducts||[]).length!==ids.length)throw Error("Não foi possível validar todos os produtos na empresa ativa.");
+  for(const p of localProducts){
+   const r=remoteProducts.find(x=>x.id===p.remote_id);
+   if(!r||r.status!=="active")throw Error("Produto indisponível no servidor: "+p.name);
+   p.price=Number(r.sale_price);p.cost=r.cost_price==null?null:Number(r.cost_price);
+   p.stock=r.stock_control?Number(r.current_stock):null;p._stock_initialized=true;
+  }
+  for(const item of sourceItems){
+   const p=localProducts.find(x=>String(x.id)===String(item.id));
+   item.price=p.price;item.cost=p.cost;item.name=p.name;
+   remoteItems.push({product_id:p.remote_id,quantity:Number(item.qty)});
+  }
+ }else{
+  const amountCents=moneyToCents(input.amount,"Valor da venda");
+  remoteItems.push({product_id:null,name:String(input.description||"Venda avulsa").trim().slice(0,240),quantity:1,unit_price:centsToMoney(amountCents)});
+ }
+ let customerId=null;
+ const customer=String(input.customer||"").trim(),phone=String(input.phone||"").trim();
+ if(customer){
+  const local=(S.cl||[]).find(c=>String(c.name||"").trim().toLocaleLowerCase("pt-BR")===customer.toLocaleLowerCase("pt-BR")&&(!phone||String(c.tel||"").replace(/\D/g,"")===phone.replace(/\D/g,"")));
+  if(uuidOrNull(local?.remote_id))customerId=local.remote_id;
+  else{
+   const{data,error}=await sb.from("customers").select("id,name,phone,whatsapp").eq("company_id",companyId).eq("status","active").eq("name",customer).limit(3);
+   if(error)throw error;
+   const matches=(data||[]).filter(c=>!phone||String(c.whatsapp||c.phone||"").replace(/\D/g,"")===phone.replace(/\D/g,""));
+   if(matches.length===1){customerId=matches[0].id;const found=matches[0];if(local)local.remote_id=found.id;else S.cl.push({id:found.id,remote_id:found.id,name:found.name,tel:found.whatsapp||found.phone||"",status:"active"});}
+  }
+ }
+ const methodMap={"Pix":"pix","Dinheiro":"cash","Cartão":"card","Fiado":"fiado","Futuro":"futuro"};
+ const method=methodMap[String(input.method||"")];if(!method)throw Error("Forma de pagamento inválida.");
+ const due=method==="fiado"||method==="futuro"?String(input.due||""):null;
+ const count=method==="futuro"?positiveInteger(input.installments):1;
+ const noteParts=[];if(customer&&!customerId)noteParts.push("Cliente informado na venda: "+customer);if(phone)noteParts.push("WhatsApp informado: "+phone);
+ return{p_company_id:companyId,p_operation_id:operationId,p_customer_id:customerId,p_description:String(input.description||"").trim(),p_sale_date:String(input.date),p_payment_method:method,p_discount:centsToMoney(moneyToCents(input.discount??0,"Desconto")),p_items:remoteItems,p_installment_count:count||1,p_first_due_date:due,p_notes:noteParts.join(" | ")||null};
+}
+async function executePendingRemoteSale(){
+ if(remoteSaleRunning)return;
+ if(!S.pendingSale)return;
+ if(!sb||!navigator.onLine)throw Error("Conecte-se à internet para confirmar a venda no servidor. A operação ficou salva e poderá ser retomada.");
+ remoteSaleRunning=true;updatePendingSaleUI();
+ let rpcAttempted=false,rpcConfirmed=false;
+ try{
+  const{user,companyId}=await getActiveCompany();
+  const pending=S.pendingSale;
+  if(pending.company_id!==companyId)throw Error("A venda pendente pertence a outra empresa. Troque para a empresa correta.");
+  if(pending.user_id&&pending.user_id!==user.id)throw Error("A venda pendente foi iniciada por outra conta. Entre com a conta original para retomá-la.");
+  rpcAttempted=true;
+  const{data:rpcData,error:rpcError}=await sb.rpc("create_sale",pending.payload);
+  if(rpcError)throw rpcError;
+  rpcConfirmed=true;remoteLedgerMutationVersion++;
+  const rpcRow=Array.isArray(rpcData)?rpcData[0]:rpcData;
+  if(!rpcRow?.sale_id)throw Error("O servidor não confirmou o identificador da venda. Retome a mesma operação.");
+  const saleId=rpcRow.sale_id;
+  const[{data:sale,error:saleError},{data:remoteItems,error:itemError},{data:remoteReceivables,error:receivableError}]=await Promise.all([
+   sb.from("sales").select("id,operation_id,description,sale_date,payment_method,status,subtotal,discount,total,customer_id,notes").eq("company_id",companyId).eq("id",saleId).single(),
+   sb.from("sale_items").select("product_id,product_name,quantity,unit_price,line_total,unit_cost,total_cost").eq("company_id",companyId).eq("sale_id",saleId).order("created_at"),
+   sb.from("sale_receivables").select("id,installment_number,due_date,amount,paid_amount,status").eq("company_id",companyId).eq("sale_id",saleId).order("installment_number")
+  ]);
+  if(saleError)throw saleError;if(itemError)throw itemError;if(receivableError)throw receivableError;
+  const plan=buildSalePlan({...pending.input,operationId:pending.operation_id,skipLocalStock:true},S,(()=>{let first=true;return()=>{if(first){first=false;return pending.operation_id}return crypto.randomUUID()}})());
+  const next=plan.state;
+  const client=String(pending.input.customer||"").trim(),tel=String(pending.input.phone||"").trim();
+  const costKnown=(remoteItems||[]).some(item=>item.total_cost!=null);
+  const costCents=(remoteItems||[]).reduce((sum,item)=>sum+(item.total_cost==null?0:moneyToCents(item.total_cost,"Custo remoto")),0);
+  if(sale.payment_method==="pix"||sale.payment_method==="cash"||sale.payment_method==="card"){
+   const tx=next.tx.find(t=>t.sale_id===pending.operation_id);
+   if(!tx)throw Error("Não foi possível reconstruir a entrada local da venda confirmada.");
+   tx.sale_id=sale.id;tx.operation_id=sale.operation_id;tx.remote_ledger=true;tx.amount=Number(sale.total);tx.subtotal=Number(sale.subtotal);tx.disc=Number(sale.discount);tx.cost=costKnown?centsToMoney(costCents):undefined;
+   tx.items=(remoteItems||[]).map(item=>{const local=(S.pr||[]).find(p=>p.remote_id===item.product_id);return{product_id:local?.id??null,name:item.product_name,qty:Number(item.quantity),unit_price:Number(item.unit_price),line_total:Number(item.line_total)}});
+   plan.receipt.amount=Number(sale.total);plan.receipt.subtotal=Number(sale.subtotal);plan.receipt.disc=Number(sale.discount);
+  }else{
+   next.rc=next.rc.filter(r=>r.sale_id!==pending.operation_id);
+   const totalReceivableCents=(remoteReceivables||[]).reduce((sum,r)=>sum+moneyToCents(r.amount,"Parcela remota"),0);
+   let allocated=0;
+   (remoteReceivables||[]).forEach((r,index)=>{
+    const amountCents=moneyToCents(r.amount,"Parcela remota");
+    const costPart=index===(remoteReceivables.length-1)?costCents-allocated:(totalReceivableCents?Math.round(costCents*amountCents/totalReceivableCents):0);allocated+=costPart;
+    next.rc.push({id:r.id,sale_id:sale.id,operation_id:sale.operation_id,installment:r.installment_number,desc:remoteReceivables.length>1?pending.input.description+" ("+r.installment_number+"/"+remoteReceivables.length+")":pending.input.description,client,tel,total:Number(r.amount),paid:Number(r.paid_amount),due:r.due_date,kind:sale.payment_method==="fiado"?"fiado":"futuro",date:sale.sale_date,remote_ledger:true,cost:costKnown?centsToMoney(costPart):undefined,disc:Number(sale.discount)});
+   });
+   plan.receipt.amount=Number(sale.total);plan.receipt.subtotal=Number(sale.subtotal);plan.receipt.disc=Number(sale.discount);
+  }
+  const productIds=[...new Set((remoteItems||[]).map(i=>i.product_id).filter(Boolean))];
+  if(productIds.length){const{data:stockRows,error:stockError}=await sb.from("products").select("id,sale_price,cost_price,stock_control,current_stock,status").eq("company_id",companyId).in("id",productIds);if(stockError)throw stockError;for(const r of stockRows||[]){const p=next.pr.find(x=>x.remote_id===r.id);if(p){p.price=Number(r.sale_price);p.cost=r.cost_price==null?null:Number(r.cost_price);p.stock=r.stock_control?Number(r.current_stock):null;p.status=r.status;p._stock_initialized=true;delete p._sync_pending;}}}
+  delete next.pendingSale;
+  localStorage.setItem(activeStorageKey,JSON.stringify(next));
+  S=next;render();updatePendingSaleUI();
+  toast(rpcRow.already_processed?"Venda confirmada anteriormente e reconciliada.":"Venda confirmada no servidor.");
+  if(plan.receipt)showRec(plan.receipt);
+  return sale;
+ }catch(error){
+  if(rpcAttempted&&!rpcConfirmed&&!isNetworkFailure(error)){
+   const next={...S};delete next.pendingSale;
+   try{localStorage.setItem(activeStorageKey,JSON.stringify(next));S=next;}catch(storageError){console.error("Não foi possível limpar venda rejeitada",storageError)}
+  }
+  throw error;
+ }finally{remoteSaleRunning=false;updatePendingSaleUI();}
+}
+async function startRemoteSale(input){
+ if(S.pendingSale||S.pendingReceipt)throw Error("Existe uma operação pendente. Retome-a antes de registrar outra venda.");
+ if(!sb||!navigator.onLine)throw Error("A conta está conectada, mas o servidor está indisponível. A venda não foi lançada; conecte-se e tente novamente.");
+ const{user,companyId}=await getActiveCompany();
+ const operationId=crypto.randomUUID();
+ const payload=await resolveRemoteSalePayload(input,operationId,companyId,user);
+ buildSalePlan({...input,operationId,skipLocalStock:true},S,()=>operationId);
+ const pending={operation_id:operationId,company_id:companyId,user_id:user.id,created_at:new Date().toISOString(),input:JSON.parse(JSON.stringify(input)),payload};
+ const next={...S,pendingSale:pending};
+ localStorage.setItem(activeStorageKey,JSON.stringify(next));S=next;updatePendingSaleUI();
+ return executePendingRemoteSale();
+}
+let remoteReceiptRunning=false;
+async function executePendingRemoteReceipt(){
+ if(remoteReceiptRunning)return;
+ if(!S.pendingReceipt)return;
+ if(!sb||!navigator.onLine)throw Error("Conecte-se à internet para confirmar o recebimento. A operação ficou salva e poderá ser retomada.");
+ remoteReceiptRunning=true;updatePendingReceiptUI();let rpcAttempted=false,rpcConfirmed=false;
+ try{
+  const{user,companyId}=await getActiveCompany(),pending=S.pendingReceipt;
+  if(pending.company_id!==companyId)throw Error("O recebimento pendente pertence a outra empresa.");
+  if(pending.user_id&&pending.user_id!==user.id)throw Error("O recebimento pendente foi iniciado por outra conta.");
+  rpcAttempted=true;
+  const{data:rpcData,error:rpcError}=await sb.rpc("register_sale_receipt",pending.payload);
+  if(rpcError)throw rpcError;
+  rpcConfirmed=true;remoteLedgerMutationVersion++;
+  const rpcRow=Array.isArray(rpcData)?rpcData[0]:rpcData;
+  if(!rpcRow?.payment_id)throw Error("O servidor não confirmou o recebimento. Retome a mesma operação.");
+  const[{data:payment,error:paymentError},{data:receivable,error:receivableError}]=await Promise.all([
+   sb.from("sale_payments").select("id,operation_id,sale_id,receivable_id,payment_method,amount,received_at").eq("company_id",companyId).eq("id",rpcRow.payment_id).single(),
+   sb.from("sale_receivables").select("id,sale_id,installment_number,due_date,amount,paid_amount,status").eq("company_id",companyId).eq("id",pending.receivable_id).single()
+  ]);
+  if(paymentError)throw paymentError;if(receivableError)throw receivableError;
+  const old=S.rc.find(r=>String(r.id)===String(pending.receivable_id));
+  if(!old)throw Error("O recebível remoto foi atualizado, mas não foi localizado no cache local. Retome a operação para reconciliar.");
+  const methodMap={pix:"Pix",cash:"Dinheiro",card:"Cartão"},method=methodMap[payment.payment_method]||pending.display_method;
+  const plan=buildReceiptPaymentPlan({receivableId:old.id,amount:String(payment.amount),date:payment.received_at,method},S,()=>pending.operation_id);
+  const next=plan.state;
+  const tx=next.tx.find(t=>t.id===pending.operation_id);
+  if(!tx)throw Error("Não foi possível reconstruir o lançamento do recebimento.");
+  tx.id=payment.id;tx.operation_id=payment.operation_id;tx.sale_id=payment.sale_id;tx.receivable_id=payment.receivable_id;
+  tx.amount=Number(payment.amount);tx.date=payment.received_at;tx.method=method;tx.remote_ledger=true;
+  const idx=next.rc.findIndex(r=>String(r.id)===String(receivable.id));
+  if(receivable.status==="paid"){if(idx>=0)next.rc.splice(idx,1);}
+  else{
+   const target=idx>=0?next.rc[idx]:{...old};
+   target.id=receivable.id;target.sale_id=receivable.sale_id;target.total=Number(receivable.amount);target.paid=Number(receivable.paid_amount);target.due=receivable.due_date;target.installment=receivable.installment_number;
+   if(idx<0)next.rc.push(target);
+  }
+  delete next.pendingReceipt;
+  localStorage.setItem(activeStorageKey,JSON.stringify(next));S=next;cur=null;
+  const dlg=$("dlg");if(dlg.open)dlg.close();render();updatePendingReceiptUI();
+  toast(rpcRow.already_processed?"Recebimento confirmado anteriormente e reconciliado.":"Recebimento confirmado no servidor.");
+  return payment;
+ }catch(error){
+  if(rpcAttempted&&!rpcConfirmed&&!isNetworkFailure(error)){
+   const next={...S};delete next.pendingReceipt;
+   try{localStorage.setItem(activeStorageKey,JSON.stringify(next));S=next;}catch(storageError){console.error("Não foi possível limpar recebimento rejeitado",storageError)}
+  }
+  throw error;
+ }finally{remoteReceiptRunning=false;updatePendingReceiptUI();}
+}
+async function startRemoteReceipt(receivable,input){
+ if(S.pendingReceipt||S.pendingSale)throw Error("Existe uma operação pendente. Retome-a antes de registrar outro movimento.");
+ if(!uuidOrNull(receivable.id)||!uuidOrNull(receivable.sale_id))throw Error("Este recebível é antigo/local e ainda não possui vínculo remoto. Ele permanece disponível no histórico local.");
+ if(!sb||!navigator.onLine)throw Error("Conecte-se à internet para confirmar o recebimento no servidor.");
+ const{user,companyId}=await getActiveCompany();
+ const{data:remoteReceivable,error:remoteReceivableError}=await sb.from("sale_receivables").select("id,sale_id,installment_number,due_date,amount,paid_amount,status").eq("company_id",companyId).eq("id",receivable.id).single();
+ if(remoteReceivableError)throw remoteReceivableError;
+ if(remoteReceivable.status==="paid")throw Error("Este recebível já foi quitado no servidor. Atualize a tela.");
+ const localIndex=S.rc.findIndex(r=>r.id===receivable.id);if(localIndex>=0){S.rc[localIndex].total=Number(remoteReceivable.amount);S.rc[localIndex].paid=Number(remoteReceivable.paid_amount);S.rc[localIndex].due=remoteReceivable.due_date;save();}
+ const operationId=crypto.randomUUID();
+ const methodMap={"Pix":"pix","Dinheiro":"cash","Cartão":"card"},method=methodMap[input.method];if(!method)throw Error("Forma de recebimento inválida.");
+ buildReceiptPaymentPlan({receivableId:receivable.id,amount:input.amount,date:input.date,method:input.method},S,()=>operationId);
+ const payload={p_company_id:companyId,p_receivable_id:receivable.id,p_operation_id:operationId,p_amount:centsToMoney(moneyToCents(input.amount,"Valor recebido")),p_payment_method:method,p_received_at:input.date};
+ const pending={operation_id:operationId,receivable_id:receivable.id,company_id:companyId,user_id:user.id,created_at:new Date().toISOString(),display_method:input.method,payload};
+ const next={...S,pendingReceipt:pending};localStorage.setItem(activeStorageKey,JSON.stringify(next));S=next;updatePendingReceiptUI();
+ return executePendingRemoteReceipt();
+}
+function buildSalePlan(input,state,idFactory){
+ const next=JSON.parse(JSON.stringify(state));
+ next.tx=Array.isArray(next.tx)?next.tx:[];next.rc=Array.isArray(next.rc)?next.rc:[];
+ next.cl=Array.isArray(next.cl)?next.cl:[];next.pr=Array.isArray(next.pr)?next.pr:[];
+ const description=String(input.description||"").trim();
+ if(!description)throw Error("Informe a descrição da venda.");
+ const date=String(input.date||"");
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||new Date(date+"T00:00:00Z").toISOString().slice(0,10)!==date)throw Error("Informe uma data válida para a venda.");
+ const method=String(input.method||"");
+ if(!["Pix","Dinheiro","Cartão","Fiado","Futuro"].includes(method))throw Error("Forma de pagamento inválida.");
+ const sourceItems=Array.isArray(input.items)?input.items:[];
+ const items=sourceItems.map((item,index)=>{
+  const qty=positiveInteger(item.qty);if(!qty)throw Error("Quantidade inválida no item "+(index+1)+".");
+  const product=next.pr.find(p=>String(p.id)===String(item.id));if(!product)throw Error("Produto não encontrado no cadastro local.");
+  const unitCents=moneyToCents(item.price,"Preço do produto");
+  const lineCents=unitCents*qty;if(!Number.isSafeInteger(lineCents))throw Error("Valor do item excede o limite seguro.");
+  const costCents=item.cost==null?null:moneyToCents(item.cost,"Custo do produto");
+  const lineCostCents=costCents==null?null:costCents*qty;
+  if(lineCostCents!=null&&!Number.isSafeInteger(lineCostCents))throw Error("Custo do item excede o limite seguro.");
+  return{product_id:String(product.id),name:String(product.name||item.name||"Produto"),qty,unit_price_cents:unitCents,line_total_cents:lineCents,line_cost_cents:lineCostCents};
+ });
+ let subtotalCents=0;
+ if(items.length){for(const item of items){subtotalCents+=item.line_total_cents;if(!Number.isSafeInteger(subtotalCents))throw Error("Subtotal excede o limite seguro.");}}
+ else subtotalCents=moneyToCents(input.amount,"Valor da venda");
+ const discountCents=moneyToCents(input.discount??0,"Desconto");
+ if(discountCents>subtotalCents)throw Error("O desconto não pode superar o subtotal.");
+ const totalCents=subtotalCents-discountCents;
+ if(totalCents<=0)throw Error("O total da venda deve ser maior que zero.");
+ const customer=String(input.customer||"").trim(),phone=String(input.phone||"").trim();
+ const costCents=items.some(i=>i.line_cost_cents!=null)?items.reduce((sum,i)=>sum+(i.line_cost_cents||0),0):null;
+ if(costCents!=null&&!Number.isSafeInteger(costCents))throw Error("Custo total excede o limite seguro.");
+ // Agrupa produtos repetidos para validar e baixar o estoque uma única vez por cadastro.
+ const quantities=new Map();
+ for(const item of items){const quantity=(quantities.get(item.product_id)||0)+item.qty;if(!Number.isSafeInteger(quantity))throw Error("Quantidade total do produto excede o limite seguro.");quantities.set(item.product_id,quantity);}
+ for(const [productId,quantity] of quantities){
+  const product=next.pr.find(p=>String(p.id)===productId);
+  if(!input.skipLocalStock&&product.stock!=null){const available=Number(product.stock);if(!Number.isFinite(available)||available<0)throw Error("Saldo local inválido para "+product.name+".");if(quantity>available)throw Error("Estoque insuficiente para "+product.name+". Disponível: "+available+"; solicitado: "+quantity+".");}
+ }
+ const operationId=input.operationId||idFactory();
+ const receipt={id:operationId,desc:description,amount:centsToMoney(totalCents),date,method,client:customer,tel:phone,disc:centsToMoney(discountCents),subtotal:centsToMoney(subtotalCents)};
+ if(method==="Fiado"||method==="Futuro"){
+  const due=String(input.due||"");
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(due)||new Date(due+"T00:00:00Z").toISOString().slice(0,10)!==due)throw Error("Informe uma data de vencimento válida.");
+  if(due<date)throw Error("O vencimento não pode ser anterior à data da venda.");
+  const count=method==="Futuro"?positiveInteger(input.installments):1;
+  if(!count||count>24)throw Error("Informe entre 1 e 24 parcelas.");
+  if(totalCents<count)throw Error("O valor é insuficiente para dividir em parcelas de pelo menos R$ 0,01.");
+  const base=Math.floor(totalCents/count),costBase=costCents==null?null:Math.floor(costCents/count);
+  for(let i=0;i<count;i++){
+   const amount=i===count-1?totalCents-base*(count-1):base;
+   const allocatedCost=costCents==null?null:(i===count-1?costCents-costBase*(count-1):costBase);
+   const id=i===0?operationId:idFactory();
+   next.rc.push({id,sale_id:operationId,installment:i+1,desc:count>1?description+" ("+(i+1)+"/"+count+")":description,client:customer,tel:phone,total:centsToMoney(amount),paid:0,due:addInstallmentMonth(due,i),kind:method==="Fiado"?"fiado":"futuro",date,cost:allocatedCost==null?undefined:centsToMoney(allocatedCost),disc:centsToMoney(discountCents)});
+  }
+  receipt.method=method==="Fiado"?"Fiado, vence em "+due:count>1?"Parcelado em "+count+"x, 1ª em "+due:"A receber em "+due;
+ }else{
+  next.tx.push({id:operationId,sale_id:operationId,type:"in",desc:description,amount:centsToMoney(totalCents),date,method,client:customer,tel:phone,cost:costCents==null?undefined:centsToMoney(costCents),disc:discountCents?centsToMoney(discountCents):undefined,subtotal:centsToMoney(subtotalCents),items:items.map(i=>({product_id:i.product_id,name:i.name,qty:i.qty,unit_price:centsToMoney(i.unit_price_cents),line_total:centsToMoney(i.line_total_cents)}))});
+ }
+ for(const [productId,quantity] of quantities){const product=next.pr.find(p=>String(p.id)===productId);if(product.stock!=null)product.stock=Number(product.stock)-quantity;}
+ if(customer&&!next.cl.some(c=>String(c.name||"").trim().toLowerCase()===customer.toLowerCase()))next.cl.push({id:idFactory(),name:customer,tel:phone,status:"active",_sync_pending:true,_sync_updated_at:new Date().toISOString()});
+ return{state:next,receipt,receivable:method==="Fiado"||method==="Futuro"};
+}
+function buildReceiptPaymentPlan(input,state,idFactory){
+ const next=JSON.parse(JSON.stringify(state));next.tx=Array.isArray(next.tx)?next.tx:[];next.rc=Array.isArray(next.rc)?next.rc:[];
+ const index=next.rc.findIndex(r=>String(r.id)===String(input.receivableId));
+ if(index<0)throw Error("Recebível não encontrado ou já quitado.");
+ const receivable=next.rc[index];
+ const totalCents=moneyToCents(receivable.total,"Total do recebível");
+ const paidCents=moneyToCents(receivable.paid||0,"Valor já recebido");
+ const amountCents=moneyToCents(input.amount,"Valor recebido");
+ if(amountCents<=0)throw Error("Informe um valor de recebimento maior que zero.");
+ const remainingCents=totalCents-paidCents;
+ if(remainingCents<=0)throw Error("Este recebível já está quitado.");
+ if(amountCents>remainingCents)throw Error("O recebimento não pode superar o saldo em aberto de R$ "+centsToMoney(remainingCents).toFixed(2)+".");
+ const date=String(input.date||"");
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||new Date(date+"T00:00:00Z").toISOString().slice(0,10)!==date)throw Error("Informe uma data válida para o recebimento.");
+ const method=String(input.method||"");if(!["Pix","Dinheiro","Cartão"].includes(method))throw Error("Forma de recebimento inválida.");
+ const nextPaid=paidCents+amountCents;
+ const costTotal=receivable.cost==null?null:moneyToCents(receivable.cost,"Custo do recebível");
+ const costBefore=costTotal==null?null:Math.round(costTotal*paidCents/totalCents);
+ const costAfter=costTotal==null?null:Math.round(costTotal*nextPaid/totalCents);
+ const paymentId=idFactory();
+ next.tx.push({id:paymentId,type:"in",desc:receivable.desc+(nextPaid<totalCents?" (parcial)":" (recebido)"),amount:centsToMoney(amountCents),date,method,client:receivable.client,cost:costTotal==null?undefined:centsToMoney(costAfter-costBefore),sale_id:receivable.sale_id||undefined,receivable_id:receivable.id});
+ if(nextPaid===totalCents)next.rc.splice(index,1);else next.rc[index].paid=centsToMoney(nextPaid);
+ return{state:next,amount:centsToMoney(amountCents),remaining:centsToMoney(remainingCents-amountCents),paymentId};
+}
+function toast(m){const t=$("toast");t.textContent=m;t.style.display="block";clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display="none",2200)}
+
+// navegação
+function go(t){document.querySelectorAll(".tab").forEach(e=>e.classList.toggle("on",e.id==="t-"+t));
+ document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.go===t));scrollTo(0,0);render()}
+document.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g)go(g.dataset.go)});
+
+// tema
+$("theme").onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;r.dataset.theme=dark?"light":"dark"};
+
+// inicialização de campos
+CATS.forEach(c=>{$("g-cat").add(new Option(c,c))});
+$("g-fc").add(new Option("Todas",""));CATS.forEach(c=>$("g-fc").add(new Option(c,c)));
+$("e-date").value=$("g-date").value=today();$("g-fm").value=today().slice(0,7);
+$("e-met").onchange=()=>{$("e-dueBox").style.display=["Fiado","Futuro"].includes($("e-met").value)?"block":"none"};
+
+ // entradas: valida tudo, prepara um novo estado e só confirma depois de persistir.
+let saleSaving=false;
+$("e-retry").onclick=async()=>{if(remoteSaleRunning)return;const b=$("e-retry");b.disabled=true;try{await executePendingRemoteSale();$("e-remote-status").textContent="Venda reconciliada com o servidor.";}catch(e){toast(e?.message||"Não foi possível retomar a venda.");}finally{b.disabled=false;updatePendingSaleUI();}};
+$("e-save").onclick=async()=>{
+ const button=$("e-save");if(saleSaving)return;saleSaving=true;button.disabled=true;
+ try{
+  const selectedProduct=S.pr.find(x=>x.id===$("e-prod").value);
+  const directQty=positiveInteger($("e-qty").value);
+  if(!CART.length&&selectedProduct&&!directQty)throw Error("A quantidade deve ser um número inteiro maior que zero.");
+  const items=CART.length?CART.map(i=>({...i})):selectedProduct?[{id:selectedProduct.id,name:selectedProduct.name,price:selectedProduct.price,cost:selectedProduct.cost,qty:directQty}]:[];
+  const defaultDescription=items.length?items.map(i=>i.qty+"x "+i.name).join(", "):"";
+  const description=$("e-desc").value.trim()||defaultDescription;
+  const saleInput={
+   description,
+   amount:$("e-val").value,
+   discount:$("e-disc").value.trim()===""?0:$("e-disc").value,
+   date:$("e-date").value,
+   method:$("e-met").value,
+   due:$("e-due").value,
+   installments:$("e-par").value,
+   customer:$("e-cli").value,
+   phone:$("e-tel").value,
+   items
+  };
+  if(isCompanyWorkspace()){
+   await startRemoteSale(saleInput);
+   ["e-desc","e-val","e-cli","e-tel","e-due","e-disc"].forEach(id=>$(id).value="");
+   $("e-prod").value="";$("e-qty").value=1;$("e-par").value=1;$("e-met").value="Pix";$("e-dueBox").style.display="none";CART=[];drawCart();go("res");
+   return;
+  }
+  const plan=buildSalePlan(saleInput,S,uid);
+  // localStorage.setItem é síncrono: se falhar (ex.: quota), o estado ativo não muda.
+  localStorage.setItem(activeStorageKey,JSON.stringify(plan.state));
+  S=plan.state;rcpt=plan.receipt;
+  toast(plan.receivable?"Venda lançada em Recebimentos.":"Venda registrada no caixa.");
+  ["e-desc","e-val","e-cli","e-tel","e-due","e-disc"].forEach(id=>$(id).value="");
+  $("e-prod").value="";$("e-qty").value=1;$("e-par").value=1;$("e-met").value="Pix";
+  $("e-dueBox").style.display="none";CART=[];drawCart();go(plan.receivable?"rec":"res");if(rcpt)showRec(rcpt);
+ }catch(error){toast(error?.message||"Não foi possível registrar a venda.");}
+ finally{saleSaving=false;button.disabled=false;}
+};
+
+// gastos
+$("g-save").onclick=()=>{
+ const desc=$("g-desc").value.trim(),val=parseFloat($("g-val").value),date=$("g-date").value;
+ if(!desc||!(val>0)||!date)return toast("Preencha descrição, valor e data");
+ S.tx.push({id:uid(),type:"out",desc,amount:val,date,cat:$("g-cat").value,method:$("g-method").value||"cash"});save();
+ $("g-desc").value=$("g-val").value="";toast("Gasto registrado");render()};
+$("g-fm").onchange=$("g-fc").onchange=render;
+
+// recebimentos
+let RF="todos";
+$("r-f").onclick=e=>{const b=e.target.closest("[data-f]");if(!b)return;RF=b.dataset.f;document.querySelectorAll("#r-f .chip").forEach(c=>c.classList.toggle("on",c===b));render()};
+$("r-q").oninput=render;
+function late(r){return rem(r)>0&&r.due<today()}
+function wa(r){
+ const left=rem(r),nome=r.client||"cliente";
+ const msg=`Olá, ${nome}! Tudo bem? Passando para lembrar do valor de ${R(left)} referente a “${r.desc}”, com vencimento em ${D(r.due)}. Qualquer dúvida, estou à disposição. Obrigado! 😊`;
+ let n=(r.tel||"").replace(/\D/g,"");if(n&&n.length<=11)n="55"+n;
+ window.open(`https://wa.me/${n}?text=${encodeURIComponent(msg)}`,"_blank")}
+let cur=null;
+$("r-retry").onclick=async()=>{const b=$("r-retry");b.disabled=true;try{await executePendingRemoteReceipt();}catch(e){toast(e?.message||"Não foi possível retomar o recebimento.");}finally{b.disabled=false;updatePendingReceiptUI();}};
+function openPay(id){if(S.pendingReceipt||S.pendingSale)return toast("Retome a operação pendente antes de registrar outro recebimento.");cur=S.rc.find(x=>x.id===id);if(!cur)return;if(rem(cur)<=0)return toast("Este recebível já está quitado.");$("dl-i").textContent=`${cur.client||"Sem cliente"} · ${cur.desc} · restante ${R(rem(cur))}`;$("dl-v").value=rem(cur).toFixed(2);$("dl-d").value=today();$("dlg").showModal()}
+$("dl-x").onclick=()=>$("dlg").close();
+let paymentSaving=false;
+$("dl-ok").onclick=async()=>{
+ if(paymentSaving)return;paymentSaving=true;const button=$("dl-ok");button.disabled=true;
+ try{
+  if(!cur)throw Error("Selecione um recebível válido.");
+  if(isCompanyWorkspace()&&uuidOrNull(cur.id)&&uuidOrNull(cur.sale_id)){await startRemoteReceipt(cur,{amount:$("dl-v").value,date:$("dl-d").value,method:$("dl-m").value});return;}
+  const plan=buildReceiptPaymentPlan({receivableId:cur.id,amount:$("dl-v").value,date:$("dl-d").value,method:$("dl-m").value},S,uid);
+  localStorage.setItem(activeStorageKey,JSON.stringify(plan.state));
+  S=plan.state;cur=null;$("dlg").close();toast("Recebimento lançado no caixa");render();
+ }catch(error){toast(error?.message||"Não foi possível registrar o recebimento.");}
+ finally{paymentSaving=false;button.disabled=false;}
+};
+$("r-list").onclick=e=>{const b=e.target.closest("[data-a]");if(!b)return;const r=S.rc.find(x=>x.id===b.dataset.id);if(!r)return;
+ if(b.dataset.a==="pay")openPay(r.id);
+ if(b.dataset.a==="wa")wa(r);
+ if(b.dataset.a==="del"&&r&&!r.sale_id&&confirm("Excluir este lançamento pendente?")){S.rc=S.rc.filter(x=>x!==r);save();render()}};
+
+// histórico (excluir)
+function delTx(id){const tx=S.tx.find(t=>String(t.id)===String(id));if(tx?.remote_expense||tx?.remote_id)return toast("Despesa sincronizada não pode ser apagada localmente. Solicite estorno autorizado no servidor.");if(confirm("Excluir este lançamento?")){S.tx=S.tx.filter(t=>t.id!==id);save();render()}}
+async function voidRemoteExpense(id){
+ const tx=S.tx.find(t=>String(t.id)===String(id)&&t.remote_expense);if(!tx||tx.status==="void")return;
+ if(!canVoidExpenses())return toast("Somente owner, admin ou manager pode estornar despesas.");
+ const reason=prompt("Informe o motivo obrigatório do estorno (3 a 500 caracteres):");if(reason===null)return;
+ const clean=reason.trim();if(clean.length<3||clean.length>500)return toast("O motivo deve ter entre 3 e 500 caracteres.");
+ if(!confirm(`Confirmar estorno de ${tx.desc} no valor de ${R(tx.amount)}?`))return;
+ try{const{companyId}=await getActiveCompany();const{data,error}=await sb.rpc("void_expense_v2",{p_company_id:companyId,p_expense_id:id,p_reason:clean});if(error)throw error;const result=Array.isArray(data)?data[0]:data;if(!result?.expense_id)throw Error("O servidor não confirmou o estorno.");await refreshRemoteSalesLedger(companyId);toast(result.already_void?"Despesa já estava estornada.":"Despesa estornada com motivo registrado.");}
+ catch(e){toast(e?.message||"Não foi possível estornar a despesa.");}
+}
+$("g-list").onclick=e=>{const v=e.target.closest("[data-void-expense]");if(v){voidRemoteExpense(v.dataset.voidExpense);return;}const b=e.target.closest("[data-del]");if(b)delTx(b.dataset.del)};
+
+// relatórios
+let P="mes";
+$("p-f").onclick=e=>{const b=e.target.closest("[data-p]");if(!b)return;P=b.dataset.p;document.querySelectorAll("#p-f .chip").forEach(c=>c.classList.toggle("on",c===b));$("p-c").style.display=P==="custom"?"grid":"none";render()};
+$("p-a").onchange=$("p-b").onchange=render;
+function range(){const t=new Date(),td=iso(t);
+ if(P==="hoje")return[td,td];
+ if(P==="semana"){const s=new Date(t);s.setDate(t.getDate()-t.getDay());const e=new Date(s);e.setDate(s.getDate()+6);return[iso(s),iso(e)]}
+ if(P==="mes")return[td.slice(0,8)+"01",iso(new Date(t.getFullYear(),t.getMonth()+1,0))];
+ return[$("p-a").value||"0000-01-01",$("p-b").value||"9999-12-31"]}
+let REP="";
+$("p-print").onclick=()=>print();
+$("p-copy").onclick=()=>{
+ const done=()=>toast("Resumo copiado!");
+ if(navigator.clipboard)navigator.clipboard.writeText(REP).then(done,fb);else fb();
+ function fb(){const t=document.createElement("textarea");t.value=REP;document.body.appendChild(t);t.select();try{document.execCommand("copy");done()}catch(e){toast("Não foi possível copiar")}t.remove()}};
+
+function canVoidExpenses(){return ["owner","admin","manager"].includes(activeCompanyRole)}
+function mov(t){const pos=t.type==="in",voided=t.status==="void";return `<div class="it"><div><b>${esc(t.desc)}</b><small>${esc(D(t.date))} · ${pos?esc(t.method||"Entrada"):esc(t.cat)}${t.client?" · "+esc(t.client):""}${voided?" · ESTORNADA":""}</small>${voided&&t.void_reason?`<small>Motivo: ${esc(t.void_reason)}</small>`:""}<span class="acts" style="margin-top:4px">${pos?`<button class="sm gh" data-rec="${esc(t.id)}">🧾 Recibo</button>`:""}${!voided&&(t.sale_id||t.receivable_id||t.items?.length)?"":(!voided&&!t.remote_expense?`<button class="sm gh" data-edit="${esc(t.id)}">✎ Editar</button>`:"")}${t.remote_expense&&!voided&&canVoidExpenses()?`<button class="sm gh" data-void-expense="${esc(t.id)}">Estornar</button>`:""}</span></div><div class="amt ${pos?"g":voided?"a":"r"}">${pos?"+":voided?"":"– "}${R(t.amount)}</div></div>`}
+
+function render(){
+ updatePendingSaleUI();updatePendingReceiptUI();
+ const td=today(),mo=td.slice(0,7);cad();cx(true);
+ const inn=S.tx.filter(t=>t.type==="in"),allOut=S.tx.filter(t=>t.type==="out"),out=allOut.filter(t=>t.status!=="void");
+ // dashboard
+ const sal=sum(inn.filter(t=>t.date.startsWith(mo)).map(t=>t.amount))-sum(out.filter(t=>t.date.startsWith(mo)).map(t=>t.amount));
+ $("d-saldo").textContent=R(sal);$("d-saldo").className="v "+(sal>=0?"g":"r");
+ $("d-in").textContent=R(sum(inn.filter(t=>t.date===td).map(t=>t.amount)));
+ $("d-out").textContent=R(sum(out.filter(t=>t.date===td).map(t=>t.amount)));
+ $("d-pend").textContent=R(sum(S.rc.map(rem)));
+ $("d-prev").textContent=R(sum(S.rc.filter(r=>r.due>=td).map(rem)));
+ const lim=iso(new Date(Date.now()+3*864e5));
+ const al=S.rc.filter(r=>rem(r)>0&&r.due<=lim).sort((a,b)=>a.due<b.due?-1:1);
+ $("d-alert").innerHTML=al.length?al.map(r=>`<div class="alert ${late(r)?"late":""}">${late(r)?"⚠ Atrasado":"⏰ Vence em breve"}: <b>${esc(r.client||r.desc)}</b> · ${R(rem(r))} · ${esc(D(r.due))}</div>`).join(""):`<div class="card empty">Nenhum vencimento próximo ou atrasado 🎉</div>`;
+ $("d-alert").innerHTML+=S.pr.filter(p=>p.stock!=null&&p.stock<=LOW).map(p=>`<div class="alert">📦 Estoque baixo: <b>${esc(p.name)}</b> · restam ${esc(p.stock)}</div>`).join("");
+ const last=[...S.tx].sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0).slice(0,6);
+ $("d-last").innerHTML=last.length?last.map(mov).join(""):`<div class="empty">Ainda sem movimentações.</div>`;
+ // recebimentos
+ const q=$("r-q").value.toLowerCase();
+ let L=S.rc.filter(r=>(!q||(r.client||"").toLowerCase().includes(q)||r.desc.toLowerCase().includes(q))&&(RF==="todos"||(RF==="atrasado"?late(r):r.kind===RF))).sort((a,b)=>a.due<b.due?-1:1);
+ $("r-list").innerHTML=L.length?L.map(r=>{const l=late(r);return `<div class="card"><div class="it" style="border:0;padding:0"><div><b>${esc(r.client||"Sem cliente")}</b><small>${esc(r.desc)} · vence ${esc(D(r.due))}</small><span class="tag ${l?"t-r":r.kind==="fiado"?"t-a":"t-b"}">${l?"Atrasado":r.kind==="fiado"?"Fiado":"Futuro"}</span></div><div class="amt ${r.kind==="fiado"?"a":"b"}">${R(rem(r))}${r.paid>0?`<small>de ${R(r.total)}</small>`:""}</div></div><div class="acts"><button class="sm" data-a="pay" data-id="${esc(r.id)}">Confirmar recebimento</button><button class="sm amb" data-a="wa" data-id="${esc(r.id)}">Cobrar no WhatsApp</button>${r.sale_id?"":`<button class="sm gh" data-a="del" data-id="${esc(r.id)}">Excluir</button>`}</div></div>`}).join(""):`<div class="card empty">Nada por aqui.</div>`;
+ // gastos
+ const fm=$("g-fm").value,fc=$("g-fc").value;
+ const G=allOut.filter(t=>(!fm||t.date.startsWith(fm))&&(!fc||t.cat===fc)).sort((a,b)=>a.date<b.date?1:-1);
+ $("g-tot").textContent=R(sum(G.filter(t=>t.status!=="void").map(t=>t.amount)));
+ $("g-list").innerHTML=G.length?G.map(t=>mov(t).replace('</div></div>',`${t.remote_expense||t.remote_id?"":"<button class=\"sm gh\" data-del=\""+esc(t.id)+"\" aria-label=\"Excluir\">✕</button>"}</div></div>`)).join(""):`<div class="empty">Nenhum gasto neste filtro.</div>`;
+ // relatórios
+ const[a,b]=range();
+ const inR=sum(inn.filter(t=>t.date>=a&&t.date<=b).map(t=>t.amount));
+ const outL=out.filter(t=>t.date>=a&&t.date<=b),outR=sum(outL.map(t=>t.amount));
+ const luc=inR-outR,pend=sum(S.rc.map(rem));
+ $("p-lab").textContent=`Período: ${a.startsWith("0000")?"início":D(a)} até ${b.startsWith("9999")?"hoje":D(b)}`;
+ const mt=inn.filter(t=>t.date>=a&&t.date<=b&&t.cost!=null),mr=sum(mt.map(t=>t.amount)),mc=sum(mt.map(t=>t.cost));
+ $("p-mg").textContent=mt.length?`${R(mr-mc)} (${mr>0?Math.round((mr-mc)/mr*100):0}% de margem)`:"Cadastre o custo dos produtos";
+ $("p-in").textContent=R(inR);$("p-out").textContent=R(outR);
+ $("p-ll").textContent=luc>=0?"Lucro líquido":"Prejuízo líquido";
+ $("p-lu").textContent=R(luc);$("p-lu").className="v "+(luc>=0?"g":"r");
+ $("p-pe").textContent=R(pend);
+ const bc=CATS.map(c=>[c,sum(outL.filter(t=>t.cat===c).map(t=>t.amount))]).filter(x=>x[1]>0).sort((x,y)=>y[1]-x[1]);
+ $("p-cat").innerHTML=bc.length?bc.map(([c,v])=>`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between"><span>${esc(c)}</span><b>${R(v)} <span class="k">(${Math.round(v/outR*100)}%)</span></b></div><div class="bar"><i style="width:${v/outR*100}%"></i></div></div>`).join(""):`<div class="empty">Sem gastos no período.</div>`;
+ REP=`*M7 ERP – Resumo*\n${$("p-lab").textContent}\n\n✅ Entradas recebidas: ${R(inR)}\n🔻 Gastos: ${R(outR)}\n${luc>=0?"💰 Lucro":"⚠ Prejuízo"} líquido: ${R(luc)}\n⏳ Pendente a receber: ${R(pend)}`+(bc.length?"\n\n*Gastos por categoria*\n"+bc.map(([c,v])=>`• ${c}: ${R(v)}`).join("\n"):"");
+}
+// extrato e cobrança em massa
+let XT="",XC=null,MG=[];
+function extrato(id){const c=S.cl.find(x=>x.id===id);if(!c)return;XC=c;
+ const pg=S.tx.filter(t=>t.type==="in"&&t.client===c.name).sort((a,b)=>a.date<b.date?1:-1),ab=S.rc.filter(r=>r.client===c.name).sort((a,b)=>a.due<b.due?-1:1);
+ const tp=sum(pg.map(t=>t.amount)),tf=sum(ab.map(rem));
+ $("x-t").textContent=c.name;
+ $("x-b").innerHTML=`<div class="grid"><div class="card"><div class="k">Já pagou</div><div class="v g">${R(tp)}</div></div><div class="card"><div class="k">Falta pagar</div><div class="v a">${R(tf)}</div></div></div>`+(ab.length?"<h3>Em aberto</h3>"+ab.map(r=>`<div class="it"><div>${esc(r.desc)}<small>vence ${esc(D(r.due))}${late(r)?" · atrasado":""}</small></div><b class="a">${R(rem(r))}</b></div>`).join(""):"")+(pg.length?"<h3>Pagamentos e compras</h3>"+pg.slice(0,15).map(t=>`<div class="it"><div>${esc(t.desc)}<small>${esc(D(t.date))} · ${esc(t.method||"")}</small></div><b class="g">${R(t.amount)}</b></div>`).join(""):"");
+ XT=`*${S.shop||"M7 ERP"} – Extrato*\nCliente: ${c.name}\n\n`+(ab.length?"Em aberto:\n"+ab.map(r=>`• ${r.desc} – ${R(rem(r))} (vence ${esc(D(r.due))}${late(r)?", atrasado":""})`).join("\n")+`\nTotal em aberto: ${R(tf)}\n\n`:"Nada em aberto. 🎉\n\n")+(pg.length?"Últimos pagamentos:\n"+pg.slice(0,8).map(t=>`• ${D(t.date)} – ${t.desc}: ${R(t.amount)}`).join("\n")+"\n\n":"")+"Obrigado!";
+ $("xdlg").showModal()}
+$("x-x").onclick=()=>$("xdlg").close();
+$("x-wa").onclick=()=>{let n=(XC.tel||"").replace(/\D/g,"");if(n&&n.length<=11)n="55"+n;open(`https://wa.me/${n}?text=${encodeURIComponent(XT)}`,"_blank")};
+function mass(){const g={};S.rc.filter(late).forEach(r=>{const k=r.client||"(sem nome)";(g[k]=g[k]||{tel:r.tel,it:[]}).it.push(r);if(!g[k].tel&&r.tel)g[k].tel=r.tel});
+ MG=Object.entries(g);
+ $("b-b").innerHTML=MG.length?MG.map(([k,v],i)=>`<div class="it"><div><b>${esc(k)}</b><small>${v.it.length} em atraso</small></div><div class="amt">${R(sum(v.it.map(rem)))}<br><button class="sm amb" data-bi="${i}">WhatsApp</button></div></div>`).join(""):'<div class="empty">Nenhum atraso 🎉</div>';
+ $("bdlg").showModal()}
+$("mass-btn").onclick=mass;$("b-x").onclick=()=>$("bdlg").close();
+$("b-b").onclick=e=>{const b=e.target.closest("[data-bi]");if(!b)return;const[k,v]=MG[+b.dataset.bi],tot=sum(v.it.map(rem));
+ const msg=`Olá${k==="(sem nome)"?"":" "+k}! Tudo bem? Passando para lembrar dos valores em atraso:\n`+v.it.map(r=>`• ${r.desc} – ${R(rem(r))} (venceu em ${D(r.due)})`).join("\n")+`\nTotal: ${R(tot)}. Qualquer dúvida, estou à disposição. Obrigado! 😊`;
+ let n=(v.tel||"").replace(/\D/g,"");if(n&&n.length<=11)n="55"+n;open(`https://wa.me/${n}?text=${encodeURIComponent(msg)}`,"_blank");b.textContent="✔ Enviado";b.className="sm gh"};
+// editar lançamentos
+function editTx(id){ET=S.tx.find(x=>x.id===id);if(!ET)return;if(ET.sale_id||ET.receivable_id||ET.items?.length)return toast("Lançamentos vinculados a venda/recebimento não podem ser editados diretamente.");const o=ET.type==="out";
+ $("ed-desc").value=ET.desc;$("ed-val").value=ET.amount;$("ed-date").value=ET.date;$("ed-cli").value=ET.client||"";$("ed-clib").style.display=o?"none":"block";
+ const ops=o?CATS:["Pix","Dinheiro","Cartão"],cv=(o?ET.cat:ET.method)||ops[0];
+ $("ed-sl").textContent=o?"Categoria":"Forma de pagamento";$("ed-method-box").style.display=o?"block":"none";$("ed-method").value=ET.method||"cash";
+ $("ed-sel").innerHTML=(ops.includes(cv)?ops:[...ops,cv]).map(x=>`<option>${esc(x)}</option>`).join("");$("ed-sel").value=cv;
+ $("edlg").showModal()}
+$("ed-x").onclick=()=>$("edlg").close();
+$("ed-ok").onclick=()=>{if(ET?.sale_id||ET?.receivable_id||ET?.items?.length)return toast("Lançamentos vinculados a venda/recebimento não podem ser editados diretamente.");const v=parseFloat($("ed-val").value),d=$("ed-date").value,ds=$("ed-desc").value.trim();if(!ds||!(v>0)||!d)return toast("Preencha descrição, valor e data");
+ ET.desc=ds;ET.amount=v;ET.date=d;if(ET.type==="out"){ET.cat=$("ed-sel").value;ET.method=$("ed-method").value||"cash";}else{ET.method=$("ed-sel").value;ET.client=$("ed-cli").value.trim()}
+ save();$("edlg").close();toast("Lançamento atualizado");render()};
+document.addEventListener("click",e=>{const b=e.target.closest("[data-edit]");if(b)editTx(b.dataset.edit)});
+// PIN
+const hpLegacy=s=>{let h=5381;const t="m7:"+s;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return String(h)};
+const PIN_ITER=150000,PIN_PREFIX="pbkdf2$";
+const pinCanHash=()=>!!(window.crypto&&crypto.subtle&&window.isSecureContext);
+const b64=u=>btoa(String.fromCharCode(...u)),unb64=t=>Uint8Array.from(atob(t),c=>c.charCodeAt(0));
+async function pinDerive(pin,salt,iter){const k=await crypto.subtle.importKey("raw",new TextEncoder().encode("m7:"+pin),"PBKDF2",false,["deriveBits"]);return new Uint8Array(await crypto.subtle.deriveBits({name:"PBKDF2",hash:"SHA-256",salt,iterations:iter},k,256))}
+async function hp(pin){if(!pinCanHash())return hpLegacy(pin);const salt=crypto.getRandomValues(new Uint8Array(16));return PIN_PREFIX+PIN_ITER+"$"+b64(salt)+"$"+b64(await pinDerive(pin,salt,PIN_ITER))}
+async function pinCheck(pin,stored){
+ if(typeof stored!=="string")return{ok:false};
+ if(!stored.startsWith(PIN_PREFIX))return{ok:hpLegacy(pin)===stored,legacy:true};
+ if(!pinCanHash())return{ok:false,unsupported:true};
+ try{const[,it,salt,hash]=stored.split("$");const got=await pinDerive(pin,unb64(salt),parseInt(it,10));const want=unb64(hash);let diff=got.length^want.length;for(let i=0;i<got.length;i++)diff|=got[i]^want[i];return{ok:diff===0}}catch(e){return{ok:false}}
+}
+function lock(){if(!S.pin)return;$("lock").style.display="flex";$("lk-in").value="";setTimeout(()=>$("lk-in").focus(),50)}
+function pinUI(){$("pin-st").textContent=S.pin?"PIN ativo: o app pede o PIN ao abrir e ao voltar para ele.":"Sem PIN: qualquer pessoa com o aparelho vê seus dados."}
+let pinFails=0,pinBlockedUntil=0;
+$("lk-ok").onclick=async()=>{
+ const wait=pinBlockedUntil-Date.now();if(wait>0)return toast("Muitas tentativas. Aguarde "+Math.ceil(wait/1000)+"s.");
+ const v=$("lk-in").value;const r=await pinCheck(v,S.pin);
+ if(r.ok){pinFails=0;$("lock").style.display="none";
+  if(r.legacy&&pinCanHash()&&/^\d{4,6}$/.test(v)){try{S.pin=await hp(v);save()}catch(e){console.error("Falha ao migrar o PIN",e)}}
+ }else{
+  if(r.unsupported)toast("PIN protegido exige HTTPS ou localhost para ser validado.");
+  else{pinFails++;if(pinFails>=5){pinBlockedUntil=Date.now()+30000;pinFails=0;toast("Muitas tentativas. Aguarde 30s.")}else toast("PIN incorreto")}
+  $("lk-in").value=""}
+};
+$("lk-in").onkeydown=e=>{if(e.key==="Enter")$("lk-ok").click()};
+$("pin-set").onclick=async()=>{const v=$("pin-n").value;if(!/^\d{4,6}$/.test(v))return toast("Use de 4 a 6 números");S.pin=await hp(v);save();$("pin-n").value="";pinUI();toast("PIN definido")};
+$("pin-off").onclick=()=>{if(S.pin&&confirm("Remover o PIN?")){delete S.pin;save();pinUI()}};
+$("pin-lock").onclick=lock;
+document.addEventListener("visibilitychange",()=>{if(document.hidden)lock()});
+pinUI();lock();
+// estoque, parcelas e caixa
+const LOW=3;let CXT="";
+function addM(s,i){const[y,m,d]=s.split("-").map(Number);const t=new Date(y,m-1+i,1);t.setDate(Math.min(d,new Date(y,m+i,0).getDate()));return iso(t)}
+$("e-met").addEventListener("change",()=>{$("e-parBox").style.display=$("e-met").value==="Futuro"?"block":"none"});
+$("cx-d").value=today();
+const cashClosingVersions={};
+const cashClosingVersionKey=(companyId,date)=>companyId+":"+date;
+const cashMethod=t=>({cash:"Dinheiro",pix:"Pix",card:"Cartão",Dinheiro:"Dinheiro",Pix:"Pix",Cartão:"Cartão"}[t?.method]||"Dinheiro");
+function cx(set){
+ const d=$("cx-d").value||today(),o=S.cx[d]||{};
+ if(set){$("cx-i").value=o.i||"";$("cx-c").value=o.c||""}
+ const ent=S.tx.filter(t=>t.type==="in"&&t.date===d),dayExpenses=S.tx.filter(t=>t.type==="out"&&t.date===d&&t.status!=="void");
+ const activeDayExpenses=dayExpenses.filter(t=>t.status!=="void");
+ const gas=sum(activeDayExpenses.map(t=>t.amount)),cashGas=sum(activeDayExpenses.filter(t=>cashMethod(t)==="Dinheiro").map(t=>t.amount));
+ const by=m=>sum(ent.filter(t=>t.method===m).map(t=>t.amount));
+ const pix=by("Pix"),din=by("Dinheiro"),car=by("Cartão"),tot=sum(ent.map(t=>t.amount));
+ const ini=parseFloat($("cx-i").value)||0,has=$("cx-c").value!=="",cont=parseFloat($("cx-c").value)||0;
+ const esp=ini+din-cashGas,dif=cont-esp;
+ const row=(k,v,c)=>`<div class="it"><span>${k}</span><b class="${c||""}">${v}</b></div>`;
+ $("cx-out").innerHTML=row("Pix",R(pix))+row("Dinheiro",R(din))+row("Cartão",R(car))+row("Total de entradas",R(tot),"g")+row("Gastos totais",R(gas),"r")+row("Despesas pagas em dinheiro",R(cashGas),"r")+row("Dinheiro esperado na gaveta",R(esp))+(has?row("Diferença",Math.abs(dif)<0.005?"Caixa batendo ✔":(dif>0?"Sobra ":"Falta ")+R(Math.abs(dif)),Math.abs(dif)<0.005?"g":"a"):"");
+ CXT=`*${S.shop||"M7 ERP"} – Fechamento de caixa*\n${D(d)}\n\nPix: ${R(pix)}\nDinheiro: ${R(din)}\nCartão: ${R(car)}\nTotal de entradas: ${R(tot)}\nGastos totais: ${R(gas)}\nDespesas em dinheiro: ${R(cashGas)}\nDinheiro esperado: ${R(esp)}`+(has?`\nContado: ${R(cont)}\nDiferença: ${R(dif)}`:"");
+}
+async function refreshCashClosingAudit(companyId,date){
+ const status=$("cx-remote-status"),history=$("cx-history");
+ try{
+  const[{data:state,error:stateError},{data:rows,error:historyError}]=await Promise.all([
+   sb.rpc("get_cash_closing_status_v1",{p_company_id:companyId,p_business_date:date}),
+   sb.from("cash_closing_revisions").select("version,opening_float,counted_cash,cash_received,pix_received,card_received,cash_expenses,total_expenses,supplier_cash_paid,supplier_total_paid,supplier_cash_refunded,supplier_total_refunded,expected_cash,difference,calculated_at,recorded_by,recorded_at,activity_version").eq("company_id",companyId).eq("business_date",date).order("version",{ascending:false}).limit(20)
+  ]);
+  if(stateError)throw stateError;if(historyError)throw historyError;
+  const st=Array.isArray(state)?state[0]:state;
+  if(st?.has_closing&&st.is_stale&&status)status.textContent+=" ⚠ Há novas movimentações desde esta apuração. Salve novamente para recalcular.";
+  if(!history)return;
+  history.innerHTML=rows?.length?`<b>Histórico de fechamentos — últimas ${rows.length} versões</b>`+rows.map(r=>`<div class="it"><div><b>Versão ${Number(r.version)}</b><small>${new Date(r.recorded_at).toLocaleString("pt-BR")} · responsável ${esc(String(r.recorded_by||"").slice(0,8))} · diferença ${R(Number(r.difference))}</small><small>Esperado ${R(Number(r.expected_cash))} · contado ${R(Number(r.counted_cash))} · fornecedores pagos ${R(Number(r.supplier_total_paid||0))} (dinheiro ${R(Number(r.supplier_cash_paid||0))}) · reembolsos ${R(Number(r.supplier_total_refunded||0))} (dinheiro ${R(Number(r.supplier_cash_refunded||0))}) · atividade ${Number(r.activity_version||0)}</small></div></div>`).join(""):`<b>Histórico de fechamentos</b><div class="empty">Nenhuma versão registrada para este dia.</div>`;
+ }catch(e){if(history)history.textContent="Não foi possível carregar o histórico de versões: "+(e.message||"verifique a conexão");}
+}
+async function loadRemoteCashClosing(date,restore=false){
+ const status=$("cx-remote-status");if(!sb||!navigator.onLine||!isCompanyWorkspace())return;
+ try{
+  const{companyId}=await getActiveCompany();const{data,error}=await sb.from("cash_closings").select("business_date,version,opening_float,counted_cash,cash_received,pix_received,card_received,cash_expenses,total_expenses,supplier_cash_paid,supplier_total_paid,supplier_cash_refunded,supplier_total_refunded,expected_cash,difference,calculated_at,updated_at").eq("company_id",companyId).eq("business_date",date).maybeSingle();
+  if(error)throw error;cashClosingVersions[cashClosingVersionKey(companyId,date)]=data?.version||0;
+  if(data){if(restore){$("cx-i").value=Number(data.opening_float).toFixed(2);$("cx-c").value=Number(data.counted_cash).toFixed(2);S.cx[date]={i:$("cx-i").value,c:$("cx-c").value};save();}if(status)status.textContent=`Fechamento remoto v${data.version} · apurado em ${new Date(data.calculated_at).toLocaleString("pt-BR")}. Salve novamente para recalcular se houve novas movimentações.`;}
+  else{if(restore){const local=S.cx[date]||{};$("cx-i").value=local.i||"";$("cx-c").value=local.c||"";}if(status)status.textContent="Ainda não existe fechamento remoto para este dia. Informe o troco inicial e o valor contado.";}
+  cx(false);await refreshCashClosingAudit(companyId,date);
+ }catch(e){if(status)status.textContent="Não foi possível carregar o fechamento remoto: "+(e.message||"verifique a conexão");}
+}
+let cashClosingSaving=false;
+async function saveRemoteCashClosing(){
+ const button=$("cx-save-remote"),status=$("cx-remote-status");if(cashClosingSaving)return;
+ if(!sb||!navigator.onLine||!isCompanyWorkspace())return toast("Entre na empresa e conecte-se à internet para salvar o fechamento remoto.");
+ const pendingExpenses=(S.tx||[]).filter(t=>t.type==="out"&&!t.remote_expense&&!t.remote_id).length;if(pendingExpenses)return toast(`Existem ${pendingExpenses} despesas locais pendentes. Sincronize as despesas antes de fechar o caixa.`);
+ if(S.pendingSale||S.pendingReceipt)return toast("Existe uma operação aguardando confirmação do servidor. Retome a operação antes de fechar o caixa.");
+ const date=$("cx-d").value||today(),opening=Number($("cx-i").value),counted=Number($("cx-c").value);
+ if(!String($("cx-c").value||"").trim())return toast("Informe o dinheiro contado na gaveta antes de fechar o caixa.");
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(opening)||!Number.isFinite(counted)||opening<0||counted<0||Math.abs(opening*100-Math.round(opening*100))>1e-7||Math.abs(counted*100-Math.round(counted*100))>1e-7)return toast("Informe data, troco inicial e dinheiro contado com valores válidos em centavos.");
+ cashClosingSaving=true;button.disabled=true;
+ try{
+  const{companyId}=await getActiveCompany(),versionKey=cashClosingVersionKey(companyId,date);if(cashClosingVersions[versionKey]===undefined)await loadRemoteCashClosing(date,false);
+  const expectedVersion=cashClosingVersions[versionKey]||0;
+  const{data,error}=await sb.rpc("save_cash_closing_v3",{p_company_id:companyId,p_business_date:date,p_expected_version:expectedVersion,p_opening_float:opening,p_counted_cash:counted});if(error)throw error;
+  const result=Array.isArray(data)?data[0]:data;if(!result)throw Error("Resposta vazia ao salvar fechamento.");
+  if(result.save_status==="conflict"){
+   cashClosingVersions[versionKey]=result.version||0;
+   if(result.version){$("cx-i").value=Number(result.opening_float).toFixed(2);$("cx-c").value=Number(result.counted_cash).toFixed(2);S.cx[date]={i:$("cx-i").value,c:$("cx-c").value};save();cx(false);}
+   if(status)status.textContent="Conflito: outro dispositivo atualizou este fechamento. Carreguei a versão mais recente; confira os valores e salve novamente.";
+   return;
+  }
+  cashClosingVersions[versionKey]=result.version;S.cx[date]={i:String(opening),c:String(counted)};save();
+  if(status)status.textContent=`Fechamento ${result.save_status==="created"?"criado":"atualizado"} no servidor · versão ${result.version} · ${new Date(result.calculated_at).toLocaleString("pt-BR")}.`;
+  await refreshCashClosingAudit(companyId,date);
+  const money=v=>R(Number(v||0));
+  const row=(k,v,c)=>`<div class="it"><span>${k}</span><b class="${c||""}">${v}</b></div>`;
+  $("cx-out").innerHTML=row("Pix",money(result.pix_received))+row("Dinheiro",money(result.cash_received))+row("Cartão",money(result.card_received))+row("Despesas totais",money(result.total_expenses),"r")+row("Pagamentos a fornecedores",money(result.supplier_total_paid),"r")+row("Saídas totais (despesas + fornecedores)",money(Number(result.total_expenses||0)+Number(result.supplier_total_paid||0)),"r")+row("Despesas em dinheiro",money(result.cash_expenses),"r")+row("Fornecedores pagos em dinheiro",money(result.supplier_cash_paid),"r")+row("Reembolsos de fornecedores",money(result.supplier_total_refunded),"g")+row("Reembolsos em dinheiro",money(result.supplier_cash_refunded),"g")+row("Dinheiro esperado na gaveta",money(result.expected_cash))+row("Dinheiro contado",money(result.counted_cash))+row("Diferença",Math.abs(Number(result.difference))<0.005?"Caixa batendo ✔":(Number(result.difference)>0?"Sobra ":"Falta ")+money(Math.abs(Number(result.difference))),Math.abs(Number(result.difference))<0.005?"g":"a");
+  CXT=`*${S.shop||"M7 ERP"} – Fechamento remoto v${result.version}*\n${D(date)}\nPix: ${money(result.pix_received)}\nDinheiro: ${money(result.cash_received)}\nCartão: ${money(result.card_received)}\nDespesas totais: ${money(result.total_expenses)}\nPagamentos a fornecedores: ${money(result.supplier_total_paid)}\nSaídas totais: ${money(Number(result.total_expenses||0)+Number(result.supplier_total_paid||0))}\nDespesas em dinheiro: ${money(result.cash_expenses)}\nFornecedores pagos em dinheiro: ${money(result.supplier_cash_paid)}\nReembolsos de fornecedores: ${money(result.supplier_total_refunded)}\nReembolsos em dinheiro: ${money(result.supplier_cash_refunded)}\nDinheiro esperado: ${money(result.expected_cash)}\nContado: ${money(result.counted_cash)}\nDiferença: ${money(result.difference)}`;
+ }catch(e){if(status)status.textContent="Falha ao salvar fechamento: "+(e.message||"verifique conexão e permissões");}
+ finally{cashClosingSaving=false;button.disabled=!activeStorageKey.startsWith("m7c:v2:company:");}
+}
+$("cx-d").onchange=async()=>{cx(true);await loadRemoteCashClosing($("cx-d").value,true)};
+$("cx-i").oninput=$("cx-c").oninput=()=>{S.cx[$("cx-d").value||today()]={i:$("cx-i").value,c:$("cx-c").value};save();cx(false)};
+$("cx-save-remote").onclick=saveRemoteCashClosing;
+$("cx-copy").onclick=()=>{if(navigator.clipboard)navigator.clipboard.writeText(CXT).then(()=>toast("Fechamento copiado!"),()=>prompt("Copie:",CXT));else prompt("Copie:",CXT)};
+// cadastros, produtos e recibo
+let rcpt=null,RT="",EP=null,CE=null,ET=null;
+function cad(){
+ $("cl-dl").innerHTML=S.cl.filter(c=>c.status!=="inactive").map(c=>`<option value="${esc(c.name)}">`).join("");
+ const pv=$("e-prod").value;$("e-prod").innerHTML='<option value="">—</option>'+S.pr.map(p=>`<option value="${esc(p.id)}">${esc(p.name)} · ${R(p.price)}${p.stock!=null?` · est. ${esc(p.stock)}`:""}</option>`).join("");$("e-prod").value=pv;
+ $("c-list").innerHTML=S.cl.length?S.cl.map(c=>{const d=sum(S.rc.filter(r=>r.client===c.name).map(rem));return `<div class="it"><div><b>${esc(c.name)}</b><small>${esc(c.tel||"sem WhatsApp")}${d>0?` · deve ${R(d)}`:""}${c.status==="inactive"?" · inativo no servidor":""}${c._sync_conflict?" · ⚠ conflito entre dispositivos":""}</small>${c._sync_conflict?`<div class="acts"><button class="sm gh" data-cf-server="${esc(c.id)}">Usar versão do servidor</button>${c._sync_conflict.status!=="inactive"?`<button class="sm gh" data-cf-local="${esc(c.id)}">Manter minha versão</button>`:""}</div>`:""}</div><span class="acts"><button class="sm gh" data-ex="${esc(c.id)}">Extrato</button>${c.status!=="inactive"?`<button class="sm gh" data-ec="${esc(c.id)}">✎ Editar</button><button class="sm gh" data-dc="${esc(c.id)}">Excluir</button>`:""}</span></div>`}).join(""):'<div class="empty">Nenhum cliente.</div>';
+ $("pr-list").innerHTML=S.pr.length?S.pr.map(p=>`<div class="it"><div><b>${esc(p.name)}</b><small>${p.cost!=null?`custo ${R(p.cost)} · margem ${p.price>0?Math.round((p.price-p.cost)/p.price*100):0}% · `:""}${p.stock==null?"sem controle de estoque":"Estoque: "+esc(p.stock)}${p.stock!=null&&p.stock<=LOW?" · ⚠ acabando":""}</small><div class="acts"><button class="sm gh" data-ep="${esc(p.id)}">✎ Editar</button>${p.stock!=null?`<button class="sm gh" data-rp="${esc(p.id)}">+ Repor</button>`:""}<button class="sm gh" data-dp="${esc(p.id)}">Excluir</button></div></div><div class="amt g">${R(p.price)}</div></div>`).join(""):'<div class="empty">Nenhum produto.</div>';
+}
+$("s-name").value=S.shop;$("s-name").oninput=()=>{S.shop=$("s-name").value;save()};
+$("pr-cancel").onclick=()=>{EP=null;$("pr-n").value=$("pr-p").value=$("pr-s").value=$("pr-c").value="";$("pr-add").textContent="Adicionar produto";$("pr-cancel").style.display="none"};
+$("c-cancel").onclick=()=>{CE=null;$("c-n").value=$("c-t").value="";$("c-add").textContent="Adicionar cliente";$("c-cancel").style.display="none"};
+$("c-add").onclick=()=>{const n=$("c-n").value.trim();if(!n)return toast("Informe o nome");if(CE){const c=S.cl.find(x=>x.id===CE);if(c){S.rc.forEach(r=>{if(r.client===c.name){r.client=n;r.tel=$("c-t").value}});S.tx.forEach(t=>{if(t.client===c.name)t.client=n});c.name=n;c.tel=$("c-t").value;markCustomerPending(c)}}else{const c={id:uid(),name:n,tel:$("c-t").value,status:"active"};S.cl.push(c);markCustomerPending(c)}CE=null;$("c-add").textContent="Adicionar cliente";$("c-cancel").style.display="none";save();$("c-n").value=$("c-t").value="";render()};
+$("pr-add").onclick=()=>{
+ const n=$("pr-n").value.trim(),price=parseFloat($("pr-p").value),costRaw=$("pr-c").value.trim(),stockRaw=$("pr-s").value.trim();
+ if(!n||!Number.isFinite(price)||price<0)return toast("Informe nome e preço válido.");
+ const cost=costRaw===""?null:Number(costRaw);if(cost!==null&&(!Number.isFinite(cost)||cost<0))return toast("Informe um custo válido, maior ou igual a zero.");
+ const stockValue=stockRaw===""?null:Number(stockRaw);if(stockValue!==null&&(!Number.isInteger(stockValue)||stockValue<0))return toast("O estoque deve ser um número inteiro maior ou igual a zero.");
+ const ix=S.pr.findIndex(x=>x.id===EP),old=ix>=0?S.pr[ix]:null;
+ const p={...(old||{}),id:old?.id||uid(),name:n,price,cost,stock:stockValue};
+ if(old&&old.remote_id&&stockValue!==old.stock&&stockValue!=null){p._stock_target=stockValue;p._stock_operation_id=crypto.randomUUID();}
+ else if(!old&&stockValue!=null){p._stock_target=stockValue;p._stock_operation_id=crypto.randomUUID();}
+ if(ix<0)S.pr.push(p);else S.pr[ix]=p;markProductPending(p);save();$("pr-n").value=$("pr-p").value=$("pr-s").value=$("pr-c").value="";EP=null;$("pr-add").textContent="Adicionar produto";$("pr-cancel").style.display="none";render();
+};
+$("c-list").onclick=e=>{const ex=e.target.closest("[data-ex]");if(ex)return extrato(ex.dataset.ex);const ed=e.target.closest("[data-ec]");if(ed){const c=S.cl.find(x=>x.id===ed.dataset.ec);if(!c||c.status==="inactive")return toast("Cliente inativo não pode ser editado.");CE=c.id;$("c-n").value=c.name;$("c-t").value=c.tel||"";$("c-add").textContent="Salvar alterações";$("c-cancel").style.display="";$("c-n").scrollIntoView({block:"center"});$("c-n").focus();return}const useServer=e.target.closest("[data-cf-server]");if(useServer){const c=S.cl.find(x=>x.id===useServer.dataset.cfServer);if(c&&c._sync_conflict){const v=c._sync_conflict;c.name=v.name||c.name;c.tel=v.whatsapp||v.phone||"";c.status=v.status||c.status;c._remote_updated_at=v.updated_at;delete c._sync_pending;delete c._sync_updated_at;delete c._sync_conflict;save();render();toast("Versão do servidor aplicada ao aparelho.");}return}const useLocal=e.target.closest("[data-cf-local]");if(useLocal){const c=S.cl.find(x=>x.id===useLocal.dataset.cfLocal);if(c&&c._sync_conflict){c._remote_updated_at=c._sync_conflict.updated_at;delete c._sync_conflict;c._sync_pending=true;c._sync_updated_at=new Date().toISOString();save();render();toast("Sua versão foi mantida. Sincronize novamente para confirmar a substituição no servidor.");}return}const b=e.target.closest("[data-dc]");if(b&&confirm("Excluir cliente? O cadastro será inativado no servidor para preservar o histórico.")){const c=S.cl.find(x=>x.id===b.dataset.dc);if(c){S.cl_deleted=S.cl_deleted||[];S.cl_deleted.push({remote_id:c.remote_id||null,legacy_id:c.id});}S.cl=S.cl.filter(c=>c.id!==b.dataset.dc);save();scheduleCustomerSync();render()}};
+$("pr-list").onclick=e=>{const ed=e.target.closest("[data-ep]");if(ed){const p=S.pr.find(x=>x.id===ed.dataset.ep);EP=p.id;$("pr-n").value=p.name;$("pr-p").value=p.price;$("pr-c").value=p.cost==null?"":p.cost;$("pr-s").value=p.stock==null?"":p.stock;$("pr-add").textContent="Salvar alterações";$("pr-cancel").style.display="";$("pr-n").scrollIntoView({block:"center"});$("pr-n").focus();return}const r=e.target.closest("[data-rp]");if(r){const p=S.pr.find(x=>x.id===r.dataset.rp),raw=prompt("Quantas unidades entraram no estoque?");if(raw===null)return;const q=positiveInteger(raw);if(!q)return toast("Informe uma quantidade inteira maior que zero.");p.stock=(p.stock||0)+q;if(p.remote_id){p._stock_target=p.stock;p._stock_operation_id=crypto.randomUUID()}markProductPending(p);save();render();return}const b=e.target.closest("[data-dp]");if(b&&confirm("Inativar produto? O histórico será preservado no servidor.")){const p=S.pr.find(c=>c.id===b.dataset.dp);if(p)S.pr_deleted=(S.pr_deleted||[]).concat([{remote_id:p.remote_id||null,legacy_id:p.id}]);S.pr=S.pr.filter(c=>c.id!==b.dataset.dp);save();scheduleProductSync();render()}};
+function fillProd(){const p=S.pr.find(x=>x.id===$("e-prod").value);if(!p)return;const q=positiveInteger($("e-qty").value);if(!q)return toast("A quantidade deve ser um número inteiro maior que zero.");$("e-desc").value=q>1?`${q}x ${p.name}`:p.name;$("e-val").value=(p.price*q).toFixed(2)}
+$("e-prod").onchange=fillProd;$("e-qty").onchange=()=>{if($("e-prod").value)fillProd()};
+let CART=[];
+function drawCart(){const sub=sum(CART.map(i=>i.price*i.qty)),dc=parseFloat($("e-disc").value)||0;
+ $("e-cart").innerHTML=CART.length?CART.map((i,x)=>`<div class="it"><div>${i.qty}x ${esc(i.name)}<small>${R(i.price)} cada</small></div><div class="amt">${R(i.price*i.qty)} <button class="sm gh" data-ci="${x}">✕</button></div></div>`).join("")+`<div class="it"><b>Subtotal</b><b>${R(sub)}</b></div>`:"";
+ if(CART.length){$("e-desc").value=CART.map(i=>`${i.qty}x ${i.name}`).join(", ");$("e-val").value=Math.max(0,sub-dc).toFixed(2)}}
+$("e-add").onclick=()=>{const p=S.pr.find(x=>x.id===$("e-prod").value);if(!p)return toast("Escolha um produto");const q=positiveInteger($("e-qty").value);if(!q)return toast("A quantidade deve ser um número inteiro maior que zero.");const f=CART.find(i=>i.id===p.id);if(f)f.qty+=q;else CART.push({id:p.id,name:p.name,price:p.price,cost:p.cost,qty:q});$("e-prod").value="";$("e-qty").value=1;drawCart()};
+$("e-cart").onclick=e=>{const b=e.target.closest("[data-ci]");if(b){CART.splice(+b.dataset.ci,1);drawCart()}};
+$("e-disc").oninput=drawCart;
+$("e-cli").onchange=()=>{const c=S.cl.find(x=>x.status!=="inactive"&&x.name.toLowerCase()===$("e-cli").value.trim().toLowerCase());if(c)$("e-tel").value=c.tel||""};
+function showRec(t){
+ RT=`${S.shop||"M7 ERP"}\nRECIBO Nº ${t.id.slice(-5).toUpperCase()}\n\nCliente: ${t.client||"Consumidor"}\nReferente a: ${t.desc}\n${t.disc>0?"Desconto: "+R(t.disc)+"\n":""}Valor: ${R(t.amount)}\nData: ${D(t.date)}\nForma: ${t.method||"—"}\n\nObrigado pela preferência! 😊`;
+ $("rc-body").textContent=RT;$("rc-tel").value=t.tel||"";$("rdlg").showModal()}
+document.addEventListener("click",e=>{const r=e.target.closest("[data-rec]");if(r){const t=S.tx.find(x=>x.id===r.dataset.rec);if(t)showRec(t)}});
+$("rc-x").onclick=()=>$("rdlg").close();
+$("rc-pr").onclick=()=>{document.body.classList.add("pr");print();document.body.classList.remove("pr")};
+$("rc-wa").onclick=()=>{let n=$("rc-tel").value.replace(/\D/g,"");if(n&&n.length<=11)n="55"+n;open(`https://wa.me/${n}?text=${encodeURIComponent(RT)}`,"_blank")};
+$("bk-copy").onclick=()=>{
+ const data={...S};delete data.pin;
+ const j=JSON.stringify({format:"m7-controle-backup",version:2,scope:activeStorageKey,data});
+ const ok=()=>toast("Backup copiado! Guarde em local seguro.");
+ if(navigator.clipboard)navigator.clipboard.writeText(j).then(ok,()=>prompt("Copie o backup:",j));else prompt("Copie o backup:",j);
+};
+$("bk-load").onclick=()=>{
+ if(S.pendingSale||S.pendingReceipt)return toast("Conclua ou reconcilie a operação online pendente antes de restaurar um backup.");
+ const t=prompt("Cole o backup desta mesma área/empresa. A restauração substitui os dados atuais:");if(!t)return;
+ try{
+  const parsed=JSON.parse(t);let data;
+  if(parsed&&parsed.format==="m7-controle-backup"){
+   if(parsed.version!==2||parsed.scope!==activeStorageKey)throw Error("Este backup pertence a outra área ou empresa.");
+   data=parsed.data;
+  }else{
+   if(activeStorageKey!==GUEST_STORAGE_KEY)throw Error("Backup antigo sem identificação de empresa. Para evitar mistura de dados, restaure-o somente no modo local de visitante.");
+   data=parsed;
+  }
+  const plain=o=>o!==null&&typeof o==="object"&&!Array.isArray(o);
+  if(!plain(data)||!Array.isArray(data.tx)||!Array.isArray(data.rc))throw Error("Estrutura principal inválida.");
+  if(data.pendingSale||data.pendingReceipt)throw Error("Este backup contém uma operação online pendente. Retome-a no aparelho original e gere um novo backup.");
+  for(const key of ["cl","pr","stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"]){if(data[key]!==undefined&&!Array.isArray(data[key]))throw Error("Lista inválida: "+key);}
+  if(data.cx!==undefined&&!plain(data.cx))throw Error("Dados de caixa inválidos.");
+  if(data.shop!==undefined&&typeof data.shop!=="string")throw Error("Nome da empresa inválido.");
+  for(const key of ["tx","rc","cl","pr","stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"]){if(Array.isArray(data[key])&&!data[key].every(plain))throw Error("Registro inválido em "+key+".");}
+  const next={tx:data.tx,rc:data.rc,cx:plain(data.cx)?data.cx:{},cl:data.cl||[],pr:data.pr||[],stock_pending:data.stock_pending||[],purchase_pending:data.purchase_pending||[],shop:data.shop||""};
+  for(const key of ["stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"])if(Array.isArray(data[key]))next[key]=data[key];
+  if(S.pin)next.pin=S.pin;
+  S=next;normalizeState();$("s-name").value=S.shop;save();render();toast("Backup restaurado com validação.");
+ }catch(e){toast(e?.message||"Backup inválido. Nenhum dado foi alterado.");}
+};
+window.addEventListener("error",e=>{console.error("Erro não tratado",e.error||e.message)});
+window.addEventListener("unhandledrejection",e=>{console.error("Promessa rejeitada sem tratamento",e.reason);if(typeof toast==="function")toast("Ocorreu um erro inesperado. Tente novamente.")});
+window.addEventListener("offline",()=>toast("Sem internet: o app segue no modo local. Sincronizações ficam indisponíveis."));
+window.addEventListener("online",()=>toast("Conexão restabelecida."));
+if("serviceWorker" in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("sw.js").catch(e=>console.warn("Service Worker não registrado",e));
+render();
+</script>
+<script src="stock-ledger.js"></script>
+<script src="purchases.js"></script>
+<script src="payables.js"></script>
+<script src="purchase-returns.js"></script>
+</body>
+</html>
