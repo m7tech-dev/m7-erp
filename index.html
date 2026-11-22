@@ -178,8 +178,18 @@ let sb=null;
 let activeCompanyRole=null;
 const sbStatus=(msg)=>{const el=document.getElementById("sb-status");if(el)el.textContent=msg};
 const sbUser=(msg)=>{const el=document.getElementById("sb-user");if(el)el.textContent=msg};
+const SB_TIMEOUT_MS=30000;
+function sbFetch(input,init){
+ init=init||{};const ctl=new AbortController();let timedOut=false;
+ const timer=setTimeout(()=>{timedOut=true;ctl.abort()},SB_TIMEOUT_MS);
+ const outer=init.signal;
+ if(outer){if(outer.aborted)ctl.abort();else outer.addEventListener("abort",()=>ctl.abort(),{once:true})}
+ return fetch(input,{...init,signal:ctl.signal})
+  .catch(err=>{if(timedOut)throw new TypeError("Failed to fetch: tempo limite de "+SB_TIMEOUT_MS/1000+"s excedido");throw err})
+  .finally(()=>clearTimeout(timer));
+}
 if(window.supabase?.createClient){
- sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+ sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{global:{fetch:sbFetch}});
  sbStatus("Biblioteca carregada. Testando conexão com o servidor…");
  fetch(SUPABASE_URL+"/auth/v1/health",{headers:{apikey:SUPABASE_PUBLISHABLE_KEY}}).then(r=>{if(!r.ok)throw Error("HTTP "+r.status);sbStatus("Servidor Supabase conectado. Faça login para validar sua conta.")}).catch(()=>sbStatus("Não foi possível alcançar o Supabase. Verifique a internet e tente novamente."));
  sb.auth.getSession().then(({data})=>{
@@ -621,6 +631,7 @@ function moneyToCents(value,label="Valor"){
  const n=Number(value);
  if(!Number.isFinite(n)||n<0)throw Error(label+" inválido.");
  const scaled=n*100,cents=Math.round(scaled);
+ if(cents>99999999999999)throw Error(label+" acima do limite permitido (R$ 999.999.999.999,99).");
  if(!Number.isSafeInteger(cents)||Math.abs(scaled-cents)>1e-7)throw Error(label+" deve ter no máximo duas casas decimais.");
  return cents;
 }
@@ -995,6 +1006,7 @@ $("e-save").onclick=async()=>{
 $("g-save").onclick=()=>{
  const desc=$("g-desc").value.trim(),val=parseFloat($("g-val").value),date=$("g-date").value;
  if(!desc||!(val>0)||!date)return toast("Preencha descrição, valor e data");
+ try{moneyToCents(val,"Valor do gasto")}catch(e){return toast(e.message)}
  S.tx.push({id:uid(),type:"out",desc,amount:val,date,cat:$("g-cat").value,method:$("g-method").value||"cash"});save();
  $("g-desc").value=$("g-val").value="";toast("Gasto registrado");render()};
 $("g-fm").onchange=$("g-fc").onchange=render;
