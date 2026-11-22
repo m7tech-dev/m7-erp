@@ -92,6 +92,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
   <div class="f2"><div><label for="e-cli">Ou digite o nome (opcional)</label><input id="e-cli" list="cl-dl"><datalist id="cl-dl"></datalist></div><div><label for="e-tel">WhatsApp (opcional)</label><input id="e-tel" inputmode="tel" placeholder="(11) 99999-9999"></div></div>
   <label for="e-met">Forma de pagamento</label>
   <select id="e-met"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option value="Futuro">Parcelado/Futuro</option><option value="Fiado">Fiado</option></select>
+  <button class="gh" id="e-pix" type="button" style="margin-top:8px">📲 Mostrar QR Pix</button>
   <div id="e-dueBox" style="display:none"><label for="e-due">Data de vencimento (obrigatória)</label><input id="e-due" type="date"><div id="e-parBox" style="display:none"><label for="e-par">Nº de parcelas (vencimentos mensais)</label><input id="e-par" type="number" min="1" max="24" value="1" inputmode="numeric"></div><p class="k">Fica em Recebimentos e só entra no caixa quando for pago.</p></div>
   <div class="row2"><button id="e-save">Salvar entrada</button></div><div class="row2" id="e-pending-row" style="display:none"><button id="e-retry" class="amb" type="button">↻ Retomar venda pendente</button></div><p class="k" id="e-remote-status" aria-live="polite">No modo conectado, a confirmação da venda é feita no servidor antes de entrar no caixa.</p>
  </div>
@@ -143,8 +144,11 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
 </section>
 <section class="tab" id="t-cad">
  <div class="card"><h2>Minha loja</h2><label for="s-name">Nome (aparece no recibo)</label><input id="s-name" placeholder="Ex.: Mercadinho do João"></div>
+ <div class="card"><h2>Pix (QR na venda)</h2><label for="pix-key">Chave Pix</label><input id="pix-key" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="CPF, CNPJ, e-mail, +55 e telefone ou chave aleatória">
+  <div class="f2"><div><label for="pix-name">Nome no Pix (opcional)</label><input id="pix-name" maxlength="25" placeholder="Usa o nome da loja"></div><div><label for="pix-city">Cidade (opcional)</label><input id="pix-city" maxlength="15" placeholder="Ex.: São Paulo"></div></div>
+  <p class="k" id="pix-status" aria-live="polite"></p><p class="k">O QR cobra o valor da venda e leva o cliente direto ao seu Pix. O app não confirma o pagamento: confira o recebimento no aplicativo do seu banco.</p></div>
  <div class="card"><h2>Clientes</h2><div class="f2"><div><label for="c-n">Nome</label><input id="c-n" placeholder="Nome do cliente"></div><div><label for="c-t">WhatsApp</label><input id="c-t" inputmode="tel" placeholder="(11) 99999-9999"></div></div><div class="row2"><button id="c-add">Adicionar cliente</button><button class="gh" id="c-cancel" style="display:none">Cancelar</button></div><div id="c-list"></div></div>
- <div class="card"><h2>Produtos</h2><div class="f2"><div><label for="pr-n">Nome</label><input id="pr-n"></div><div><label for="pr-p">Preço (R$)</label><input id="pr-p" type="number" min="0" step="0.01" inputmode="decimal"></div></div><div class="f2"><div><label for="pr-c">Custo (R$, opcional)</label><input id="pr-c" type="number" min="0" step="0.01" inputmode="decimal"><p class="k" id="pr-cost-help">Para produto remoto, o custo é atualizado pelo recebimento de compras.</p></div><div><label for="pr-s">Estoque inicial (opcional)</label><input id="pr-s" type="number" min="0" inputmode="numeric"></div></div><div class="row2"><button id="pr-add">Adicionar produto</button><button class="gh" id="pr-cancel" style="display:none">Cancelar</button></div><div id="pr-list"></div></div>
+ <div class="card"><h2>Produtos</h2><div class="f2"><div><label for="pr-n">Nome</label><input id="pr-n"></div><div><label for="pr-p">Preço (R$)</label><input id="pr-p" type="number" min="0" step="0.01" inputmode="decimal"></div></div><div class="f2"><div><label for="pr-c">Custo (R$, opcional)</label><input id="pr-c" type="number" min="0" step="0.01" inputmode="decimal"><p class="k" id="pr-cost-help">Para produto remoto, o custo é atualizado pelo recebimento de compras.</p></div><div><label for="pr-s">Estoque inicial (opcional)</label><input id="pr-s" type="number" min="0" inputmode="numeric"><p class="k" id="pr-stock-help"></p></div></div><div class="row2"><button id="pr-add">Adicionar produto</button><button class="gh" id="pr-cancel" style="display:none">Cancelar</button></div><div id="pr-list"></div></div>
  <div class="card"><h2>Conexão M7 ERP</h2><p class="k">Vendas, recebimentos, produtos, clientes, despesas e fechamentos de caixa podem ser sincronizados com o servidor.</p><p id="sb-status" class="k">Verificando disponibilidade da conexão…</p><label for="sb-email">E-mail da conta</label><input id="sb-email" type="email" autocomplete="username" placeholder="seu@email.com"><label for="sb-pass">Senha</label><input id="sb-pass" type="password" autocomplete="current-password" placeholder="Senha da conta Supabase"><div class="row2"><button id="sb-login" type="button">Entrar na conta</button><button class="gh" id="sb-logout" type="button">Sair</button></div><p id="sb-user" class="k">Não conectado</p><div class="row2"><button id="sb-sync" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar clientes">Sincronizar clientes</button><button id="sb-sync-products" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar o catálogo">Sincronizar produtos</button></div><p id="sb-sync-status" class="k">Entre na conta e valide a empresa para sincronizar clientes com segurança.</p><p id="sb-product-sync-status" class="k">Entre na conta e valide a empresa para sincronizar o catálogo com segurança.</p><div class="row2"><button id="sb-sync-expenses" type="button" class="gh" disabled>Sincronizar despesas</button></div><p id="sb-expense-sync-status" class="k">As despesas antigas só serão enviadas quando você solicitar a sincronização.</p></div>
  <div class="card"><h2>Segurança</h2><label for="pin-n">PIN de acesso (4 a 6 números)</label><input id="pin-n" type="password" inputmode="numeric" maxlength="6" autocomplete="off"><div class="row2"><button id="pin-set">Definir PIN</button><button class="gh" id="pin-off">Remover</button><button class="gh" id="pin-lock">Bloquear</button></div><p class="k" id="pin-st"></p></div>
 </section>
@@ -168,6 +172,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
 <dialog id="purchase-credit-refund-dlg"><h2>Registrar reembolso do fornecedor</h2><p class="k" id="purchase-credit-refund-title"></p><label for="purchase-credit-refund-amount">Valor efetivamente recebido (R$)</label><input id="purchase-credit-refund-amount" type="number" min="0.01" step="0.01" inputmode="decimal"><div class="f2"><div><label for="purchase-credit-refund-date">Data do recebimento</label><input id="purchase-credit-refund-date" type="date"></div><div><label for="purchase-credit-refund-method">Forma de recebimento</label><select id="purchase-credit-refund-method"><option value="cash">Dinheiro</option><option value="pix">Pix</option><option value="bank_transfer">Transferência bancária</option><option value="card">Cartão</option><option value="other">Outro</option></select></div></div><label for="purchase-credit-refund-notes">Observação (opcional)</label><input id="purchase-credit-refund-notes" maxlength="500"><div class="row2"><button class="gh" id="purchase-credit-refund-close" type="button">Cancelar</button><button id="purchase-credit-refund-save" type="button">Confirmar reembolso</button></div><p class="k" id="purchase-credit-refund-status" aria-live="polite"></p></dialog>
 <dialog id="purchase-credit-apply-dlg"><h2>Compensar crédito do fornecedor</h2><p class="k" id="purchase-credit-apply-title"></p><label for="purchase-credit-installment">Parcela do mesmo fornecedor</label><select id="purchase-credit-installment"></select><label for="purchase-credit-amount">Valor a compensar (R$)</label><input id="purchase-credit-amount" type="number" min="0.01" step="0.01" inputmode="decimal"><div class="f2"><div><label for="purchase-credit-date">Data da compensação</label><input id="purchase-credit-date" type="date"></div><div><label for="purchase-credit-notes">Observação</label><input id="purchase-credit-notes" maxlength="500"></div></div><div class="row2"><button class="gh" id="purchase-credit-close" type="button">Cancelar</button><button id="purchase-credit-save" type="button">Confirmar compensação</button></div><p class="k" id="purchase-credit-status" aria-live="polite"></p></dialog>
 <dialog id="stock-history-dlg"><h2>📚 Histórico de estoque</h2><p class="k" id="stock-history-product"></p><div id="stock-history-list"></div><div class="row2"><button class="gh" id="stock-history-close" type="button">Fechar</button><button id="stock-history-more" type="button" class="gh" style="display:none">Carregar mais</button></div><p class="k" id="stock-history-status" aria-live="polite"></p></dialog>
+<dialog id="pixdlg"><h2>📲 Pix</h2><div style="text-align:center"><canvas id="pix-qr" width="260" height="260" style="width:260px;max-width:100%;height:auto;background:#fff;border-radius:8px;image-rendering:pixelated"></canvas><div class="k" id="pix-info" style="margin:6px 0 10px"></div></div><label for="pix-code">Pix copia e cola</label><textarea id="pix-code" readonly rows="4" style="width:100%;font:12px/1.4 ui-monospace,monospace"></textarea><p class="k">Confira o recebimento no aplicativo do seu banco antes de entregar. O M7 ERP não confirma o pagamento.</p><div class="row2"><button class="gh" id="pix-x" type="button">Fechar</button><button id="pix-copy" type="button">Copiar código</button></div></dialog>
 <dialog id="rdlg"><h2>🧾 Recibo</h2><pre id="rc-body" style="white-space:pre-wrap;font:14px/1.5 ui-monospace,monospace;background:var(--bg);padding:12px;border-radius:10px;margin:0"></pre><div class="noprint"><label for="rc-tel">WhatsApp do cliente</label><input id="rc-tel" inputmode="tel"><div class="row2"><button class="gh" id="rc-x">Fechar</button><button class="gh" id="rc-pr">Imprimir</button><button id="rc-wa">WhatsApp</button></div></div></dialog>
 <div class="toast" id="toast"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -256,6 +261,7 @@ function normalizeState(){
  }
  S.tx=Array.isArray(S.tx)?S.tx:[]; S.rc=Array.isArray(S.rc)?S.rc:[];
  S.cx=plain(S.cx)?S.cx:{};
+ S.pix=plain(S.pix)?{key:typeof S.pix.key==="string"?S.pix.key:"",name:typeof S.pix.name==="string"?S.pix.name:"",city:typeof S.pix.city==="string"?S.pix.city:""}:{key:"",name:"",city:""};
  S.cl=Array.isArray(S.cl)?S.cl:[]; S.pr=Array.isArray(S.pr)?S.pr:[];
  S.shop=typeof S.shop==="string"?S.shop:"";
  S.stock_pending=Array.isArray(S.stock_pending)?S.stock_pending.filter(x=>plain(x)&&typeof x.product_id==="string"&&typeof x.operation_id==="string"&&plain(x.payload)&&typeof x.payload.type==="string"&&Number.isFinite(Number(x.payload.quantity))&&typeof x.payload.reason_code==="string"&&typeof x.payload.reason==="string"):[];
@@ -270,7 +276,7 @@ function activateGuestStorage(){
  const productSyncButton=document.getElementById("sb-sync-products");if(productSyncButton)productSyncButton.disabled=true;const expenseSyncButton=document.getElementById("sb-sync-expenses");if(expenseSyncButton)expenseSyncButton.disabled=true;const cashCloseButton=document.getElementById("cx-save-remote");if(cashCloseButton)cashCloseButton.disabled=true;
  activeCompanyRole=null;activeStorageKey=GUEST_STORAGE_KEY;
  S=readLocalState(GUEST_STORAGE_KEY); normalizeState();
- const shopInput=document.getElementById("s-name"); if(shopInput)shopInput.value=S.shop||"";
+ const shopInput=document.getElementById("s-name"); if(shopInput)shopInput.value=S.shop||"";if(typeof pixLoadFields==="function")pixLoadFields();
  render();
 }
 function isNetworkFailure(error){
@@ -284,7 +290,7 @@ function handleCompanyStorageError(session,error,allowOfflineFallback=false){
  const lastKey=localStorage.getItem("m7c:last_company_scope");
  if(allowOfflineFallback && localStorage.getItem("m7c:last_user_id")===session?.user?.id && lastKey?.startsWith("m7c:v2:company:")){
   activeStorageKey=lastKey; S=readLocalState(lastKey); normalizeState();
-  const shopInput=document.getElementById("s-name"); if(shopInput)shopInput.value=S.shop||"";
+  const shopInput=document.getElementById("s-name"); if(shopInput)shopInput.value=S.shop||"";if(typeof pixLoadFields==="function")pixLoadFields();
   render(); document.body.classList.remove("tenant-switching");
   sbStatus("Sem conexão. Mantendo temporariamente o cache local desta conta.");
  }else{
@@ -318,7 +324,7 @@ async function activateCompanyStorage(session){
   if(activeStorageKey!==targetKey){
    activeStorageKey=targetKey; localStorage.setItem("m7c:last_company_scope",targetKey);
    S=targetRaw?readLocalState(targetKey):emptyState(); normalizeState();
-   const shopInput=document.getElementById("s-name"); if(shopInput)shopInput.value=S.shop||"";
+   const shopInput=document.getElementById("s-name"); if(shopInput)shopInput.value=S.shop||"";if(typeof pixLoadFields==="function")pixLoadFields();
    render();
   }
   localStorage.setItem("m7c:last_user_id",user.id);
@@ -947,7 +953,7 @@ function buildReceiptPaymentPlan(input,state,idFactory){
 function toast(m){const t=$("toast");t.textContent=m;t.style.display="block";clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display="none",2200)}
 
 // navegação
-function go(t){document.body.dataset.tab=t;document.querySelectorAll(".tab").forEach(e=>e.classList.toggle("on",e.id==="t-"+t));
+function go(t){document.body.dataset.tab=t;if(typeof syncPixBtn==="function")syncPixBtn();document.querySelectorAll(".tab").forEach(e=>e.classList.toggle("on",e.id==="t-"+t));
  document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.go===t));scrollTo(0,0);render()}
 document.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g)go(g.dataset.go)});
 
@@ -1306,6 +1312,962 @@ document.addEventListener("click",e=>{const r=e.target.closest("[data-rec]");if(
 $("rc-x").onclick=()=>$("rdlg").close();
 $("rc-pr").onclick=()=>{document.body.classList.add("pr");print();document.body.classList.remove("pr")};
 $("rc-wa").onclick=()=>{let n=$("rc-tel").value.replace(/\D/g,"");if(n&&n.length<=11)n="55"+n;open(`https://wa.me/${n}?text=${encodeURIComponent(RT)}`,"_blank")};
+/* QR Code: QRCode for JavaScript, Copyright (c) 2009 Kazuhiko Arase, licença MIT (http://www.opensource.org/licenses/mit-license.php). "QR Code" é marca registrada da DENSO WAVE INCORPORATED. */
+const M7QR=(function(){const mods={};const req=n=>mods[n.replace(/^\.\//,"")];
+mods["QRMode"]=(function(module,require){
+module.exports = {
+MODE_NUMBER :       1 << 0,
+MODE_ALPHA_NUM :    1 << 1,
+MODE_8BIT_BYTE :    1 << 2,
+MODE_KANJI :        1 << 3
+};
+return module.exports})({exports:{}},req);
+mods["QRErrorCorrectLevel"]=(function(module,require){
+module.exports = {
+L : 1,
+M : 0,
+Q : 3,
+H : 2
+};
+return module.exports})({exports:{}},req);
+mods["QRMaskPattern"]=(function(module,require){
+module.exports = {
+PATTERN000 : 0,
+PATTERN001 : 1,
+PATTERN010 : 2,
+PATTERN011 : 3,
+PATTERN100 : 4,
+PATTERN101 : 5,
+PATTERN110 : 6,
+PATTERN111 : 7
+};
+return module.exports})({exports:{}},req);
+mods["QRMath"]=(function(module,require){
+var QRMath = {
+glog : function(n) {
+if (n < 1) {
+throw new Error("glog(" + n + ")");
+}
+return QRMath.LOG_TABLE[n];
+},
+gexp : function(n) {
+while (n < 0) {
+n += 255;
+}
+while (n >= 256) {
+n -= 255;
+}
+return QRMath.EXP_TABLE[n];
+},
+EXP_TABLE : new Array(256),
+LOG_TABLE : new Array(256)
+};
+for (var i = 0; i < 8; i++) {
+QRMath.EXP_TABLE[i] = 1 << i;
+}
+for (var i = 8; i < 256; i++) {
+QRMath.EXP_TABLE[i] = QRMath.EXP_TABLE[i - 4]
+^ QRMath.EXP_TABLE[i - 5]
+^ QRMath.EXP_TABLE[i - 6]
+^ QRMath.EXP_TABLE[i - 8];
+}
+for (var i = 0; i < 255; i++) {
+QRMath.LOG_TABLE[QRMath.EXP_TABLE[i] ] = i;
+}
+module.exports = QRMath;
+return module.exports})({exports:{}},req);
+mods["QRPolynomial"]=(function(module,require){
+var QRMath = require('./QRMath');
+function QRPolynomial(num, shift) {
+if (num.length === undefined) {
+throw new Error(num.length + "/" + shift);
+}
+var offset = 0;
+while (offset < num.length && num[offset] === 0) {
+offset++;
+}
+this.num = new Array(num.length - offset + shift);
+for (var i = 0; i < num.length - offset; i++) {
+this.num[i] = num[i + offset];
+}
+}
+QRPolynomial.prototype = {
+get : function(index) {
+return this.num[index];
+},
+getLength : function() {
+return this.num.length;
+},
+multiply : function(e) {
+var num = new Array(this.getLength() + e.getLength() - 1);
+for (var i = 0; i < this.getLength(); i++) {
+for (var j = 0; j < e.getLength(); j++) {
+num[i + j] ^= QRMath.gexp(QRMath.glog(this.get(i) ) + QRMath.glog(e.get(j) ) );
+}
+}
+return new QRPolynomial(num, 0);
+},
+mod : function(e) {
+if (this.getLength() - e.getLength() < 0) {
+return this;
+}
+var ratio = QRMath.glog(this.get(0) ) - QRMath.glog(e.get(0) );
+var num = new Array(this.getLength() );
+for (var i = 0; i < this.getLength(); i++) {
+num[i] = this.get(i);
+}
+for (var x = 0; x < e.getLength(); x++) {
+num[x] ^= QRMath.gexp(QRMath.glog(e.get(x) ) + ratio);
+}
+return new QRPolynomial(num, 0).mod(e);
+}
+};
+module.exports = QRPolynomial;
+return module.exports})({exports:{}},req);
+mods["QRUtil"]=(function(module,require){
+var QRMode = require('./QRMode');
+var QRPolynomial = require('./QRPolynomial');
+var QRMath = require('./QRMath');
+var QRMaskPattern = require('./QRMaskPattern');
+var QRUtil = {
+PATTERN_POSITION_TABLE : [
+[],
+[6, 18],
+[6, 22],
+[6, 26],
+[6, 30],
+[6, 34],
+[6, 22, 38],
+[6, 24, 42],
+[6, 26, 46],
+[6, 28, 50],
+[6, 30, 54],
+[6, 32, 58],
+[6, 34, 62],
+[6, 26, 46, 66],
+[6, 26, 48, 70],
+[6, 26, 50, 74],
+[6, 30, 54, 78],
+[6, 30, 56, 82],
+[6, 30, 58, 86],
+[6, 34, 62, 90],
+[6, 28, 50, 72, 94],
+[6, 26, 50, 74, 98],
+[6, 30, 54, 78, 102],
+[6, 28, 54, 80, 106],
+[6, 32, 58, 84, 110],
+[6, 30, 58, 86, 114],
+[6, 34, 62, 90, 118],
+[6, 26, 50, 74, 98, 122],
+[6, 30, 54, 78, 102, 126],
+[6, 26, 52, 78, 104, 130],
+[6, 30, 56, 82, 108, 134],
+[6, 34, 60, 86, 112, 138],
+[6, 30, 58, 86, 114, 142],
+[6, 34, 62, 90, 118, 146],
+[6, 30, 54, 78, 102, 126, 150],
+[6, 24, 50, 76, 102, 128, 154],
+[6, 28, 54, 80, 106, 132, 158],
+[6, 32, 58, 84, 110, 136, 162],
+[6, 26, 54, 82, 110, 138, 166],
+[6, 30, 58, 86, 114, 142, 170]
+],
+G15 : (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0),
+G18 : (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0),
+G15_MASK : (1 << 14) | (1 << 12) | (1 << 10)    | (1 << 4) | (1 << 1),
+getBCHTypeInfo : function(data) {
+var d = data << 10;
+while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) >= 0) {
+d ^= (QRUtil.G15 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) ) );
+}
+return ( (data << 10) | d) ^ QRUtil.G15_MASK;
+},
+getBCHTypeNumber : function(data) {
+var d = data << 12;
+while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) >= 0) {
+d ^= (QRUtil.G18 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) ) );
+}
+return (data << 12) | d;
+},
+getBCHDigit : function(data) {
+var digit = 0;
+while (data !== 0) {
+digit++;
+data >>>= 1;
+}
+return digit;
+},
+getPatternPosition : function(typeNumber) {
+return QRUtil.PATTERN_POSITION_TABLE[typeNumber - 1];
+},
+getMask : function(maskPattern, i, j) {
+switch (maskPattern) {
+case QRMaskPattern.PATTERN000 : return (i + j) % 2 === 0;
+case QRMaskPattern.PATTERN001 : return i % 2 === 0;
+case QRMaskPattern.PATTERN010 : return j % 3 === 0;
+case QRMaskPattern.PATTERN011 : return (i + j) % 3 === 0;
+case QRMaskPattern.PATTERN100 : return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 === 0;
+case QRMaskPattern.PATTERN101 : return (i * j) % 2 + (i * j) % 3 === 0;
+case QRMaskPattern.PATTERN110 : return ( (i * j) % 2 + (i * j) % 3) % 2 === 0;
+case QRMaskPattern.PATTERN111 : return ( (i * j) % 3 + (i + j) % 2) % 2 === 0;
+default :
+throw new Error("bad maskPattern:" + maskPattern);
+}
+},
+getErrorCorrectPolynomial : function(errorCorrectLength) {
+var a = new QRPolynomial([1], 0);
+for (var i = 0; i < errorCorrectLength; i++) {
+a = a.multiply(new QRPolynomial([1, QRMath.gexp(i)], 0) );
+}
+return a;
+},
+getLengthInBits : function(mode, type) {
+if (1 <= type && type < 10) {
+switch(mode) {
+case QRMode.MODE_NUMBER     : return 10;
+case QRMode.MODE_ALPHA_NUM  : return 9;
+case QRMode.MODE_8BIT_BYTE  : return 8;
+case QRMode.MODE_KANJI      : return 8;
+default :
+throw new Error("mode:" + mode);
+}
+} else if (type < 27) {
+switch(mode) {
+case QRMode.MODE_NUMBER     : return 12;
+case QRMode.MODE_ALPHA_NUM  : return 11;
+case QRMode.MODE_8BIT_BYTE  : return 16;
+case QRMode.MODE_KANJI      : return 10;
+default :
+throw new Error("mode:" + mode);
+}
+} else if (type < 41) {
+switch(mode) {
+case QRMode.MODE_NUMBER     : return 14;
+case QRMode.MODE_ALPHA_NUM  : return 13;
+case QRMode.MODE_8BIT_BYTE  : return 16;
+case QRMode.MODE_KANJI      : return 12;
+default :
+throw new Error("mode:" + mode);
+}
+} else {
+throw new Error("type:" + type);
+}
+},
+getLostPoint : function(qrCode) {
+var moduleCount = qrCode.getModuleCount();
+var lostPoint = 0;
+var row = 0;
+var col = 0;
+for (row = 0; row < moduleCount; row++) {
+for (col = 0; col < moduleCount; col++) {
+var sameCount = 0;
+var dark = qrCode.isDark(row, col);
+for (var r = -1; r <= 1; r++) {
+if (row + r < 0 || moduleCount <= row + r) {
+continue;
+}
+for (var c = -1; c <= 1; c++) {
+if (col + c < 0 || moduleCount <= col + c) {
+continue;
+}
+if (r === 0 && c === 0) {
+continue;
+}
+if (dark === qrCode.isDark(row + r, col + c) ) {
+sameCount++;
+}
+}
+}
+if (sameCount > 5) {
+lostPoint += (3 + sameCount - 5);
+}
+}
+}
+for (row = 0; row < moduleCount - 1; row++) {
+for (col = 0; col < moduleCount - 1; col++) {
+var count = 0;
+if (qrCode.isDark(row,     col    ) ) count++;
+if (qrCode.isDark(row + 1, col    ) ) count++;
+if (qrCode.isDark(row,     col + 1) ) count++;
+if (qrCode.isDark(row + 1, col + 1) ) count++;
+if (count === 0 || count === 4) {
+lostPoint += 3;
+}
+}
+}
+for (row = 0; row < moduleCount; row++) {
+for (col = 0; col < moduleCount - 6; col++) {
+if (qrCode.isDark(row, col) &&
+!qrCode.isDark(row, col + 1) &&
+qrCode.isDark(row, col + 2) &&
+qrCode.isDark(row, col + 3) &&
+qrCode.isDark(row, col + 4) &&
+!qrCode.isDark(row, col + 5) &&
+qrCode.isDark(row, col + 6) ) {
+lostPoint += 40;
+}
+}
+}
+for (col = 0; col < moduleCount; col++) {
+for (row = 0; row < moduleCount - 6; row++) {
+if (qrCode.isDark(row, col) &&
+!qrCode.isDark(row + 1, col) &&
+qrCode.isDark(row + 2, col) &&
+qrCode.isDark(row + 3, col) &&
+qrCode.isDark(row + 4, col) &&
+!qrCode.isDark(row + 5, col) &&
+qrCode.isDark(row + 6, col) ) {
+lostPoint += 40;
+}
+}
+}
+var darkCount = 0;
+for (col = 0; col < moduleCount; col++) {
+for (row = 0; row < moduleCount; row++) {
+if (qrCode.isDark(row, col) ) {
+darkCount++;
+}
+}
+}
+var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+lostPoint += ratio * 10;
+return lostPoint;
+}
+};
+module.exports = QRUtil;
+return module.exports})({exports:{}},req);
+mods["QRRSBlock"]=(function(module,require){
+var QRErrorCorrectLevel = require('./QRErrorCorrectLevel');
+function QRRSBlock(totalCount, dataCount) {
+this.totalCount = totalCount;
+this.dataCount  = dataCount;
+}
+QRRSBlock.RS_BLOCK_TABLE = [
+[1, 26, 19],
+[1, 26, 16],
+[1, 26, 13],
+[1, 26, 9],
+[1, 44, 34],
+[1, 44, 28],
+[1, 44, 22],
+[1, 44, 16],
+[1, 70, 55],
+[1, 70, 44],
+[2, 35, 17],
+[2, 35, 13],
+[1, 100, 80],
+[2, 50, 32],
+[2, 50, 24],
+[4, 25, 9],
+[1, 134, 108],
+[2, 67, 43],
+[2, 33, 15, 2, 34, 16],
+[2, 33, 11, 2, 34, 12],
+[2, 86, 68],
+[4, 43, 27],
+[4, 43, 19],
+[4, 43, 15],
+[2, 98, 78],
+[4, 49, 31],
+[2, 32, 14, 4, 33, 15],
+[4, 39, 13, 1, 40, 14],
+[2, 121, 97],
+[2, 60, 38, 2, 61, 39],
+[4, 40, 18, 2, 41, 19],
+[4, 40, 14, 2, 41, 15],
+[2, 146, 116],
+[3, 58, 36, 2, 59, 37],
+[4, 36, 16, 4, 37, 17],
+[4, 36, 12, 4, 37, 13],
+[2, 86, 68, 2, 87, 69],
+[4, 69, 43, 1, 70, 44],
+[6, 43, 19, 2, 44, 20],
+[6, 43, 15, 2, 44, 16],
+[4, 101, 81],
+[1, 80, 50, 4, 81, 51],
+[4, 50, 22, 4, 51, 23],
+[3, 36, 12, 8, 37, 13],
+[2, 116, 92, 2, 117, 93],
+[6, 58, 36, 2, 59, 37],
+[4, 46, 20, 6, 47, 21],
+[7, 42, 14, 4, 43, 15],
+[4, 133, 107],
+[8, 59, 37, 1, 60, 38],
+[8, 44, 20, 4, 45, 21],
+[12, 33, 11, 4, 34, 12],
+[3, 145, 115, 1, 146, 116],
+[4, 64, 40, 5, 65, 41],
+[11, 36, 16, 5, 37, 17],
+[11, 36, 12, 5, 37, 13],
+[5, 109, 87, 1, 110, 88],
+[5, 65, 41, 5, 66, 42],
+[5, 54, 24, 7, 55, 25],
+[11, 36, 12],
+[5, 122, 98, 1, 123, 99],
+[7, 73, 45, 3, 74, 46],
+[15, 43, 19, 2, 44, 20],
+[3, 45, 15, 13, 46, 16],
+[1, 135, 107, 5, 136, 108],
+[10, 74, 46, 1, 75, 47],
+[1, 50, 22, 15, 51, 23],
+[2, 42, 14, 17, 43, 15],
+[5, 150, 120, 1, 151, 121],
+[9, 69, 43, 4, 70, 44],
+[17, 50, 22, 1, 51, 23],
+[2, 42, 14, 19, 43, 15],
+[3, 141, 113, 4, 142, 114],
+[3, 70, 44, 11, 71, 45],
+[17, 47, 21, 4, 48, 22],
+[9, 39, 13, 16, 40, 14],
+[3, 135, 107, 5, 136, 108],
+[3, 67, 41, 13, 68, 42],
+[15, 54, 24, 5, 55, 25],
+[15, 43, 15, 10, 44, 16],
+[4, 144, 116, 4, 145, 117],
+[17, 68, 42],
+[17, 50, 22, 6, 51, 23],
+[19, 46, 16, 6, 47, 17],
+[2, 139, 111, 7, 140, 112],
+[17, 74, 46],
+[7, 54, 24, 16, 55, 25],
+[34, 37, 13],
+[4, 151, 121, 5, 152, 122],
+[4, 75, 47, 14, 76, 48],
+[11, 54, 24, 14, 55, 25],
+[16, 45, 15, 14, 46, 16],
+[6, 147, 117, 4, 148, 118],
+[6, 73, 45, 14, 74, 46],
+[11, 54, 24, 16, 55, 25],
+[30, 46, 16, 2, 47, 17],
+[8, 132, 106, 4, 133, 107],
+[8, 75, 47, 13, 76, 48],
+[7, 54, 24, 22, 55, 25],
+[22, 45, 15, 13, 46, 16],
+[10, 142, 114, 2, 143, 115],
+[19, 74, 46, 4, 75, 47],
+[28, 50, 22, 6, 51, 23],
+[33, 46, 16, 4, 47, 17],
+[8, 152, 122, 4, 153, 123],
+[22, 73, 45, 3, 74, 46],
+[8, 53, 23, 26, 54, 24],
+[12, 45, 15, 28, 46, 16],
+[3, 147, 117, 10, 148, 118],
+[3, 73, 45, 23, 74, 46],
+[4, 54, 24, 31, 55, 25],
+[11, 45, 15, 31, 46, 16],
+[7, 146, 116, 7, 147, 117],
+[21, 73, 45, 7, 74, 46],
+[1, 53, 23, 37, 54, 24],
+[19, 45, 15, 26, 46, 16],
+[5, 145, 115, 10, 146, 116],
+[19, 75, 47, 10, 76, 48],
+[15, 54, 24, 25, 55, 25],
+[23, 45, 15, 25, 46, 16],
+[13, 145, 115, 3, 146, 116],
+[2, 74, 46, 29, 75, 47],
+[42, 54, 24, 1, 55, 25],
+[23, 45, 15, 28, 46, 16],
+[17, 145, 115],
+[10, 74, 46, 23, 75, 47],
+[10, 54, 24, 35, 55, 25],
+[19, 45, 15, 35, 46, 16],
+[17, 145, 115, 1, 146, 116],
+[14, 74, 46, 21, 75, 47],
+[29, 54, 24, 19, 55, 25],
+[11, 45, 15, 46, 46, 16],
+[13, 145, 115, 6, 146, 116],
+[14, 74, 46, 23, 75, 47],
+[44, 54, 24, 7, 55, 25],
+[59, 46, 16, 1, 47, 17],
+[12, 151, 121, 7, 152, 122],
+[12, 75, 47, 26, 76, 48],
+[39, 54, 24, 14, 55, 25],
+[22, 45, 15, 41, 46, 16],
+[6, 151, 121, 14, 152, 122],
+[6, 75, 47, 34, 76, 48],
+[46, 54, 24, 10, 55, 25],
+[2, 45, 15, 64, 46, 16],
+[17, 152, 122, 4, 153, 123],
+[29, 74, 46, 14, 75, 47],
+[49, 54, 24, 10, 55, 25],
+[24, 45, 15, 46, 46, 16],
+[4, 152, 122, 18, 153, 123],
+[13, 74, 46, 32, 75, 47],
+[48, 54, 24, 14, 55, 25],
+[42, 45, 15, 32, 46, 16],
+[20, 147, 117, 4, 148, 118],
+[40, 75, 47, 7, 76, 48],
+[43, 54, 24, 22, 55, 25],
+[10, 45, 15, 67, 46, 16],
+[19, 148, 118, 6, 149, 119],
+[18, 75, 47, 31, 76, 48],
+[34, 54, 24, 34, 55, 25],
+[20, 45, 15, 61, 46, 16]
+];
+QRRSBlock.getRSBlocks = function(typeNumber, errorCorrectLevel) {
+var rsBlock = QRRSBlock.getRsBlockTable(typeNumber, errorCorrectLevel);
+if (rsBlock === undefined) {
+throw new Error("bad rs block @ typeNumber:" + typeNumber + "/errorCorrectLevel:" + errorCorrectLevel);
+}
+var length = rsBlock.length / 3;
+var list = [];
+for (var i = 0; i < length; i++) {
+var count = rsBlock[i * 3 + 0];
+var totalCount = rsBlock[i * 3 + 1];
+var dataCount  = rsBlock[i * 3 + 2];
+for (var j = 0; j < count; j++) {
+list.push(new QRRSBlock(totalCount, dataCount) );
+}
+}
+return list;
+};
+QRRSBlock.getRsBlockTable = function(typeNumber, errorCorrectLevel) {
+switch(errorCorrectLevel) {
+case QRErrorCorrectLevel.L :
+return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+case QRErrorCorrectLevel.M :
+return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+case QRErrorCorrectLevel.Q :
+return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+case QRErrorCorrectLevel.H :
+return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+default :
+return undefined;
+}
+};
+module.exports = QRRSBlock;
+return module.exports})({exports:{}},req);
+mods["QRBitBuffer"]=(function(module,require){
+function QRBitBuffer() {
+this.buffer = [];
+this.length = 0;
+}
+QRBitBuffer.prototype = {
+get : function(index) {
+var bufIndex = Math.floor(index / 8);
+return ( (this.buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+},
+put : function(num, length) {
+for (var i = 0; i < length; i++) {
+this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+}
+},
+getLengthInBits : function() {
+return this.length;
+},
+putBit : function(bit) {
+var bufIndex = Math.floor(this.length / 8);
+if (this.buffer.length <= bufIndex) {
+this.buffer.push(0);
+}
+if (bit) {
+this.buffer[bufIndex] |= (0x80 >>> (this.length % 8) );
+}
+this.length++;
+}
+};
+module.exports = QRBitBuffer;
+return module.exports})({exports:{}},req);
+mods["QR8bitByte"]=(function(module,require){
+var QRMode = require('./QRMode');
+function QR8bitByte(data) {
+this.mode = QRMode.MODE_8BIT_BYTE;
+this.data = data;
+}
+QR8bitByte.prototype = {
+getLength : function() {
+return this.data.length;
+},
+write : function(buffer) {
+for (var i = 0; i < this.data.length; i++) {
+buffer.put(this.data.charCodeAt(i), 8);
+}
+}
+};
+module.exports = QR8bitByte;
+return module.exports})({exports:{}},req);
+mods["index"]=(function(module,require){
+var QR8bitByte = require('./QR8bitByte');
+var QRUtil = require('./QRUtil');
+var QRPolynomial = require('./QRPolynomial');
+var QRRSBlock = require('./QRRSBlock');
+var QRBitBuffer = require('./QRBitBuffer');
+function QRCode(typeNumber, errorCorrectLevel) {
+this.typeNumber = typeNumber;
+this.errorCorrectLevel = errorCorrectLevel;
+this.modules = null;
+this.moduleCount = 0;
+this.dataCache = null;
+this.dataList = [];
+}
+QRCode.prototype = {
+addData : function(data) {
+var newData = new QR8bitByte(data);
+this.dataList.push(newData);
+this.dataCache = null;
+},
+isDark : function(row, col) {
+if (row < 0 || this.moduleCount <= row || col < 0 || this.moduleCount <= col) {
+throw new Error(row + "," + col);
+}
+return this.modules[row][col];
+},
+getModuleCount : function() {
+return this.moduleCount;
+},
+make : function() {
+if (this.typeNumber < 1 ){
+var typeNumber = 1;
+for (typeNumber = 1; typeNumber < 40; typeNumber++) {
+var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, this.errorCorrectLevel);
+var buffer = new QRBitBuffer();
+var totalDataCount = 0;
+for (var i = 0; i < rsBlocks.length; i++) {
+totalDataCount += rsBlocks[i].dataCount;
+}
+for (var x = 0; x < this.dataList.length; x++) {
+var data = this.dataList[x];
+buffer.put(data.mode, 4);
+buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+data.write(buffer);
+}
+if (buffer.getLengthInBits() <= totalDataCount * 8)
+break;
+}
+this.typeNumber = typeNumber;
+}
+this.makeImpl(false, this.getBestMaskPattern() );
+},
+makeImpl : function(test, maskPattern) {
+this.moduleCount = this.typeNumber * 4 + 17;
+this.modules = new Array(this.moduleCount);
+for (var row = 0; row < this.moduleCount; row++) {
+this.modules[row] = new Array(this.moduleCount);
+for (var col = 0; col < this.moduleCount; col++) {
+this.modules[row][col] = null;//(col + row) % 3;
+}
+}
+this.setupPositionProbePattern(0, 0);
+this.setupPositionProbePattern(this.moduleCount - 7, 0);
+this.setupPositionProbePattern(0, this.moduleCount - 7);
+this.setupPositionAdjustPattern();
+this.setupTimingPattern();
+this.setupTypeInfo(test, maskPattern);
+if (this.typeNumber >= 7) {
+this.setupTypeNumber(test);
+}
+if (this.dataCache === null) {
+this.dataCache = QRCode.createData(this.typeNumber, this.errorCorrectLevel, this.dataList);
+}
+this.mapData(this.dataCache, maskPattern);
+},
+setupPositionProbePattern : function(row, col)  {
+for (var r = -1; r <= 7; r++) {
+if (row + r <= -1 || this.moduleCount <= row + r) continue;
+for (var c = -1; c <= 7; c++) {
+if (col + c <= -1 || this.moduleCount <= col + c) continue;
+if ( (0 <= r && r <= 6 && (c === 0 || c === 6) ) ||
+(0 <= c && c <= 6 && (r === 0 || r === 6) ) ||
+(2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+this.modules[row + r][col + c] = true;
+} else {
+this.modules[row + r][col + c] = false;
+}
+}
+}
+},
+getBestMaskPattern : function() {
+var minLostPoint = 0;
+var pattern = 0;
+for (var i = 0; i < 8; i++) {
+this.makeImpl(true, i);
+var lostPoint = QRUtil.getLostPoint(this);
+if (i === 0 || minLostPoint >  lostPoint) {
+minLostPoint = lostPoint;
+pattern = i;
+}
+}
+return pattern;
+},
+createMovieClip : function(target_mc, instance_name, depth) {
+var qr_mc = target_mc.createEmptyMovieClip(instance_name, depth);
+var cs = 1;
+this.make();
+for (var row = 0; row < this.modules.length; row++) {
+var y = row * cs;
+for (var col = 0; col < this.modules[row].length; col++) {
+var x = col * cs;
+var dark = this.modules[row][col];
+if (dark) {
+qr_mc.beginFill(0, 100);
+qr_mc.moveTo(x, y);
+qr_mc.lineTo(x + cs, y);
+qr_mc.lineTo(x + cs, y + cs);
+qr_mc.lineTo(x, y + cs);
+qr_mc.endFill();
+}
+}
+}
+return qr_mc;
+},
+setupTimingPattern : function() {
+for (var r = 8; r < this.moduleCount - 8; r++) {
+if (this.modules[r][6] !== null) {
+continue;
+}
+this.modules[r][6] = (r % 2 === 0);
+}
+for (var c = 8; c < this.moduleCount - 8; c++) {
+if (this.modules[6][c] !== null) {
+continue;
+}
+this.modules[6][c] = (c % 2 === 0);
+}
+},
+setupPositionAdjustPattern : function() {
+var pos = QRUtil.getPatternPosition(this.typeNumber);
+for (var i = 0; i < pos.length; i++) {
+for (var j = 0; j < pos.length; j++) {
+var row = pos[i];
+var col = pos[j];
+if (this.modules[row][col] !== null) {
+continue;
+}
+for (var r = -2; r <= 2; r++) {
+for (var c = -2; c <= 2; c++) {
+if (Math.abs(r) === 2 ||
+Math.abs(c) === 2 ||
+(r === 0 && c === 0) ) {
+this.modules[row + r][col + c] = true;
+} else {
+this.modules[row + r][col + c] = false;
+}
+}
+}
+}
+}
+},
+setupTypeNumber : function(test) {
+var bits = QRUtil.getBCHTypeNumber(this.typeNumber);
+var mod;
+for (var i = 0; i < 18; i++) {
+mod = (!test && ( (bits >> i) & 1) === 1);
+this.modules[Math.floor(i / 3)][i % 3 + this.moduleCount - 8 - 3] = mod;
+}
+for (var x = 0; x < 18; x++) {
+mod = (!test && ( (bits >> x) & 1) === 1);
+this.modules[x % 3 + this.moduleCount - 8 - 3][Math.floor(x / 3)] = mod;
+}
+},
+setupTypeInfo : function(test, maskPattern) {
+var data = (this.errorCorrectLevel << 3) | maskPattern;
+var bits = QRUtil.getBCHTypeInfo(data);
+var mod;
+for (var v = 0; v < 15; v++) {
+mod = (!test && ( (bits >> v) & 1) === 1);
+if (v < 6) {
+this.modules[v][8] = mod;
+} else if (v < 8) {
+this.modules[v + 1][8] = mod;
+} else {
+this.modules[this.moduleCount - 15 + v][8] = mod;
+}
+}
+for (var h = 0; h < 15; h++) {
+mod = (!test && ( (bits >> h) & 1) === 1);
+if (h < 8) {
+this.modules[8][this.moduleCount - h - 1] = mod;
+} else if (h < 9) {
+this.modules[8][15 - h - 1 + 1] = mod;
+} else {
+this.modules[8][15 - h - 1] = mod;
+}
+}
+this.modules[this.moduleCount - 8][8] = (!test);
+},
+mapData : function(data, maskPattern) {
+var inc = -1;
+var row = this.moduleCount - 1;
+var bitIndex = 7;
+var byteIndex = 0;
+for (var col = this.moduleCount - 1; col > 0; col -= 2) {
+if (col === 6) col--;
+while (true) {
+for (var c = 0; c < 2; c++) {
+if (this.modules[row][col - c] === null) {
+var dark = false;
+if (byteIndex < data.length) {
+dark = ( ( (data[byteIndex] >>> bitIndex) & 1) === 1);
+}
+var mask = QRUtil.getMask(maskPattern, row, col - c);
+if (mask) {
+dark = !dark;
+}
+this.modules[row][col - c] = dark;
+bitIndex--;
+if (bitIndex === -1) {
+byteIndex++;
+bitIndex = 7;
+}
+}
+}
+row += inc;
+if (row < 0 || this.moduleCount <= row) {
+row -= inc;
+inc = -inc;
+break;
+}
+}
+}
+}
+};
+QRCode.PAD0 = 0xEC;
+QRCode.PAD1 = 0x11;
+QRCode.createData = function(typeNumber, errorCorrectLevel, dataList) {
+var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectLevel);
+var buffer = new QRBitBuffer();
+for (var i = 0; i < dataList.length; i++) {
+var data = dataList[i];
+buffer.put(data.mode, 4);
+buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+data.write(buffer);
+}
+var totalDataCount = 0;
+for (var x = 0; x < rsBlocks.length; x++) {
+totalDataCount += rsBlocks[x].dataCount;
+}
+if (buffer.getLengthInBits() > totalDataCount * 8) {
+throw new Error("code length overflow. (" +
+buffer.getLengthInBits() +
+">" +
+totalDataCount * 8 +
+")");
+}
+if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+buffer.put(0, 4);
+}
+while (buffer.getLengthInBits() % 8 !== 0) {
+buffer.putBit(false);
+}
+while (true) {
+if (buffer.getLengthInBits() >= totalDataCount * 8) {
+break;
+}
+buffer.put(QRCode.PAD0, 8);
+if (buffer.getLengthInBits() >= totalDataCount * 8) {
+break;
+}
+buffer.put(QRCode.PAD1, 8);
+}
+return QRCode.createBytes(buffer, rsBlocks);
+};
+QRCode.createBytes = function(buffer, rsBlocks) {
+var offset = 0;
+var maxDcCount = 0;
+var maxEcCount = 0;
+var dcdata = new Array(rsBlocks.length);
+var ecdata = new Array(rsBlocks.length);
+for (var r = 0; r < rsBlocks.length; r++) {
+var dcCount = rsBlocks[r].dataCount;
+var ecCount = rsBlocks[r].totalCount - dcCount;
+maxDcCount = Math.max(maxDcCount, dcCount);
+maxEcCount = Math.max(maxEcCount, ecCount);
+dcdata[r] = new Array(dcCount);
+for (var i = 0; i < dcdata[r].length; i++) {
+dcdata[r][i] = 0xff & buffer.buffer[i + offset];
+}
+offset += dcCount;
+var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+var rawPoly = new QRPolynomial(dcdata[r], rsPoly.getLength() - 1);
+var modPoly = rawPoly.mod(rsPoly);
+ecdata[r] = new Array(rsPoly.getLength() - 1);
+for (var x = 0; x < ecdata[r].length; x++) {
+var modIndex = x + modPoly.getLength() - ecdata[r].length;
+ecdata[r][x] = (modIndex >= 0)? modPoly.get(modIndex) : 0;
+}
+}
+var totalCodeCount = 0;
+for (var y = 0; y < rsBlocks.length; y++) {
+totalCodeCount += rsBlocks[y].totalCount;
+}
+var data = new Array(totalCodeCount);
+var index = 0;
+for (var z = 0; z < maxDcCount; z++) {
+for (var s = 0; s < rsBlocks.length; s++) {
+if (z < dcdata[s].length) {
+data[index++] = dcdata[s][z];
+}
+}
+}
+for (var xx = 0; xx < maxEcCount; xx++) {
+for (var t = 0; t < rsBlocks.length; t++) {
+if (xx < ecdata[t].length) {
+data[index++] = ecdata[t][xx];
+}
+}
+}
+return data;
+};
+module.exports = QRCode;
+return module.exports})({exports:{}},req);
+return{QRCode:mods.index,ECL:mods.QRErrorCorrectLevel}})();
+/* ===== Pix: QR de cobrança (BR Code estático, padrão Banco Central) ===== */
+const pixDigitCheck=(d,n,w)=>{let t=0;for(let i=0;i<n;i++)t+=+d[i]*w[i];return t};
+function pixCpfOk(d){if(!/^\d{11}$/.test(d)||/^(\d)\1{10}$/.test(d))return false;const c=n=>{const r=(pixDigitCheck(d,n,Array.from({length:n},(_,i)=>n+1-i))*10)%11;return r===10?0:r};return c(9)===+d[9]&&c(10)===+d[10]}
+function pixCnpjOk(d){if(!/^\d{14}$/.test(d)||/^(\d)\1{13}$/.test(d))return false;const c=n=>{const w=n===12?[5,4,3,2,9,8,7,6,5,4,3,2]:[6,5,4,3,2,9,8,7,6,5,4,3,2];const r=pixDigitCheck(d,n,w)%11;return r<2?0:11-r};return c(12)===+d[12]&&c(13)===+d[13]}
+function pixKeyParse(raw){
+ const k=String(raw||"").trim();if(!k)return{error:"Informe a chave Pix."};
+ if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(k)&&k.length<=77)return{key:k.toLowerCase(),type:"e-mail"};
+ if(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(k))return{key:k.toLowerCase(),type:"chave aleatória"};
+ const ph=k.replace(/[\s().-]/g,"");if(/^\+55\d{10,11}$/.test(ph))return{key:ph,type:"telefone"};
+ if(/^[\d.\-\/\s]+$/.test(k)){const d=k.replace(/\D/g,"");
+  if(d.length===11)return pixCpfOk(d)?{key:d,type:"CPF"}:{error:"CPF inválido. Se for telefone, digite com +55 e o DDD (ex.: +5511999990000)."};
+  if(d.length===14)return pixCnpjOk(d)?{key:d,type:"CNPJ"}:{error:"CNPJ inválido. Confira os números."};}
+ return{error:"Chave Pix inválida. Use CPF, CNPJ, e-mail, telefone com +55 ou chave aleatória."};
+}
+const pixAscii=(t,max)=>String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^A-Za-z0-9 ]/g," ").replace(/\s+/g," ").trim().toUpperCase().slice(0,max);
+const pixField=(id,v)=>id+String(v.length).padStart(2,"0")+v;
+function pixCrc16(t){let c=0xFFFF;for(let i=0;i<t.length;i++){c^=t.charCodeAt(i)<<8;for(let j=0;j<8;j++)c=(c&0x8000)?((c<<1)^0x1021)&0xFFFF:(c<<1)&0xFFFF}return c.toString(16).toUpperCase().padStart(4,"0")}
+function pixConfig(){const p=S.pix||{},k=pixKeyParse(p.key);if(k.error)return{error:k.error};return{key:k.key,type:k.type,name:pixAscii(p.name||S.shop,25)||"COMERCIO",city:pixAscii(p.city,15)||"BRASIL"}}
+function pixPayload(cfg,cents){
+ const mai=pixField("00","br.gov.bcb.pix")+pixField("01",cfg.key);
+ let t=pixField("00","01")+pixField("01","11")+pixField("26",mai)+pixField("52","0000")+pixField("53","986");
+ if(cents)t+=pixField("54",Math.floor(cents/100)+"."+String(cents%100).padStart(2,"0"));
+ t+=pixField("58","BR")+pixField("59",cfg.name)+pixField("60",cfg.city)+pixField("62",pixField("05","***"))+"6304";
+ return t+pixCrc16(t);
+}
+// Total da venda em centavos: mesma regra de buildSalePlan (subtotal − desconto).
+function pixSaleCents(){
+ const sel=S.pr.find(x=>x.id===$("e-prod").value),q=positiveInteger($("e-qty").value);let sub;
+ if(CART.length)sub=CART.reduce((t,i)=>t+moneyToCents(i.price,"Preço do produto")*i.qty,0);
+ else if(sel&&q)sub=moneyToCents(sel.price,"Preço do produto")*q;
+ else sub=moneyToCents($("e-val").value,"Valor da venda");
+ const dc=moneyToCents($("e-disc").value.trim()===""?0:$("e-disc").value,"Desconto");
+ if(dc>sub)throw Error("O desconto não pode superar o subtotal.");
+ if(sub-dc<=0)throw Error("O total da venda deve ser maior que zero.");
+ return sub-dc;
+}
+function pixDraw(canvas,text){const q=new M7QR.QRCode(-1,M7QR.ECL.M);q.addData(text);q.make();
+ const n=q.getModuleCount(),qz=4,sc=Math.max(3,Math.floor(320/(n+2*qz))),W=(n+2*qz)*sc;canvas.width=canvas.height=W;
+ const x=canvas.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,W,W);x.fillStyle="#000";
+ for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(q.isDark(r,c))x.fillRect((c+qz)*sc,(r+qz)*sc,sc,sc)}
+function showPix(cents){const cfg=pixConfig();
+ if(cfg.error)return toast(S.pix&&S.pix.key?cfg.error:"Cadastre sua chave Pix em Cadastros > Pix.");
+ const code=pixPayload(cfg,cents);pixDraw($("pix-qr"),code);$("pix-code").value=code;
+ $("pix-info").textContent=R(cents/100)+" · "+cfg.name;$("pix-copy").textContent="Copiar código";$("pixdlg").showModal()}
+function syncPixBtn(){const b=$("e-pix"),m=$("e-met");if(b&&m)b.style.display=m.value==="Pix"?"block":"none"}
+function pixStatus(){const el=$("pix-status");if(!el)return;
+ if(!S.pix||!String(S.pix.key||"").trim()){el.textContent="Informe a chave Pix para gerar o QR na venda.";return}
+ const c=pixConfig();el.textContent=c.error?"⚠️ "+c.error:"✅ Chave "+c.type+" válida. Aparece no Pix como: "+c.name+" · "+c.city}
+function pixLoadFields(){if(!$("pix-key"))return;const p=S.pix||{};$("pix-key").value=p.key||"";$("pix-name").value=p.name||"";$("pix-city").value=p.city||"";pixStatus()}
+["pix-key","pix-name","pix-city"].forEach(id=>$(id).oninput=()=>{S.pix={key:$("pix-key").value.trim(),name:$("pix-name").value,city:$("pix-city").value};save();pixStatus()});
+$("e-met").addEventListener("change",syncPixBtn);
+$("e-pix").onclick=()=>{try{showPix(pixSaleCents())}catch(e){toast(e?.message||"Não foi possível gerar o QR Pix.")}};
+$("pix-x").onclick=()=>$("pixdlg").close();
+$("pix-copy").onclick=()=>{const t=$("pix-code").value,b=$("pix-copy"),ok=()=>{b.textContent="Copiado ✓"},fb=()=>{$("pix-code").focus();$("pix-code").select();b.textContent="Selecione e copie"};
+ if(navigator.clipboard)navigator.clipboard.writeText(t).then(ok,fb);else fb()};
+pixLoadFields();syncPixBtn();
+
 $("bk-copy").onclick=()=>{
  const data={...S};delete data.pin;
  const j=JSON.stringify({format:"m7-controle-backup",version:2,scope:activeStorageKey,data});
@@ -1330,11 +2292,12 @@ $("bk-load").onclick=()=>{
   for(const key of ["cl","pr","stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"]){if(data[key]!==undefined&&!Array.isArray(data[key]))throw Error("Lista inválida: "+key);}
   if(data.cx!==undefined&&!plain(data.cx))throw Error("Dados de caixa inválidos.");
   if(data.shop!==undefined&&typeof data.shop!=="string")throw Error("Nome da empresa inválido.");
+   if(data.pix!==undefined&&!plain(data.pix))throw Error("Configuração do Pix inválida.");
   for(const key of ["tx","rc","cl","pr","stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"]){if(Array.isArray(data[key])&&!data[key].every(plain))throw Error("Registro inválido em "+key+".");}
-  const next={tx:data.tx,rc:data.rc,cx:plain(data.cx)?data.cx:{},cl:data.cl||[],pr:data.pr||[],stock_pending:data.stock_pending||[],purchase_pending:data.purchase_pending||[],shop:data.shop||""};
+  const next={tx:data.tx,rc:data.rc,cx:plain(data.cx)?data.cx:{},cl:data.cl||[],pr:data.pr||[],stock_pending:data.stock_pending||[],purchase_pending:data.purchase_pending||[],shop:data.shop||"",pix:data.pix};
   for(const key of ["stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"])if(Array.isArray(data[key]))next[key]=data[key];
   if(S.pin)next.pin=S.pin;
-  S=next;normalizeState();$("s-name").value=S.shop;save();render();toast("Backup restaurado com validação.");
+  S=next;normalizeState();$("s-name").value=S.shop;pixLoadFields();save();render();toast("Backup restaurado com validação.");
  }catch(e){toast(e?.message||"Backup inválido. Nenhum dado foi alterado.");}
 };
 window.addEventListener("error",e=>{console.error("Erro não tratado",e.error||e.message)});
