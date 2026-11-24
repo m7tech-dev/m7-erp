@@ -70,6 +70,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
 <div id="tenant-loading"><div style="font-size:38px">🔐</div><h2>Validando empresa</h2><p class="k" id="tenant-loading-msg">Aguarde enquanto carregamos os dados da conta correta…</p><button id="tenant-logout" type="button" class="gh">Sair da conta</button></div>
 <main>
 <section class="tab on" id="t-res">
+ <div class="card" id="onb-card" style="display:none;margin-bottom:12px"></div>
  <div class="grid">
   <div class="card wide"><div class="k">Saldo realizado no mês</div><div class="v" id="d-saldo">–</div></div>
   <div class="card"><div class="k">Entradas hoje</div><div class="v g" id="d-in">–</div></div>
@@ -84,6 +85,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
 
 <section class="tab" id="t-ent">
  <div class="card"><h2>Nova entrada / venda</h2>
+  <label for="e-code">Código de barras ou SKU (leitor ou digitação)</label><input id="e-code" autocomplete="off" autocapitalize="characters" placeholder="Passe o leitor ou digite o código" style="margin-bottom:8px">
   <div class="f2"><div><label for="e-prod">Produto (opcional)</label><select id="e-prod"><option value="">—</option></select></div><div><label for="e-qty">Qtd.</label><input id="e-qty" type="number" min="1" value="1" inputmode="numeric"></div></div>
   <div class="row2" style="margin:8px 0"><button class="gh" id="e-add" type="button">+ Adicionar item à venda</button></div><div id="e-cart"></div><label for="e-disc">Desconto (R$, opcional)</label><input id="e-disc" type="number" min="0" step="0.01" inputmode="decimal">
   <label for="e-desc">Descrição</label><input id="e-desc" placeholder="Ex.: Venda de bolo">
@@ -104,6 +106,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
  <input id="r-q" placeholder="Buscar cliente…">
  <div class="chips" id="r-f"><button class="chip on" data-f="todos">Todos</button><button class="chip" data-f="fiado">Fiados</button><button class="chip" data-f="futuro">Futuros</button><button class="chip" data-f="atrasado">Atrasados</button></div>
  <button class="sm amb" id="mass-btn" style="margin-bottom:10px">📣 Cobrar todos os atrasados</button>
+ <label for="stmt-sel">Extrato do cliente</label><select id="stmt-sel"><option value="">— Escolher cliente com saldo —</option></select>
  <div id="r-list"></div>
 </section>
 
@@ -133,6 +136,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
  </div>
  <h3>Gastos por categoria</h3><div class="card" id="p-cat"></div>
  <div class="row2 noprint"><button class="gh" id="p-print">🖨 Imprimir / Salvar PDF</button><button id="p-copy">Copiar para WhatsApp</button></div>
+ <div class="row2 noprint" style="margin-top:8px"><button class="gh" id="p-csv" type="button">⬇ Exportar planilha (CSV)</button></div>
  <div class="card" style="margin-top:12px"><h2>Fechamento de caixa</h2><div class="f2"><div><label for="cx-d">Dia</label><input id="cx-d" type="date"></div><div><label for="cx-i">Troco inicial (R$)</label><input id="cx-i" type="number" min="0" step="0.01" inputmode="decimal"></div></div><label for="cx-c">Dinheiro contado na gaveta (R$)</label><input id="cx-c" type="number" min="0" step="0.01" inputmode="decimal"><div id="cx-out" style="margin-top:8px"></div><p class="k">Dinheiro esperado = troco inicial + recebimentos em dinheiro − despesas em dinheiro − pagamentos a fornecedores em dinheiro + reembolsos de fornecedores em dinheiro. Pix, transferências e cartão não alteram o saldo físico da gaveta. Sincronize as despesas pendentes antes de fechar.</p><p class="k" id="cx-remote-status">Fechamento local. Entre na empresa para apurar e salvar no servidor.</p><div class="row2 noprint"><button id="cx-save-remote" type="button" disabled>Salvar fechamento no servidor</button><button class="gh" id="cx-copy">Copiar fechamento</button></div><div id="cx-history" class="k" style="margin-top:10px">O histórico de versões aparecerá após carregar o fechamento remoto.</div></div>
 </section>
 <section class="tab" id="t-comp">
@@ -147,10 +151,13 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
  <div class="card"><h2>Pix (QR na venda)</h2><label for="pix-key">Chave Pix</label><input id="pix-key" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="CPF, CNPJ, e-mail, +55 e telefone ou chave aleatória">
   <div class="f2"><div><label for="pix-name">Nome no Pix (opcional)</label><input id="pix-name" maxlength="25" placeholder="Usa o nome da loja"></div><div><label for="pix-city">Cidade (opcional)</label><input id="pix-city" maxlength="15" placeholder="Ex.: São Paulo"></div></div>
   <p class="k" id="pix-status" aria-live="polite"></p><p class="k">O QR cobra o valor da venda e leva o cliente direto ao seu Pix. O app não confirma o pagamento: confira o recebimento no aplicativo do seu banco.</p></div>
- <div class="card"><h2>Clientes</h2><div class="f2"><div><label for="c-n">Nome</label><input id="c-n" placeholder="Nome do cliente"></div><div><label for="c-t">WhatsApp</label><input id="c-t" inputmode="tel" placeholder="(11) 99999-9999"></div></div><div class="row2"><button id="c-add">Adicionar cliente</button><button class="gh" id="c-cancel" style="display:none">Cancelar</button></div><div id="c-list"></div></div>
- <div class="card"><h2>Produtos</h2><div class="f2"><div><label for="pr-n">Nome</label><input id="pr-n"></div><div><label for="pr-p">Preço (R$)</label><input id="pr-p" type="number" min="0" step="0.01" inputmode="decimal"></div></div><div class="f2"><div><label for="pr-c">Custo (R$, opcional)</label><input id="pr-c" type="number" min="0" step="0.01" inputmode="decimal"><p class="k" id="pr-cost-help">Para produto remoto, o custo é atualizado pelo recebimento de compras.</p></div><div><label for="pr-s">Estoque inicial (opcional)</label><input id="pr-s" type="number" min="0" inputmode="numeric"><p class="k" id="pr-stock-help"></p></div></div><div class="row2"><button id="pr-add">Adicionar produto</button><button class="gh" id="pr-cancel" style="display:none">Cancelar</button></div><div id="pr-list"></div></div>
- <div class="card"><h2>Conexão M7 ERP</h2><p class="k">Vendas, recebimentos, produtos, clientes, despesas e fechamentos de caixa podem ser sincronizados com o servidor.</p><p id="sb-status" class="k">Verificando disponibilidade da conexão…</p><label for="sb-email">E-mail da conta</label><input id="sb-email" type="email" autocomplete="username" placeholder="seu@email.com"><label for="sb-pass">Senha</label><input id="sb-pass" type="password" autocomplete="current-password" placeholder="Senha da conta Supabase"><div class="row2"><button id="sb-login" type="button">Entrar na conta</button><button class="gh" id="sb-logout" type="button">Sair</button></div><p id="sb-user" class="k">Não conectado</p><div class="row2"><button id="sb-sync" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar clientes">Sincronizar clientes</button><button id="sb-sync-products" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar o catálogo">Sincronizar produtos</button></div><p id="sb-sync-status" class="k">Entre na conta e valide a empresa para sincronizar clientes com segurança.</p><p id="sb-product-sync-status" class="k">Entre na conta e valide a empresa para sincronizar o catálogo com segurança.</p><div class="row2"><button id="sb-sync-expenses" type="button" class="gh" disabled>Sincronizar despesas</button></div><p id="sb-expense-sync-status" class="k">As despesas antigas só serão enviadas quando você solicitar a sincronização.</p></div>
+ <div class="card"><h2>Clientes</h2><div class="f2"><div><label for="c-n">Nome</label><input id="c-n" placeholder="Nome do cliente"></div><div><label for="c-t">WhatsApp</label><input id="c-t" inputmode="tel" placeholder="(11) 99999-9999"></div></div><div class="row2"><button id="c-add">Adicionar cliente</button><button class="gh" id="c-cancel" style="display:none">Cancelar</button></div><input id="c-q" type="search" autocomplete="off" placeholder="Buscar cliente por nome ou WhatsApp" style="margin-top:10px"><div id="c-list"></div></div>
+ <div class="card"><h2>Produtos</h2><div class="f2"><div><label for="pr-n">Nome</label><input id="pr-n"></div><div><label for="pr-p">Preço (R$)</label><input id="pr-p" type="number" min="0" step="0.01" inputmode="decimal"></div></div><div class="f2"><div><label for="pr-sku">Código / SKU (opcional)</label><input id="pr-sku" maxlength="40" autocomplete="off" autocapitalize="characters"></div><div><label for="pr-bar">Código de barras (opcional)</label><input id="pr-bar" inputmode="numeric" maxlength="14" autocomplete="off" placeholder="Só números"></div></div><div class="f2"><div><label for="pr-unit">Unidade</label><select id="pr-unit"><option>UN</option><option>KG</option><option>G</option><option>L</option><option>ML</option><option>M</option><option>CX</option><option>PCT</option><option>DZ</option></select></div><div><label for="pr-desc">Descrição (opcional)</label><input id="pr-desc" maxlength="120"></div></div><div class="f2"><div><label for="pr-c">Custo (R$, opcional)</label><input id="pr-c" type="number" min="0" step="0.01" inputmode="decimal"><p class="k" id="pr-cost-help">Para produto remoto, o custo é atualizado pelo recebimento de compras.</p></div><div><label for="pr-s">Estoque inicial (opcional)</label><input id="pr-s" type="number" min="0" inputmode="numeric"><p class="k" id="pr-stock-help"></p></div></div><div class="row2"><button id="pr-add">Adicionar produto</button><button class="gh" id="pr-cancel" style="display:none">Cancelar</button></div><input id="pr-q" type="search" autocomplete="off" placeholder="Buscar produto por nome ou código" style="margin-top:10px"><div id="pr-list"></div></div>
+ <div class="card"><h2>Conexão M7 ERP</h2><p class="k">Entre com o e-mail e a senha da sua empresa para guardar vendas, recebimentos, produtos, clientes, despesas e fechamentos de caixa com segurança na nuvem.</p><p id="sb-status" class="k">Verificando disponibilidade da conexão…</p><label for="sb-email">E-mail da conta</label><input id="sb-email" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" placeholder="seu@email.com"><label for="sb-pass">Senha</label><div style="display:flex;gap:8px"><input id="sb-pass" type="password" autocomplete="current-password" placeholder="Sua senha" style="flex:1;min-width:0"><button class="gh" id="sb-eye" type="button" aria-label="Mostrar senha" aria-pressed="false" style="width:auto;flex:none;padding:0 16px">👁</button></div><div class="row2"><button id="sb-login" type="button">Entrar na conta</button><button class="gh" id="sb-logout" type="button">Sair</button></div><div class="row2" style="margin-top:8px"><button class="gh" id="sb-forgot" type="button">Esqueci minha senha</button><button class="gh" id="sb-chpw" type="button">Alterar senha</button></div><p id="sb-user" class="k">Não conectado</p><div class="row2"><button id="sb-sync" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar clientes">Sincronizar clientes</button><button id="sb-sync-products" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar o catálogo">Sincronizar produtos</button></div><p id="sb-sync-status" class="k">Entre na conta e valide a empresa para sincronizar clientes com segurança.</p><p id="sb-product-sync-status" class="k">Entre na conta e valide a empresa para sincronizar o catálogo com segurança.</p><div class="row2"><button id="sb-sync-expenses" type="button" class="gh" disabled>Sincronizar despesas</button></div><p id="sb-expense-sync-status" class="k">As despesas antigas só serão enviadas quando você solicitar a sincronização.</p></div>
  <div class="card"><h2>Segurança</h2><label for="pin-n">PIN de acesso (4 a 6 números)</label><input id="pin-n" type="password" inputmode="numeric" maxlength="6" autocomplete="off"><div class="row2"><button id="pin-set">Definir PIN</button><button class="gh" id="pin-off">Remover</button><button class="gh" id="pin-lock">Bloquear</button></div><p class="k" id="pin-st"></p></div>
+ <div class="card" id="master-card" style="display:none"><h2>Administração da plataforma</h2><p class="k">Área exclusiva do administrador M7 TECH: cadastre e gerencie os comércios clientes.</p><div class="row2"><button class="gh" id="mc-refresh" type="button">Atualizar lista</button><button id="mc-new" type="button">+ Novo comércio</button></div><div id="mc-last" style="margin-top:8px"></div><div id="mc-list"></div></div>
+ <div class="card" id="wipe-card"><h2>Dados de teste</h2><p class="k" id="wipe-note"></p><div class="row2" id="wipe-btns"><button class="gh" id="wipe-hist" type="button">Apagar vendas e caixa</button><button class="gh" id="wipe-all" type="button">Apagar tudo</button></div></div>
+ <div class="card"><h2>Suporte e informações</h2><p class="k" id="app-ver"></p><div class="row2"><button id="sup-wa" type="button" style="display:none">💬 Falar com o suporte</button><button class="gh" id="sup-terms" type="button">Termos e Privacidade</button></div></div>
 </section>
 </main>
 <footer class="noprint"><div class="row2 bk" style="max-width:420px;margin:0 auto 10px"><button class="sm gh" id="bk-copy">Copiar backup</button><button class="sm gh" id="bk-load">Restaurar backup</button></div>M7 ERP · desenvolvido pela M7 TECH · histórico local e vendas remotas quando conectado</footer>
@@ -172,6 +179,12 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
 <dialog id="purchase-credit-refund-dlg"><h2>Registrar reembolso do fornecedor</h2><p class="k" id="purchase-credit-refund-title"></p><label for="purchase-credit-refund-amount">Valor efetivamente recebido (R$)</label><input id="purchase-credit-refund-amount" type="number" min="0.01" step="0.01" inputmode="decimal"><div class="f2"><div><label for="purchase-credit-refund-date">Data do recebimento</label><input id="purchase-credit-refund-date" type="date"></div><div><label for="purchase-credit-refund-method">Forma de recebimento</label><select id="purchase-credit-refund-method"><option value="cash">Dinheiro</option><option value="pix">Pix</option><option value="bank_transfer">Transferência bancária</option><option value="card">Cartão</option><option value="other">Outro</option></select></div></div><label for="purchase-credit-refund-notes">Observação (opcional)</label><input id="purchase-credit-refund-notes" maxlength="500"><div class="row2"><button class="gh" id="purchase-credit-refund-close" type="button">Cancelar</button><button id="purchase-credit-refund-save" type="button">Confirmar reembolso</button></div><p class="k" id="purchase-credit-refund-status" aria-live="polite"></p></dialog>
 <dialog id="purchase-credit-apply-dlg"><h2>Compensar crédito do fornecedor</h2><p class="k" id="purchase-credit-apply-title"></p><label for="purchase-credit-installment">Parcela do mesmo fornecedor</label><select id="purchase-credit-installment"></select><label for="purchase-credit-amount">Valor a compensar (R$)</label><input id="purchase-credit-amount" type="number" min="0.01" step="0.01" inputmode="decimal"><div class="f2"><div><label for="purchase-credit-date">Data da compensação</label><input id="purchase-credit-date" type="date"></div><div><label for="purchase-credit-notes">Observação</label><input id="purchase-credit-notes" maxlength="500"></div></div><div class="row2"><button class="gh" id="purchase-credit-close" type="button">Cancelar</button><button id="purchase-credit-save" type="button">Confirmar compensação</button></div><p class="k" id="purchase-credit-status" aria-live="polite"></p></dialog>
 <dialog id="stock-history-dlg"><h2>📚 Histórico de estoque</h2><p class="k" id="stock-history-product"></p><div id="stock-history-list"></div><div class="row2"><button class="gh" id="stock-history-close" type="button">Fechar</button><button id="stock-history-more" type="button" class="gh" style="display:none">Carregar mais</button></div><p class="k" id="stock-history-status" aria-live="polite"></p></dialog>
+<dialog id="mcdlg"><h2>Novo comércio</h2><label for="mc-name">Nome / Razão social</label><input id="mc-name" maxlength="120"><label for="mc-trade">Nome fantasia (opcional)</label><input id="mc-trade" maxlength="120"><label for="mc-doc">CPF ou CNPJ (opcional)</label><input id="mc-doc" inputmode="numeric" maxlength="18" placeholder="Somente números"><label for="mc-email">E-mail do dono</label><input id="mc-email" type="email" inputmode="email" autocapitalize="off" spellcheck="false"><p class="k" id="mc-msg" aria-live="polite" style="color:var(--rd,#c0392b)"></p><div class="row2"><button class="gh" id="mc-x" type="button">Cancelar</button><button id="mc-ok" type="button">Cadastrar</button></div></dialog>
+<dialog id="mudlg"><h2 id="mu-title">Usuários</h2><div id="mu-list"></div><label for="mu-email">Adicionar usuário (e-mail)</label><input id="mu-email" type="email" inputmode="email" autocapitalize="off" spellcheck="false"><label for="mu-role">Perfil</label><select id="mu-role"></select><p class="k" id="mu-msg" aria-live="polite"></p><div class="row2"><button class="gh" id="mu-x" type="button">Fechar</button><button id="mu-add" type="button">Adicionar</button></div></dialog>
+<dialog id="wipedlg"><h2>🗑 Apagar dados de teste</h2><p id="wipe-desc"></p><button class="gh" id="wipe-bk" type="button">Copiar backup antes</button><label for="wipe-in">Digite APAGAR para confirmar</label><input id="wipe-in" autocomplete="off" autocapitalize="characters"><div class="row2" style="margin-top:10px"><button class="gh" id="wipe-x" type="button">Cancelar</button><button id="wipe-ok" type="button" disabled>Apagar definitivamente</button></div></dialog>
+<dialog id="termsdlg"><h2>📄 Termos de Uso e Privacidade</h2><div id="terms-body" style="max-height:52vh;overflow:auto;font-size:14px;line-height:1.5;text-align:left"></div><div id="terms-acc"><label style="display:flex;gap:10px;align-items:flex-start;margin:12px 0"><input type="checkbox" id="terms-chk" style="width:auto;margin-top:3px"><span>Li e aceito os Termos de Uso e a Política de Privacidade.</span></label><button id="terms-ok" type="button" disabled>Aceitar e continuar</button></div><button class="gh" id="terms-close" type="button" style="display:none">Fechar</button></dialog>
+<dialog id="stmtdlg"><h2 id="stmt-title">Extrato</h2><div id="stmt-body"></div><div class="row2" style="margin-top:10px"><button class="gh" id="stmt-copy" type="button">Copiar</button><button id="stmt-wa" type="button">WhatsApp</button></div><button class="gh" id="stmt-x" type="button" style="margin-top:8px">Fechar</button></dialog>
+<dialog id="pwdlg"><h2>🔑 Definir nova senha</h2><p class="k">Escolha uma senha com pelo menos 8 caracteres.</p><label for="pw-new">Nova senha</label><input id="pw-new" type="password" autocomplete="new-password"><label for="pw-new2">Repita a nova senha</label><input id="pw-new2" type="password" autocomplete="new-password"><p class="k" id="pw-msg" aria-live="polite" style="color:var(--rd,#c0392b)"></p><div class="row2"><button class="gh" id="pw-x" type="button">Agora não</button><button id="pw-ok" type="button">Salvar senha</button></div></dialog>
 <dialog id="pixdlg"><h2>📲 Pix</h2><div style="text-align:center"><canvas id="pix-qr" width="260" height="260" style="width:260px;max-width:100%;height:auto;background:#fff;border-radius:8px;image-rendering:pixelated"></canvas><div class="k" id="pix-info" style="margin:6px 0 10px"></div></div><label for="pix-code">Pix copia e cola</label><textarea id="pix-code" readonly rows="4" style="width:100%;font:12px/1.4 ui-monospace,monospace"></textarea><p class="k">Confira o recebimento no aplicativo do seu banco antes de entregar. O M7 ERP não confirma o pagamento.</p><div class="row2"><button class="gh" id="pix-x" type="button">Fechar</button><button id="pix-copy" type="button">Copiar código</button></div></dialog>
 <dialog id="rdlg"><h2>🧾 Recibo</h2><pre id="rc-body" style="white-space:pre-wrap;font:14px/1.5 ui-monospace,monospace;background:var(--bg);padding:12px;border-radius:10px;margin:0"></pre><div class="noprint"><label for="rc-tel">WhatsApp do cliente</label><input id="rc-tel" inputmode="tel"><div class="row2"><button class="gh" id="rc-x">Fechar</button><button class="gh" id="rc-pr">Imprimir</button><button id="rc-wa">WhatsApp</button></div></div></dialog>
 <div class="toast" id="toast"></div>
@@ -183,6 +196,16 @@ let sb=null;
 let activeCompanyRole=null;
 const sbStatus=(msg)=>{const el=document.getElementById("sb-status");if(el)el.textContent=msg};
 const sbUser=(msg)=>{const el=document.getElementById("sb-user");if(el)el.textContent=msg};
+function authMsg(e){const m=String((e&&e.message)||e||""),st=e&&e.status;
+ if(/invalid login credentials|invalid_credentials/i.test(m))return"E-mail ou senha incorretos.";
+ if(/email not confirmed/i.test(m))return"Confirme seu e-mail antes de entrar (veja a caixa de entrada e o spam).";
+ if(st===429||/rate limit|too many|security purposes/i.test(m))return"Muitas tentativas. Aguarde alguns minutos e tente de novo.";
+ if(/banned/i.test(m))return"Acesso bloqueado. Fale com o suporte.";
+ if(/same password|different from the old/i.test(m))return"A nova senha precisa ser diferente da atual.";
+ if(/password/i.test(m)&&/(least|short|weak|characters|pwned|known to be)/i.test(m))return"Senha fraca ou curta demais. Use pelo menos 8 caracteres, misturando letras e números.";
+ if(/failed to fetch|network|timeout|tempo limite|load failed/i.test(m))return"Sem conexão com o servidor. Verifique a internet e tente de novo.";
+ return m||"Não foi possível concluir. Tente novamente."}
+function openPwDialog(){const d=document.getElementById("pwdlg");if(!d)return;["pw-new","pw-new2"].forEach(i=>document.getElementById(i).value="");document.getElementById("pw-msg").textContent="";if(!d.open)d.showModal()}
 const SB_TIMEOUT_MS=30000;
 function sbFetch(input,init){
  init=init||{};const ctl=new AbortController();let timedOut=false;
@@ -196,7 +219,7 @@ function sbFetch(input,init){
 if(window.supabase?.createClient){
  sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{global:{fetch:sbFetch}});
  sbStatus("Biblioteca carregada. Testando conexão com o servidor…");
- fetch(SUPABASE_URL+"/auth/v1/health",{headers:{apikey:SUPABASE_PUBLISHABLE_KEY}}).then(r=>{if(!r.ok)throw Error("HTTP "+r.status);sbStatus("Servidor Supabase conectado. Faça login para validar sua conta.")}).catch(()=>sbStatus("Não foi possível alcançar o Supabase. Verifique a internet e tente novamente."));
+ fetch(SUPABASE_URL+"/auth/v1/health",{headers:{apikey:SUPABASE_PUBLISHABLE_KEY}}).then(r=>{if(!r.ok)throw Error("HTTP "+r.status);sbStatus("Servidor conectado. Faça login para validar sua conta.")}).catch(()=>sbStatus("Não foi possível alcançar o servidor. Verifique a internet e tente novamente."));
  sb.auth.getSession().then(({data})=>{
   if(data.session){
    sbUser("Conectado: "+(data.session.user.email||"usuário autenticado"));
@@ -205,13 +228,15 @@ if(window.supabase?.createClient){
   }
  });
  sb.auth.onAuthStateChange((event,session)=>{
+  if(event==="PASSWORD_RECOVERY")setTimeout(openPwDialog,0);
   sbUser(session?"Conectado: "+(session.user.email||"usuário autenticado"):"Não conectado");
   if(session && event!=="TOKEN_REFRESHED"){
    document.body.classList.add("tenant-switching");
-   setTimeout(()=>activateCompanyStorage(session),0);
+   setTimeout(async()=>{try{await sb.rpc("claim_company_invites_v1")}catch(_){}try{await masterCheck()}catch(_){}activateCompanyStorage(session)},0);
   }else if(!session){
    const productSyncButton=document.getElementById("sb-sync-products");if(productSyncButton)productSyncButton.disabled=true;const expenseSyncButton=document.getElementById("sb-sync-expenses");if(expenseSyncButton)expenseSyncButton.disabled=true;const customerSyncButton=document.getElementById("sb-sync");if(customerSyncButton)customerSyncButton.disabled=true;const cashCloseButton=document.getElementById("cx-save-remote");if(cashCloseButton)cashCloseButton.disabled=true;
    storageSwitchToken++;
+   IS_MASTER=false;if(typeof masterSync==="function")masterSync();
    activeCompanyRole=null;activateGuestStorage();
    document.body.classList.remove("tenant-switching");
    sbUser("Não conectado · modo local");
@@ -220,7 +245,22 @@ if(window.supabase?.createClient){
 }else{sbStatus("Biblioteca de conexão indisponível. Confira a internet e recarregue o aplicativo.")}
 document.addEventListener("DOMContentLoaded",()=>{
  const login=document.getElementById("sb-login"),logout=document.getElementById("sb-logout");
- if(login)login.onclick=async()=>{if(!sb)return sbStatus("Conexão indisponível. Recarregue com internet.");const email=document.getElementById("sb-email").value.trim(),password=document.getElementById("sb-pass").value;if(!email||!password)return sbStatus("Informe e-mail e senha.");login.disabled=true;try{const{error}=await sb.auth.signInWithPassword({email,password});if(error)throw error;document.getElementById("sb-pass").value="";sbStatus("Login realizado com sucesso.")}catch(e){sbStatus("Falha no login: "+(e.message||"verifique e-mail e senha"))}finally{login.disabled=false}};
+ if(login)login.onclick=async()=>{if(!sb)return sbStatus("Conexão indisponível. Recarregue com internet.");const email=document.getElementById("sb-email").value.trim(),password=document.getElementById("sb-pass").value;if(!email||!password)return sbStatus("Informe e-mail e senha.");const label=login.textContent;login.disabled=true;login.textContent="Entrando…";try{const{error}=await sb.auth.signInWithPassword({email,password});if(error)throw error;document.getElementById("sb-pass").value="";try{localStorage.setItem("m7:last-email",email)}catch(_){}sbStatus("Login realizado com sucesso.")}catch(e){sbStatus("Falha no login: "+authMsg(e))}finally{login.disabled=false;login.textContent=label}};
+ try{const last=localStorage.getItem("m7:last-email"),ei=document.getElementById("sb-email");if(last&&ei&&!ei.value)ei.value=last}catch(_){}
+ const passInput=document.getElementById("sb-pass"),eye=document.getElementById("sb-eye");
+ if(passInput&&login)passInput.addEventListener("keydown",ev=>{if(ev.key==="Enter"){ev.preventDefault();login.click()}});
+ if(eye&&passInput)eye.onclick=()=>{const show=passInput.type==="password";passInput.type=show?"text":"password";eye.setAttribute("aria-pressed",show?"true":"false");eye.setAttribute("aria-label",show?"Ocultar senha":"Mostrar senha");eye.textContent=show?"🙈":"👁"};
+ const forgot=document.getElementById("sb-forgot");
+ if(forgot)forgot.onclick=async()=>{if(!sb)return sbStatus("Conexão indisponível. Recarregue com internet.");const email=document.getElementById("sb-email").value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return sbStatus('Digite seu e-mail acima e toque em "Esqueci minha senha".');forgot.disabled=true;try{const{error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});if(error)throw error;sbStatus("Se este e-mail estiver cadastrado, enviamos um link para criar uma nova senha. Confira também o spam.")}catch(e){sbStatus("Não foi possível enviar o link: "+authMsg(e))}setTimeout(()=>{forgot.disabled=false},30000)};
+ const chpw=document.getElementById("sb-chpw");
+ if(chpw)chpw.onclick=async()=>{if(!sb)return sbStatus("Conexão indisponível. Recarregue com internet.");const{data}=await sb.auth.getSession();if(!data||!data.session)return sbStatus("Entre na conta para alterar a senha.");openPwDialog()};
+ const pwOk=document.getElementById("pw-ok"),pwX=document.getElementById("pw-x"),pwMsg=document.getElementById("pw-msg");
+ if(pwX)pwX.onclick=()=>document.getElementById("pwdlg").close();
+ if(pwOk)pwOk.onclick=async()=>{const a=document.getElementById("pw-new").value,b2=document.getElementById("pw-new2").value;
+  if(a.length<8)return pwMsg.textContent="A senha precisa ter pelo menos 8 caracteres.";
+  if(a!==b2)return pwMsg.textContent="As senhas não conferem.";
+  if(!sb)return pwMsg.textContent="Conexão indisponível. Recarregue com internet.";
+  pwOk.disabled=true;try{const{error}=await sb.auth.updateUser({password:a});if(error)throw error;document.getElementById("pwdlg").close();sbStatus("Senha alterada com sucesso.");toast("Senha alterada com sucesso.")}catch(e){pwMsg.textContent=authMsg(e)}finally{pwOk.disabled=false}};
  if(logout)logout.onclick=async()=>{if(!sb)return;const{error}=await sb.auth.signOut();sbStatus(error?"Erro ao sair: "+error.message:"Sessão encerrada.")};
  const tenantLogout=document.getElementById("tenant-logout");
  if(tenantLogout)tenantLogout.onclick=async()=>{if(!sb)return;tenantLogout.disabled=true;try{const{error}=await sb.auth.signOut();if(error)throw error;}catch(e){sbStatus("Não foi possível sair: "+(e.message||"erro desconhecido"));tenantLogout.disabled=false;}};
@@ -293,6 +333,10 @@ function handleCompanyStorageError(session,error,allowOfflineFallback=false){
   const shopInput=document.getElementById("s-name"); if(shopInput)shopInput.value=S.shop||"";if(typeof pixLoadFields==="function")pixLoadFields();
   render(); document.body.classList.remove("tenant-switching");
   sbStatus("Sem conexão. Mantendo temporariamente o cache local desta conta.");
+ }else if(IS_MASTER&&/sem vínculo ativo/.test(msg)){
+  // Administrador da plataforma sem comércio próprio: libera a tela (modo local) para usar o painel de administração.
+  activateGuestStorage();document.body.classList.remove("tenant-switching");
+  sbStatus("Conta de administrador da plataforma (sem comércio vinculado). Use Cadastros > Administração da plataforma.");go("cad");
  }else{
   const productSyncButton=document.getElementById("sb-sync-products");if(productSyncButton)productSyncButton.disabled=true;
   const el=document.getElementById("tenant-loading-msg");
@@ -1080,7 +1124,7 @@ $("p-copy").onclick=()=>{
 function canVoidExpenses(){return ["owner","admin","manager"].includes(activeCompanyRole)}
 function mov(t){const pos=t.type==="in",voided=t.status==="void";return `<div class="it"><div><b>${esc(t.desc)}</b><small>${esc(D(t.date))} · ${pos?esc(t.method||"Entrada"):esc(t.cat)}${t.client?" · "+esc(t.client):""}${voided?" · ESTORNADA":""}</small>${voided&&t.void_reason?`<small>Motivo: ${esc(t.void_reason)}</small>`:""}<span class="acts" style="margin-top:4px">${pos?`<button class="sm gh" data-rec="${esc(t.id)}">🧾 Recibo</button>`:""}${!voided&&(t.sale_id||t.receivable_id||t.items?.length)?"":(!voided&&!t.remote_expense?`<button class="sm gh" data-edit="${esc(t.id)}">✎ Editar</button>`:"")}${t.remote_expense&&!voided&&canVoidExpenses()?`<button class="sm gh" data-void-expense="${esc(t.id)}">Estornar</button>`:""}</span></div><div class="amt ${pos?"g":voided?"a":"r"}">${pos?"+":voided?"":"– "}${R(t.amount)}</div></div>`}
 
-function render(){
+function render(){if(typeof renderOnb==="function"){renderOnb();fillStmt();wipeSync();listFilter("pr-list","pr-q");listFilter("c-list","c-q")}
  updatePendingSaleUI();updatePendingReceiptUI();
  const td=today(),mo=td.slice(0,7);cad();cx(true);
  const inn=S.tx.filter(t=>t.type==="in"),allOut=S.tx.filter(t=>t.type==="out"),out=allOut.filter(t=>t.status!=="void");
@@ -1274,25 +1318,32 @@ function cad(){
  {const sel=$("e-cli-sel"),keep=sel.value;sel.innerHTML='<option value="">— Escolher cliente cadastrado —</option>'+S.cl.filter(c=>c.status!=="inactive").map(c=>`<option value="${esc(c.name)}">${esc(c.name)}</option>`).join("");sel.value=[...sel.options].some(o=>o.value===keep)?keep:""}
  const pv=$("e-prod").value;$("e-prod").innerHTML='<option value="">—</option>'+S.pr.map(p=>`<option value="${esc(p.id)}">${esc(p.name)} · ${R(p.price)}${p.stock!=null?` · est. ${esc(p.stock)}`:""}</option>`).join("");$("e-prod").value=pv;
  $("c-list").innerHTML=S.cl.length?S.cl.map(c=>{const d=sum(S.rc.filter(r=>r.client===c.name).map(rem));return `<div class="it"><div><b>${esc(c.name)}</b><small>${esc(c.tel||"sem WhatsApp")}${d>0?` · deve ${R(d)}`:""}${c.status==="inactive"?" · inativo no servidor":""}${c._sync_conflict?" · ⚠ conflito entre dispositivos":""}</small>${c._sync_conflict?`<div class="acts"><button class="sm gh" data-cf-server="${esc(c.id)}">Usar versão do servidor</button>${c._sync_conflict.status!=="inactive"?`<button class="sm gh" data-cf-local="${esc(c.id)}">Manter minha versão</button>`:""}</div>`:""}</div><span class="acts"><button class="sm gh" data-ex="${esc(c.id)}">Extrato</button>${c.status!=="inactive"?`<button class="sm gh" data-ec="${esc(c.id)}">✎ Editar</button><button class="sm gh" data-dc="${esc(c.id)}">Excluir</button>`:""}</span></div>`}).join(""):'<div class="empty">Nenhum cliente ainda. Cadastre acima para escolher o cliente na hora da venda.</div>';
- $("pr-list").innerHTML=S.pr.length?S.pr.map(p=>`<div class="it"><div><b>${esc(p.name)}</b><small>${p.cost!=null?`custo ${R(p.cost)} · margem ${p.price>0?Math.round((p.price-p.cost)/p.price*100):0}% · `:""}${p.stock==null?"sem controle de estoque":"Estoque: "+esc(p.stock)}${p.stock!=null&&p.stock<=LOW?" · ⚠ acabando":""}</small><div class="acts"><button class="sm gh" data-ep="${esc(p.id)}">✎ Editar</button>${p.stock!=null?`<button class="sm gh" data-rp="${esc(p.id)}">+ Repor</button>`:""}<button class="sm gh" data-dp="${esc(p.id)}">Excluir</button></div></div><div class="amt g">${R(p.price)}</div></div>`).join(""):'<div class="empty">Nenhum produto.</div>';
+ $("pr-list").innerHTML=S.pr.length?S.pr.map(p=>`<div class="it"><div><b>${esc(p.name)}</b><small>${p.cost!=null?`custo ${R(p.cost)} · margem ${p.price>0?Math.round((p.price-p.cost)/p.price*100):0}% · `:""}${p.stock==null?"sem controle de estoque":"Estoque: "+esc(p.stock)}${p.stock!=null&&p.stock<=LOW?" · ⚠ acabando":""}${p.sku?" · cód. "+esc(p.sku):""}${p.barcode?" · 🏷 "+esc(p.barcode):""}${p.unit&&p.unit!=="UN"?" · "+esc(p.unit):""}</small><div class="acts"><button class="sm gh" data-ep="${esc(p.id)}">✎ Editar</button>${p.stock!=null?`<button class="sm gh" data-rp="${esc(p.id)}">+ Repor</button>`:""}<button class="sm gh" data-dp="${esc(p.id)}">Excluir</button></div></div><div class="amt g">${R(p.price)}</div></div>`).join(""):'<div class="empty">Nenhum produto.</div>';
 }
 $("s-name").value=S.shop;$("s-name").oninput=()=>{S.shop=$("s-name").value;save()};
-$("pr-cancel").onclick=()=>{EP=null;$("pr-n").value=$("pr-p").value=$("pr-s").value=$("pr-c").value="";$("pr-add").textContent="Adicionar produto";$("pr-cancel").style.display="none"};
+$("pr-cancel").onclick=()=>{["pr-sku","pr-bar","pr-desc"].forEach(i=>$(i).value="");$("pr-unit").value="UN";EP=null;$("pr-n").value=$("pr-p").value=$("pr-s").value=$("pr-c").value="";$("pr-add").textContent="Adicionar produto";$("pr-cancel").style.display="none"};
 $("c-cancel").onclick=()=>{CE=null;$("c-n").value=$("c-t").value="";$("c-add").textContent="Adicionar cliente";$("c-cancel").style.display="none"};
-$("c-add").onclick=()=>{const n=$("c-n").value.trim();if(!n)return toast("Informe o nome");if(CE){const c=S.cl.find(x=>x.id===CE);if(c){S.rc.forEach(r=>{if(r.client===c.name){r.client=n;r.tel=$("c-t").value}});S.tx.forEach(t=>{if(t.client===c.name)t.client=n});c.name=n;c.tel=$("c-t").value;markCustomerPending(c)}}else{const c={id:uid(),name:n,tel:$("c-t").value,status:"active"};S.cl.push(c);markCustomerPending(c)}CE=null;$("c-add").textContent="Adicionar cliente";$("c-cancel").style.display="none";save();$("c-n").value=$("c-t").value="";render()};
+$("c-add").onclick=()=>{const n=$("c-n").value.trim();if(!n)return toast("Informe o nome");
+ const ph=$("c-t").value.trim(),pd=ph.replace(/\D/g,"");if(ph&&(pd.length<10||pd.length>13))return toast("WhatsApp inválido. Use DDD + número, ex.: (11) 99999-9999.");
+ const dc=S.cl.find(x=>x.id!==CE&&x.status!=="inactive"&&(String(x.name||"").trim().toLowerCase()===n.toLowerCase()||(pd&&String(x.tel||"").replace(/\D/g,"")===pd)));
+ if(dc)return toast("Já existe cliente com este "+(String(dc.name).trim().toLowerCase()===n.toLowerCase()?"nome":"WhatsApp")+": "+dc.name+".");if(CE){const c=S.cl.find(x=>x.id===CE);if(c){S.rc.forEach(r=>{if(r.client===c.name){r.client=n;r.tel=$("c-t").value}});S.tx.forEach(t=>{if(t.client===c.name)t.client=n});c.name=n;c.tel=$("c-t").value;markCustomerPending(c)}}else{const c={id:uid(),name:n,tel:$("c-t").value,status:"active"};S.cl.push(c);markCustomerPending(c)}CE=null;$("c-add").textContent="Adicionar cliente";$("c-cancel").style.display="none";save();$("c-n").value=$("c-t").value="";render()};
 $("pr-add").onclick=()=>{
  const n=$("pr-n").value.trim(),price=parseFloat($("pr-p").value),costRaw=$("pr-c").value.trim(),stockRaw=$("pr-s").value.trim();
  if(!n||!Number.isFinite(price)||price<0)return toast("Informe nome e preço válido.");
  const cost=costRaw===""?null:Number(costRaw);if(cost!==null&&(!Number.isFinite(cost)||cost<0))return toast("Informe um custo válido, maior ou igual a zero.");
  const stockValue=stockRaw===""?null:Number(stockRaw);if(stockValue!==null&&(!Number.isInteger(stockValue)||stockValue<0))return toast("O estoque deve ser um número inteiro maior ou igual a zero.");
+ const sku=$("pr-sku").value.trim(),barcode=$("pr-bar").value.trim(),description=$("pr-desc").value.trim(),unit=$("pr-unit").value||"UN";
+ if(barcode&&!/^\d{8,14}$/.test(barcode))return toast("Código de barras inválido: use de 8 a 14 números.");
+ const dp=S.pr.find(x=>x.id!==EP&&x.status!=="inactive"&&(String(x.name||"").trim().toLowerCase()===n.toLowerCase()||(sku&&String(x.sku||"").toLowerCase()===sku.toLowerCase())||(barcode&&x.barcode===barcode)));
+ if(dp)return toast("Já existe produto com "+(String(dp.name).trim().toLowerCase()===n.toLowerCase()?"este nome":(barcode&&dp.barcode===barcode?"este código de barras":"este código/SKU"))+": "+dp.name+".");
  const ix=S.pr.findIndex(x=>x.id===EP),old=ix>=0?S.pr[ix]:null;
- const p={...(old||{}),id:old?.id||uid(),name:n,price,cost,stock:stockValue};
+ const p={...(old||{}),id:old?.id||uid(),name:n,price,cost,stock:stockValue,sku:sku||null,barcode:barcode||null,description:description||null,unit};
  if(old&&old.remote_id&&stockValue!==old.stock&&stockValue!=null){p._stock_target=stockValue;p._stock_operation_id=crypto.randomUUID();}
  else if(!old&&stockValue!=null){p._stock_target=stockValue;p._stock_operation_id=crypto.randomUUID();}
- if(ix<0)S.pr.push(p);else S.pr[ix]=p;markProductPending(p);save();$("pr-n").value=$("pr-p").value=$("pr-s").value=$("pr-c").value="";EP=null;$("pr-add").textContent="Adicionar produto";$("pr-cancel").style.display="none";render();
+ if(ix<0)S.pr.push(p);else S.pr[ix]=p;markProductPending(p);save();$("pr-n").value=$("pr-p").value=$("pr-s").value=$("pr-c").value="";["pr-sku","pr-bar","pr-desc"].forEach(i=>$(i).value="");$("pr-unit").value="UN";EP=null;$("pr-add").textContent="Adicionar produto";$("pr-cancel").style.display="none";render();
 };
 $("c-list").onclick=e=>{const ex=e.target.closest("[data-ex]");if(ex)return extrato(ex.dataset.ex);const ed=e.target.closest("[data-ec]");if(ed){const c=S.cl.find(x=>x.id===ed.dataset.ec);if(!c||c.status==="inactive")return toast("Cliente inativo não pode ser editado.");CE=c.id;$("c-n").value=c.name;$("c-t").value=c.tel||"";$("c-add").textContent="Salvar alterações";$("c-cancel").style.display="";$("c-n").scrollIntoView({block:"center"});$("c-n").focus();return}const useServer=e.target.closest("[data-cf-server]");if(useServer){const c=S.cl.find(x=>x.id===useServer.dataset.cfServer);if(c&&c._sync_conflict){const v=c._sync_conflict;c.name=v.name||c.name;c.tel=v.whatsapp||v.phone||"";c.status=v.status||c.status;c._remote_updated_at=v.updated_at;delete c._sync_pending;delete c._sync_updated_at;delete c._sync_conflict;save();render();toast("Versão do servidor aplicada ao aparelho.");}return}const useLocal=e.target.closest("[data-cf-local]");if(useLocal){const c=S.cl.find(x=>x.id===useLocal.dataset.cfLocal);if(c&&c._sync_conflict){c._remote_updated_at=c._sync_conflict.updated_at;delete c._sync_conflict;c._sync_pending=true;c._sync_updated_at=new Date().toISOString();save();render();toast("Sua versão foi mantida. Sincronize novamente para confirmar a substituição no servidor.");}return}const b=e.target.closest("[data-dc]");if(b&&confirm("Excluir cliente? O cadastro será inativado no servidor para preservar o histórico.")){const c=S.cl.find(x=>x.id===b.dataset.dc);if(c){S.cl_deleted=S.cl_deleted||[];S.cl_deleted.push({remote_id:c.remote_id||null,legacy_id:c.id});}S.cl=S.cl.filter(c=>c.id!==b.dataset.dc);save();scheduleCustomerSync();render()}};
-$("pr-list").onclick=e=>{const ed=e.target.closest("[data-ep]");if(ed){const p=S.pr.find(x=>x.id===ed.dataset.ep);EP=p.id;$("pr-n").value=p.name;$("pr-p").value=p.price;$("pr-c").value=p.cost==null?"":p.cost;$("pr-s").value=p.stock==null?"":p.stock;$("pr-add").textContent="Salvar alterações";$("pr-cancel").style.display="";$("pr-n").scrollIntoView({block:"center"});$("pr-n").focus();return}const r=e.target.closest("[data-rp]");if(r){const p=S.pr.find(x=>x.id===r.dataset.rp),raw=prompt("Quantas unidades entraram no estoque?");if(raw===null)return;const q=positiveInteger(raw);if(!q)return toast("Informe uma quantidade inteira maior que zero.");p.stock=(p.stock||0)+q;if(p.remote_id){p._stock_target=p.stock;p._stock_operation_id=crypto.randomUUID()}markProductPending(p);save();render();return}const b=e.target.closest("[data-dp]");if(b&&confirm("Inativar produto? O histórico será preservado no servidor.")){const p=S.pr.find(c=>c.id===b.dataset.dp);if(p)S.pr_deleted=(S.pr_deleted||[]).concat([{remote_id:p.remote_id||null,legacy_id:p.id}]);S.pr=S.pr.filter(c=>c.id!==b.dataset.dp);save();scheduleProductSync();render()}};
+$("pr-list").onclick=e=>{const ed=e.target.closest("[data-ep]");if(ed){const p=S.pr.find(x=>x.id===ed.dataset.ep);EP=p.id;$("pr-n").value=p.name;$("pr-p").value=p.price;$("pr-c").value=p.cost==null?"":p.cost;$("pr-s").value=p.stock==null?"":p.stock;$("pr-sku").value=p.sku||"";$("pr-bar").value=p.barcode||"";$("pr-desc").value=p.description||"";$("pr-unit").value=p.unit||"UN";$("pr-add").textContent="Salvar alterações";$("pr-cancel").style.display="";$("pr-n").scrollIntoView({block:"center"});$("pr-n").focus();return}const r=e.target.closest("[data-rp]");if(r){const p=S.pr.find(x=>x.id===r.dataset.rp),raw=prompt("Quantas unidades entraram no estoque?");if(raw===null)return;const q=positiveInteger(raw);if(!q)return toast("Informe uma quantidade inteira maior que zero.");p.stock=(p.stock||0)+q;if(p.remote_id){p._stock_target=p.stock;p._stock_operation_id=crypto.randomUUID()}markProductPending(p);save();render();return}const b=e.target.closest("[data-dp]");if(b&&confirm("Inativar produto? O histórico será preservado no servidor.")){const p=S.pr.find(c=>c.id===b.dataset.dp);if(p)S.pr_deleted=(S.pr_deleted||[]).concat([{remote_id:p.remote_id||null,legacy_id:p.id}]);S.pr=S.pr.filter(c=>c.id!==b.dataset.dp);save();scheduleProductSync();render()}};
 function fillProd(){const p=S.pr.find(x=>x.id===$("e-prod").value);if(!p)return;const q=positiveInteger($("e-qty").value);if(!q)return toast("A quantidade deve ser um número inteiro maior que zero.");$("e-desc").value=q>1?`${q}x ${p.name}`:p.name;$("e-val").value=(p.price*q).toFixed(2)}
 $("e-prod").onchange=fillProd;$("e-qty").onchange=()=>{if($("e-prod").value)fillProd()};
 let CART=[];
@@ -2267,6 +2318,159 @@ $("pix-x").onclick=()=>$("pixdlg").close();
 $("pix-copy").onclick=()=>{const t=$("pix-code").value,b=$("pix-copy"),ok=()=>{b.textContent="Copiado ✓"},fb=()=>{$("pix-code").focus();$("pix-code").select();b.textContent="Selecione e copie"};
  if(navigator.clipboard)navigator.clipboard.writeText(t).then(ok,fb);else fb()};
 pixLoadFields();syncPixBtn();
+
+
+/* ===== Comercial: termos, primeiros passos, suporte, extrato do cliente e planilha CSV ===== */
+const APP_VERSION="v39";let M7_SUPPORT_WHATS="";
+const TERMS_KEY="m7:terms:v1";
+const TERMS_HTML=`<h3>Termos de Uso</h3><p><small>Versão 1</small></p>
+<p><b>1. O que é o M7 ERP.</b> Aplicativo de gestão para pequenos comércios (vendas, estoque, fiado, gastos e caixa), fornecido pela M7 TECH.</p>
+<p><b>2. Conta e acesso.</b> O acesso na nuvem é feito com e-mail e senha fornecidos pela M7 TECH. Guarde sua senha e o PIN do aparelho: tudo que for feito com eles é considerado feito por você.</p>
+<p><b>3. Seus dados.</b> Os registros que você lança são seus. Sem login, ficam somente neste aparelho, e o backup é sua responsabilidade (use "Copiar backup" em Cadastros). Com login, são guardados também no servidor da sua empresa.</p>
+<p><b>4. Pix.</b> O app gera o QR de cobrança com a chave que você informa. Confira a chave com atenção. O app não confirma pagamentos: confira o recebimento no aplicativo do seu banco antes de entregar a mercadoria.</p>
+<p><b>5. Notas fiscais e impostos.</b> O M7 ERP não emite nota fiscal e não substitui a orientação de um contador.</p>
+<p><b>6. Uso adequado.</b> Não use o app para atividades ilegais nem tente acessar dados de outras empresas.</p>
+<p><b>7. Disponibilidade.</b> Trabalhamos para manter o serviço no ar, mas não garantimos funcionamento sem interrupções: podem ocorrer manutenções e falhas de internet.</p>
+<p><b>8. Encerramento.</b> Você pode parar de usar quando quiser. A M7 TECH pode suspender o acesso em caso de uso indevido ou conforme o combinado em contrato.</p>
+<p><b>9. Mudanças.</b> Estes termos podem ser atualizados. Quando houver nova versão, será pedido novo aceite.</p>
+<p><b>10. Lei aplicável.</b> Legislação brasileira.</p>
+<h3>Política de Privacidade</h3>
+<p><b>Quem trata os dados.</b> A M7 TECH fornece o aplicativo. Os dados de vendas e de clientes da sua loja são seus: você é o controlador e a M7 TECH atua como operadora, tratando-os apenas para prestar o serviço (Lei 13.709/2018, a LGPD).</p>
+<p><b>Quais dados.</b> E-mail da conta; dados do seu negócio (vendas, produtos, estoque, gastos e fechamentos); dados dos seus clientes que você cadastra (nome, WhatsApp e valores a receber). No momento, o app não usa localização, câmera nem microfone e não tem rastreadores de publicidade.</p>
+<p><b>Para quê.</b> Para o app funcionar: registrar suas vendas, sincronizar entre aparelhos e gerar relatórios.</p>
+<p><b>Onde ficam.</b> No seu aparelho e, quando você entra na conta, em servidor de nuvem contratado pela M7 TECH, com acesso separado por empresa e comunicação criptografada (HTTPS).</p>
+<p><b>Com quem compartilhamos.</b> Não vendemos dados. O armazenamento usa um provedor de nuvem; o WhatsApp só é aberto quando você toca para enviar uma mensagem; a biblioteca de conexão é carregada de um servidor de distribuição (jsDelivr).</p>
+<p><b>Por quanto tempo.</b> Enquanto a conta estiver ativa e conforme combinado em contrato e na lei.</p>
+<p><b>Seus direitos.</b> Você pode pedir acesso, correção, exportação ou exclusão dos seus dados pelo suporte (Cadastros > Suporte e informações). Quanto aos dados dos seus clientes, você atende os pedidos deles e a M7 TECH ajuda no que for técnico.</p>
+<p><b>Segurança.</b> Acesso por login, PIN opcional neste aparelho e separação de dados por empresa. Nenhum sistema é totalmente imune a riscos: avise o suporte se notar algo estranho.</p>`;
+function termsAccepted(){try{const o=JSON.parse(localStorage.getItem(TERMS_KEY)||"null");return !!(o&&o.v===1)}catch(e){return false}}
+function openTerms(mustAccept){$("terms-body").innerHTML=TERMS_HTML;$("terms-body").scrollTop=0;
+ $("terms-acc").style.display=mustAccept?"block":"none";$("terms-close").style.display=mustAccept?"none":"block";
+ $("terms-chk").checked=false;$("terms-ok").disabled=true;if(!$("termsdlg").open)$("termsdlg").showModal()}
+$("termsdlg").addEventListener("cancel",e=>{if(!termsAccepted())e.preventDefault()});
+$("terms-chk").onchange=()=>{$("terms-ok").disabled=!$("terms-chk").checked};
+$("terms-ok").onclick=()=>{try{localStorage.setItem(TERMS_KEY,JSON.stringify({v:1,at:new Date().toISOString()}))}catch(e){}$("termsdlg").close()};
+$("terms-close").onclick=()=>$("termsdlg").close();
+
+// Primeiros passos (Resumo): lista que se marca sozinha conforme o comerciante usa o app
+function renderOnb(){const el=$("onb-card");if(!el)return;let hidden=false;try{hidden=localStorage.getItem("m7:onb-hidden")==="1"}catch(e){}
+ const pixOk=!!(S.pix&&String(S.pix.key||"").trim()&&!pixConfig().error);
+ const steps=[["Nome da sua loja",!!String(S.shop||"").trim(),"cad"],["Chave Pix para cobrar por QR",pixOk,"cad"],["Primeiro produto ou serviço",S.pr.length>0,"cad"],["Primeiro cliente",S.cl.length>0,"cad"],["Primeira venda",S.tx.some(t=>t.type==="in"),"ent"]];
+ const done=steps.filter(x=>x[1]).length;if(hidden||done===steps.length){el.style.display="none";return}
+ el.style.display="block";
+ el.innerHTML=`<h2>Primeiros passos <small>${done} de ${steps.length}</small></h2>`+steps.map(x=>`<div class="it"><div><b>${x[1]?"✅":"⬜"} ${esc(x[0])}</b></div>${x[1]?"":`<button class="sm" type="button" data-go="${x[2]}">Fazer agora</button>`}</div>`).join("")+`<button class="sm gh" type="button" id="onb-hide" style="margin-top:8px">Ocultar</button>`}
+$("onb-card").onclick=e=>{const g=e.target.closest("[data-go]");if(g)return go(g.dataset.go);if(e.target.closest("#onb-hide")){try{localStorage.setItem("m7:onb-hidden","1")}catch(x){}renderOnb()}};
+
+// Suporte
+const supMsg=()=>"Olá! Preciso de ajuda com o M7 ERP.\nVersão: "+APP_VERSION+"\nLoja: "+(S.shop||"não informada")+"\nAparelho: "+navigator.userAgent.slice(0,90);
+function supSync(){$("sup-wa").style.display=M7_SUPPORT_WHATS?"block":"none"}
+$("app-ver").textContent="M7 ERP "+APP_VERSION+" · desenvolvido pela M7 TECH";
+$("sup-wa").onclick=()=>{if(!M7_SUPPORT_WHATS)return toast("Suporte ainda não configurado.");open("https://wa.me/"+M7_SUPPORT_WHATS+"?text="+encodeURIComponent(supMsg()),"_blank","noopener,noreferrer")};
+$("sup-terms").onclick=()=>openTerms(false);
+
+// Extrato do cliente (fiados e valores a receber em aberto)
+function stmtClients(){const g={};S.rc.filter(r=>rem(r)>0).forEach(r=>{const k=r.client||"(sem nome)";(g[k]=g[k]||{tel:"",it:[]}).it.push(r);if(!g[k].tel&&r.tel)g[k].tel=r.tel});return g}
+function fillStmt(){const sel=$("stmt-sel");if(!sel)return;const g=stmtClients(),keep=sel.value;
+ sel.innerHTML='<option value="">— Escolher cliente com saldo —</option>'+Object.entries(g).sort((a,b)=>sum(b[1].it.map(rem))-sum(a[1].it.map(rem))).map(([k,v])=>`<option value="${esc(k)}">${esc(k)} · ${R(sum(v.it.map(rem)))}</option>`).join("");sel.value=g[keep]?keep:""}
+let STMT=null;
+const stmtSorted=v=>v.it.slice().sort((a,b)=>String(a.due||"").localeCompare(String(b.due||"")));
+function stmtText(k,v){const tot=sum(v.it.map(rem)),lt=sum(v.it.filter(late).map(rem));
+ return`Extrato de ${k==="(sem nome)"?"cliente":k} — ${S.shop||"M7 ERP"}\n`+stmtSorted(v).map(r=>`• ${r.desc} – ${R(rem(r))} (vence em ${D(r.due)})${late(r)?" ATRASADO":""}`).join("\n")+`\nTotal em aberto: ${R(tot)}${lt?` (em atraso: ${R(lt)})`:""}`}
+$("stmt-sel").onchange=()=>{const k=$("stmt-sel").value;if(!k)return;const v=stmtClients()[k];if(!v)return;STMT={k,v};
+ $("stmt-title").textContent="Extrato · "+k;
+ $("stmt-body").innerHTML=stmtSorted(v).map(r=>`<div class="it"><div><b>${esc(r.desc)}</b><small>vence em ${esc(D(r.due))}${late(r)?" · ATRASADO":""} · total ${R(Number(r.total||0))}, pago ${R(Number(r.paid||0))}</small></div><div class="amt">${R(rem(r))}</div></div>`).join("")+`<div class="it"><div><b>Total em aberto</b></div><div class="amt">${R(sum(v.it.map(rem)))}</div></div>`;
+ $("stmt-sel").value="";$("stmtdlg").showModal()};
+$("stmt-x").onclick=()=>$("stmtdlg").close();
+$("stmt-wa").onclick=()=>{if(!STMT)return;let n=(STMT.v.tel||"").replace(/\D/g,"");if(n&&n.length<=11)n="55"+n;open(`https://wa.me/${n}?text=${encodeURIComponent(stmtText(STMT.k,STMT.v))}`,"_blank","noopener,noreferrer")};
+$("stmt-copy").onclick=()=>{if(!STMT)return;const t=stmtText(STMT.k,STMT.v),b=$("stmt-copy"),ok=()=>{b.textContent="Copiado ✓"};
+ if(navigator.clipboard)navigator.clipboard.writeText(t).then(ok,()=>toast("Não foi possível copiar."));else toast("Não foi possível copiar.")};
+
+// Exportar lançamentos do período para planilha (CSV com separador ";" e acentos corretos no Excel)
+const csvCell=v=>{let s=String(v??"");if(/^[=+\-@\t\r]/.test(s))s="'"+s;return'"'+s.replace(/"/g,'""')+'"'};
+$("p-csv").onclick=()=>{const[a,b]=range();const rows=S.tx.filter(t=>t.date>=a&&t.date<=b).sort((x,y)=>String(x.date).localeCompare(String(y.date)));
+ if(!rows.length)return toast("Não há lançamentos no período.");
+ const lines=[["Data","Tipo","Descrição","Cliente","Forma de pagamento / Categoria","Valor (R$)","Situação"],...rows.map(t=>[D(t.date),t.type==="in"?"Entrada":"Saída",t.desc||"",t.client||"",t.type==="in"?(t.method||""):(t.cat||""),Number(t.amount||0).toFixed(2).replace(".",","),t.status==="void"?"Estornada":"Ativa"])];
+ const csv="\ufeff"+lines.map(r=>r.map(csvCell).join(";")).join("\r\n"),url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"})),el=document.createElement("a");
+ el.href=url;el.download=`m7-erp-lancamentos-${a==="0000-01-01"?"inicio":a}_a_${b==="9999-12-31"?"hoje":b}.csv`;document.body.appendChild(el);el.click();el.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);toast("Planilha gerada: "+rows.length+" lançamento(s).")};
+supSync();renderOnb();fillStmt();if(!termsAccepted())openTerms(true);
+
+
+/* ===== v39: administração da plataforma (mestre), cadastro melhorado e dados de teste ===== */
+var IS_MASTER=false;let MC_ROWS=[],MC_CUR=null,MC_LAST=null;
+const MC_ST={active:"🟢 Ativo",suspended:"🟠 Suspenso",closed:"⚫ Encerrado"};
+const MC_ROLES={owner:"Dono",admin:"Administrador",manager:"Gerente",cashier:"Caixa",salesperson:"Vendedor",stock_operator:"Estoquista",read_only:"Somente leitura"};
+async function masterCheck(){IS_MASTER=false;try{const{data,error}=await sb.rpc("is_platform_admin");IS_MASTER=!error&&data===true}catch(e){}masterSync()}
+function masterSync(){const c=$("master-card");if(!c)return;c.style.display=IS_MASTER?"block":"none";if(IS_MASTER)mcLoad();else{MC_LAST=null;mcLast()}}
+async function mcLoad(){const box=$("mc-list");box.innerHTML='<p class="k">Carregando…</p>';
+ try{const{data,error}=await sb.rpc("admin_list_companies_v1");if(error)throw error;MC_ROWS=data||[];mcRender()}
+ catch(e){box.innerHTML="";const p=document.createElement("p");p.className="k";p.textContent="Não foi possível carregar: "+authMsg(e);box.appendChild(p)}}
+function mcRender(){$("mc-list").innerHTML=MC_ROWS.length?MC_ROWS.map(r=>{const on=r.status==="active",own=(r.owner_emails||[]).join(", ")||"—",pen=(r.pending_emails||[]).join(", ");
+ return`<div class="it"><div><b>${esc(r.trade_name||r.legal_name)}</b><small>${esc(r.legal_name)}${r.document_number?" · "+esc(r.document_number):""}</small><small>${MC_ST[r.status]||esc(r.status)} · ${Number(r.active_members||0)} usuário(s) · dono: ${esc(own)}${r.pending_invites?` · convite pendente: ${esc(pen)}`:""}</small><div class="acts"><button class="sm gh" type="button" data-mc-users="${esc(r.company_id)}">Usuários</button><button class="sm gh" type="button" data-mc-status="${esc(r.company_id)}" data-to="${on?"suspended":"active"}">${on?"Suspender":"Reativar"}</button></div></div></div>`}).join(""):'<p class="k">Nenhum comércio cadastrado.</p>'}
+$("mc-refresh").onclick=()=>mcLoad();
+$("mc-list").onclick=async e=>{const u=e.target.closest("[data-mc-users]");if(u)return mcUsers(u.dataset.mcUsers);
+ const s=e.target.closest("[data-mc-status]");if(!s)return;const r=MC_ROWS.find(x=>x.company_id===s.dataset.mcStatus);if(!r)return;const to=s.dataset.to;
+ if(!confirm((to==="suspended"?"Suspender ":"Reativar ")+(r.trade_name||r.legal_name)+"? "+(to==="suspended"?"Os usuários perdem o acesso até você reativar.":"Os usuários voltam a ter acesso.")))return;
+ try{const{error}=await sb.rpc("admin_set_company_status_v1",{p_company_id:r.company_id,p_status:to});if(error)throw error;toast(to==="suspended"?"Comércio suspenso.":"Comércio reativado.");mcLoad()}catch(x){toast(authMsg(x))}};
+$("mc-new").onclick=()=>{["mc-name","mc-trade","mc-doc","mc-email"].forEach(i=>$(i).value="");$("mc-msg").textContent="";$("mcdlg").showModal()};
+$("mc-x").onclick=()=>$("mcdlg").close();
+$("mc-ok").onclick=async()=>{const name=$("mc-name").value.trim(),trade=$("mc-trade").value.trim(),doc=$("mc-doc").value.replace(/\D/g,""),email=$("mc-email").value.trim().toLowerCase(),m=$("mc-msg");
+ if(name.length<2)return m.textContent="Informe o nome do comércio.";
+ if(doc&&!(pixCpfOk(doc)||pixCnpjOk(doc)))return m.textContent="CPF ou CNPJ inválido. Confira os números ou deixe em branco.";
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return m.textContent="Informe um e-mail válido para o dono.";
+ $("mc-ok").disabled=true;
+ try{const{data,error}=await sb.rpc("admin_create_company_v1",{p_legal_name:name,p_trade_name:trade||null,p_document:doc||null,p_owner_email:email});if(error)throw error;
+  const r=Array.isArray(data)?data[0]:data;MC_LAST={email,status:r&&r.owner_status,name:trade||name};$("mcdlg").close();mcLast();mcLoad()}
+ catch(e){m.textContent=authMsg(e)}finally{$("mc-ok").disabled=false}};
+function mcLast(){const el=$("mc-last");if(!MC_LAST){el.innerHTML="";return}const l=MC_LAST,inv=l.status==="invited";
+ el.innerHTML=`<div class="it"><div><b>✅ ${esc(l.name)} cadastrado</b><small>${inv?`Falta enviar o convite de acesso para ${esc(l.email)}: no painel do Supabase, Authentication > Users > Invite user. Quando ele aceitar e entrar, o comércio é vinculado automaticamente.`:`${esc(l.email)} já tem conta e foi vinculado como dono.`}</small><div class="acts"><button class="sm" type="button" id="mc-copy">Copiar mensagem para o cliente</button></div></div></div>`}
+$("mc-last").onclick=e=>{if(!e.target.closest("#mc-copy")||!MC_LAST)return;const l=MC_LAST,link=location.origin+location.pathname;
+ const t=`Olá! Seu acesso ao M7 ERP está pronto.\nLink: ${link}\nE-mail de acesso: ${l.email}\n`+(l.status==="invited"?"Você vai receber um e-mail de convite: abra, crie sua senha e depois entre no app (Cadastros > Conexão > Entrar na conta).":"Entre no app em Cadastros > Conexão > Entrar na conta. Se esquecer a senha, toque em Esqueci minha senha.")+`\nQualquer dúvida, fale com o suporte pelo botão "Falar com o suporte".`;
+ if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>toast("Mensagem copiada."),()=>toast("Não foi possível copiar."));else toast("Não foi possível copiar.")};
+async function mcUsers(id){MC_CUR=id;const r=MC_ROWS.find(x=>x.company_id===id);$("mu-title").textContent="Usuários · "+(r?(r.trade_name||r.legal_name):"");$("mu-msg").textContent="";$("mu-email").value="";$("mudlg").showModal();await muLoad()}
+async function muLoad(){const box=$("mu-list");
+ try{const{data,error}=await sb.rpc("admin_list_members_v1",{p_company_id:MC_CUR});if(error)throw error;const rows=data||[];
+  box.innerHTML=rows.length?rows.map(m=>`<div class="it"><div><b>${esc(m.email)}</b><small>${esc(MC_ROLES[m.role]||m.role)} · ${esc(m.status)}</small></div>${m.status==="active"?`<button class="sm gh" type="button" data-mu-off="${esc(m.email)}">Desativar</button>`:m.status==="disabled"?`<button class="sm gh" type="button" data-mu-on="${esc(m.email)}">Reativar</button>`:""}</div>`).join(""):'<p class="k">Nenhum usuário.</p>'}
+ catch(e){box.textContent="";$("mu-msg").textContent=authMsg(e)}}
+$("mu-role").innerHTML=Object.entries(MC_ROLES).filter(([k])=>k!=="owner").map(([k,v])=>`<option value="${k}">${v}</option>`).join("");
+$("mu-add").onclick=async()=>{const email=$("mu-email").value.trim().toLowerCase(),m=$("mu-msg");if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return m.textContent="Informe um e-mail válido.";
+ $("mu-add").disabled=true;try{const{data,error}=await sb.rpc("admin_add_member_v1",{p_company_id:MC_CUR,p_email:email,p_role:$("mu-role").value});if(error)throw error;
+  m.textContent=data==="invited"?"Convite criado. Falta enviar o convite de acesso pelo painel do Supabase (Authentication > Users > Invite user).":"Usuário vinculado ao comércio.";$("mu-email").value="";await muLoad();mcLoad()}
+ catch(e){m.textContent=authMsg(e)}finally{$("mu-add").disabled=false}};
+$("mu-list").onclick=async e=>{const b=e.target.closest("[data-mu-off],[data-mu-on]");if(!b)return;const off=!!b.dataset.muOff;
+ try{const{error}=await sb.rpc("admin_set_member_status_v1",{p_company_id:MC_CUR,p_email:off?b.dataset.muOff:b.dataset.muOn,p_status:off?"disabled":"active"});if(error)throw error;await muLoad();mcLoad()}catch(x){$("mu-msg").textContent=authMsg(x)}};
+$("mu-x").onclick=()=>$("mudlg").close();
+
+// Busca nas listas de produtos e clientes
+function listFilter(listId,qId){const q=(($(qId)||{value:""}).value||"").trim().toLowerCase();document.querySelectorAll("#"+listId+" > .it").forEach(el=>{el.style.display=!q||el.textContent.toLowerCase().includes(q)?"":"none"})}
+$("pr-q").oninput=()=>listFilter("pr-list","pr-q");$("c-q").oninput=()=>listFilter("c-list","c-q");
+// O módulo de estoque redesenha a lista de produtos; aqui acrescentamos código/unidade por fora e mantemos o filtro.
+function decoProducts(){document.querySelectorAll("#pr-list > .it").forEach(el=>{if(el.dataset.deco)return;const bt=el.querySelector("[data-ep]"),p=bt&&S.pr.find(x=>String(x.id)===String(bt.dataset.ep));if(!p)return;
+ const bits=[p.sku?"cód. "+esc(p.sku):"",p.barcode?"🏷 "+esc(p.barcode):"",p.unit&&p.unit!=="UN"?esc(p.unit):"",p.description?esc(p.description):""].filter(Boolean);
+ if(bits.length){const sm=document.createElement("small");sm.innerHTML=bits.join(" · ");const b=el.querySelector("b");if(b)b.insertAdjacentElement("afterend",sm)}el.dataset.deco="1"})}
+["pr-list","c-list"].forEach(id=>{const el=$(id);if(el)new MutationObserver(()=>{if(id==="pr-list")decoProducts();listFilter(id,id==="pr-list"?"pr-q":"c-q")}).observe(el,{childList:true})});
+decoProducts();
+
+// Leitor de código de barras (USB/Bluetooth) ou digitação: adiciona 1 unidade à venda
+function pickByCode(){const v=$("e-code").value.trim();if(!v)return;const lv=v.toLowerCase();
+ const p=S.pr.find(x=>x.status!=="inactive"&&(String(x.barcode||"")===v||String(x.sku||"").toLowerCase()===lv));
+ if(!p){$("e-code").value="";return toast("Nenhum produto com o código "+v+".")}
+ $("e-prod").value=p.id;if($("e-prod").value!==p.id){$("e-code").value="";return toast("Produto indisponível para venda.")}
+ $("e-prod").dispatchEvent(new Event("change"));$("e-qty").value="1";$("e-code").value="";$("e-add").click();toast("Adicionado: "+p.name)}
+$("e-code").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();pickByCode()}});$("e-code").addEventListener("change",pickByCode);
+
+// Dados de teste: apagar histórico (somente neste aparelho, nunca de comércio conectado)
+let WIPE_MODE=null;
+function wipeSync(){const c=isCompanyWorkspace();$("wipe-btns").style.display=c?"none":"flex";
+ $("wipe-note").textContent=c?"Este comércio está conectado: os dados ficam guardados com segurança no servidor e não podem ser apagados por aqui. Para recomeçar do zero, peça ao administrador um novo comércio.":"Fez testes com vendas e cadastros? Apague antes de começar a usar de verdade. Isto afeta só os dados deste aparelho e não pode ser desfeito."}
+function wipeOpen(mode){WIPE_MODE=mode;$("wipe-desc").textContent=mode==="all"?"Vai apagar TUDO: vendas, fiados, caixa, produtos e clientes. Mantém o nome da loja, a chave Pix e o PIN.":"Vai apagar vendas, fiados, fechamentos de caixa e pendências. Mantém produtos e clientes (o estoque dos produtos não volta ao valor antigo).";$("wipe-in").value="";$("wipe-ok").disabled=true;$("wipedlg").showModal()}
+$("wipe-hist").onclick=()=>wipeOpen("hist");$("wipe-all").onclick=()=>wipeOpen("all");
+$("wipe-in").oninput=()=>{$("wipe-ok").disabled=$("wipe-in").value.trim().toUpperCase()!=="APAGAR"};
+$("wipe-x").onclick=()=>$("wipedlg").close();
+$("wipe-bk").onclick=()=>{$("wipedlg").close();$("bk-copy").click()};
+$("wipe-ok").onclick=()=>{if(isCompanyWorkspace()||$("wipe-in").value.trim().toUpperCase()!=="APAGAR")return;
+ S.tx=[];S.rc=[];S.cx={};S.stock_pending=[];S.purchase_pending=[];if(WIPE_MODE==="all"){S.pr=[];S.cl=[]}
+ save();try{localStorage.removeItem("m7:onb-hidden")}catch(e){}$("wipedlg").close();render();toast(WIPE_MODE==="all"?"Tudo foi apagado.":"Vendas e caixa apagados.")};
+wipeSync();
 
 $("bk-copy").onclick=()=>{
  const data={...S};delete data.pin;
