@@ -156,7 +156,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
  <div class="card"><h2>Conexão M7 ERP</h2><p class="k">Entre com o e-mail e a senha da sua empresa para guardar vendas, recebimentos, produtos, clientes, despesas e fechamentos de caixa com segurança na nuvem.</p><p id="sb-status" class="k">Verificando disponibilidade da conexão…</p><label for="sb-email">E-mail da conta</label><input id="sb-email" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" placeholder="seu@email.com"><label for="sb-pass">Senha</label><div style="display:flex;gap:8px"><input id="sb-pass" type="password" autocomplete="current-password" placeholder="Sua senha" style="flex:1;min-width:0"><button class="gh" id="sb-eye" type="button" aria-label="Mostrar senha" aria-pressed="false" style="width:auto;flex:none;padding:0 16px">👁</button></div><div class="row2"><button id="sb-login" type="button">Entrar na conta</button><button class="gh" id="sb-logout" type="button">Sair</button></div><div class="row2" style="margin-top:8px"><button class="gh" id="sb-forgot" type="button">Esqueci minha senha</button><button class="gh" id="sb-chpw" type="button">Alterar senha</button></div><p id="sb-user" class="k">Não conectado</p><div class="row2"><button id="sb-sync" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar clientes">Sincronizar clientes</button><button id="sb-sync-products" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar o catálogo">Sincronizar produtos</button></div><p id="sb-sync-status" class="k">Entre na conta e valide a empresa para sincronizar clientes com segurança.</p><p id="sb-product-sync-status" class="k">Entre na conta e valide a empresa para sincronizar o catálogo com segurança.</p><div class="row2"><button id="sb-sync-expenses" type="button" class="gh" disabled>Sincronizar despesas</button></div><p id="sb-expense-sync-status" class="k">As despesas antigas só serão enviadas quando você solicitar a sincronização.</p></div>
  <div class="card"><h2>Segurança</h2><label for="pin-n">PIN de acesso (4 a 6 números)</label><input id="pin-n" type="password" inputmode="numeric" maxlength="6" autocomplete="off"><div class="row2"><button id="pin-set">Definir PIN</button><button class="gh" id="pin-off">Remover</button><button class="gh" id="pin-lock">Bloquear</button></div><p class="k" id="pin-st"></p></div>
  <div class="card" id="master-card" style="display:none"><h2>Administração da plataforma</h2><p class="k">Área exclusiva do administrador M7 TECH: cadastre e gerencie os comércios clientes.</p><div class="row2"><button class="gh" id="mc-refresh" type="button">Atualizar lista</button><button id="mc-new" type="button">+ Novo comércio</button></div><div id="mc-last" style="margin-top:8px"></div><div id="mc-list"></div></div>
- <div class="card" id="wipe-card"><h2>Dados de teste</h2><p class="k" id="wipe-note"></p><div class="row2" id="wipe-btns"><button class="gh" id="wipe-hist" type="button">Apagar vendas e caixa</button><button class="gh" id="wipe-all" type="button">Apagar tudo</button></div></div>
+ <div class="card" id="wipe-card"><h2>Resetar sistema</h2><p class="k" id="wipe-note"></p><div class="row2" id="wipe-btns"><button class="gh" id="wipe-hist" type="button">Apagar histórico</button><button class="red" id="wipe-all" type="button">Resetar tudo</button></div></div>
  <div class="card"><h2>Suporte e informações</h2><p class="k" id="app-ver"></p><div class="row2"><button id="sup-wa" type="button" style="display:none">💬 Falar com o suporte</button><button class="gh" id="sup-terms" type="button">Termos e Privacidade</button></div></div>
 </section>
 </main>
@@ -181,7 +181,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
 <dialog id="stock-history-dlg"><h2>📚 Histórico de estoque</h2><p class="k" id="stock-history-product"></p><div id="stock-history-list"></div><div class="row2"><button class="gh" id="stock-history-close" type="button">Fechar</button><button id="stock-history-more" type="button" class="gh" style="display:none">Carregar mais</button></div><p class="k" id="stock-history-status" aria-live="polite"></p></dialog>
 <dialog id="mcdlg"><h2>Novo comércio</h2><label for="mc-name">Nome / Razão social</label><input id="mc-name" maxlength="120"><label for="mc-trade">Nome fantasia (opcional)</label><input id="mc-trade" maxlength="120"><label for="mc-doc">CPF ou CNPJ (opcional)</label><input id="mc-doc" inputmode="numeric" maxlength="18" placeholder="Somente números"><label for="mc-email">E-mail do dono</label><input id="mc-email" type="email" inputmode="email" autocapitalize="off" spellcheck="false"><p class="k" id="mc-msg" aria-live="polite" style="color:var(--rd,#c0392b)"></p><div class="row2"><button class="gh" id="mc-x" type="button">Cancelar</button><button id="mc-ok" type="button">Cadastrar</button></div></dialog>
 <dialog id="mudlg"><h2 id="mu-title">Usuários</h2><div id="mu-list"></div><label for="mu-email">Adicionar usuário (e-mail)</label><input id="mu-email" type="email" inputmode="email" autocapitalize="off" spellcheck="false"><label for="mu-role">Perfil</label><select id="mu-role"></select><p class="k" id="mu-msg" aria-live="polite"></p><div class="row2"><button class="gh" id="mu-x" type="button">Fechar</button><button id="mu-add" type="button">Adicionar</button></div></dialog>
-<dialog id="wipedlg"><h2>🗑 Apagar dados de teste</h2><p id="wipe-desc"></p><button class="gh" id="wipe-bk" type="button">Copiar backup antes</button><label for="wipe-in">Digite APAGAR para confirmar</label><input id="wipe-in" autocomplete="off" autocapitalize="characters"><div class="row2" style="margin-top:10px"><button class="gh" id="wipe-x" type="button">Cancelar</button><button id="wipe-ok" type="button" disabled>Apagar definitivamente</button></div></dialog>
+<dialog id="wipedlg"><h2>🗑 Resetar sistema</h2><p id="wipe-desc"></p><button class="gh" id="wipe-bk" type="button">Copiar backup antes</button><label for="wipe-in">Digite APAGAR para confirmar</label><input id="wipe-in" autocomplete="off" autocapitalize="characters"><div class="row2" style="margin-top:10px"><button class="gh" id="wipe-x" type="button">Cancelar</button><button id="wipe-ok" type="button" disabled>Apagar definitivamente</button></div></dialog>
 <dialog id="termsdlg"><h2>📄 Termos de Uso e Privacidade</h2><div id="terms-body" style="max-height:52vh;overflow:auto;font-size:14px;line-height:1.5;text-align:left"></div><div id="terms-acc"><label style="display:flex;gap:10px;align-items:flex-start;margin:12px 0"><input type="checkbox" id="terms-chk" style="width:auto;margin-top:3px"><span>Li e aceito os Termos de Uso e a Política de Privacidade.</span></label><button id="terms-ok" type="button" disabled>Aceitar e continuar</button></div><button class="gh" id="terms-close" type="button" style="display:none">Fechar</button></dialog>
 <dialog id="stmtdlg"><h2 id="stmt-title">Extrato</h2><div id="stmt-body"></div><div class="row2" style="margin-top:10px"><button class="gh" id="stmt-copy" type="button">Copiar</button><button id="stmt-wa" type="button">WhatsApp</button></div><button class="gh" id="stmt-x" type="button" style="margin-top:8px">Fechar</button></dialog>
 <dialog id="pwdlg"><h2>🔑 Definir nova senha</h2><p class="k">Escolha uma senha com pelo menos 8 caracteres.</p><label for="pw-new">Nova senha</label><input id="pw-new" type="password" autocomplete="new-password"><label for="pw-new2">Repita a nova senha</label><input id="pw-new2" type="password" autocomplete="new-password"><p class="k" id="pw-msg" aria-live="polite" style="color:var(--rd,#c0392b)"></p><div class="row2"><button class="gh" id="pw-x" type="button">Agora não</button><button id="pw-ok" type="button">Salvar senha</button></div></dialog>
@@ -2458,18 +2458,60 @@ function pickByCode(){const v=$("e-code").value.trim();if(!v)return;const lv=v.t
  $("e-prod").dispatchEvent(new Event("change"));$("e-qty").value="1";$("e-code").value="";$("e-add").click();toast("Adicionado: "+p.name)}
 $("e-code").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();pickByCode()}});$("e-code").addEventListener("change",pickByCode);
 
-// Dados de teste: apagar histórico (somente neste aparelho, nunca de comércio conectado)
-let WIPE_MODE=null;
-function wipeSync(){const c=isCompanyWorkspace();$("wipe-btns").style.display=c?"none":"flex";
- $("wipe-note").textContent=c?"Este comércio está conectado: os dados ficam guardados com segurança no servidor e não podem ser apagados por aqui. Para recomeçar do zero, peça ao administrador um novo comércio.":"Fez testes com vendas e cadastros? Apague antes de começar a usar de verdade. Isto afeta só os dados deste aparelho e não pode ser desfeito."}
-function wipeOpen(mode){WIPE_MODE=mode;$("wipe-desc").textContent=mode==="all"?"Vai apagar TUDO: vendas, fiados, caixa, produtos e clientes. Mantém o nome da loja, a chave Pix e o PIN.":"Vai apagar vendas, fiados, fechamentos de caixa e pendências. Mantém produtos e clientes (o estoque dos produtos não volta ao valor antigo).";$("wipe-in").value="";$("wipe-ok").disabled=true;$("wipedlg").showModal()}
+// Reset controlado: no modo conectado, a exclusão é transacional no servidor por empresa.
+let WIPE_MODE=null, wipeRunning=false;
+function wipeSync(){
+ const connected=isCompanyWorkspace();
+ const permitted=!connected||["owner","admin"].includes(activeCompanyRole);
+ $("wipe-btns").style.display=permitted?"flex":"none";
+ $("wipe-note").textContent=connected
+  ?(permitted?"Empresa conectada. O reset será executado no servidor e afetará somente este comércio. Disponível para proprietário e administrador.":"Somente o proprietário ou administrador pode resetar os dados deste comércio.")
+  :"Apaga dados locais deste aparelho. Faça um backup antes: a operação é definitiva.";
+}
+function wipeOpen(mode){
+ if(isCompanyWorkspace()&&!['owner','admin'].includes(activeCompanyRole))return toast("Apenas proprietário ou administrador pode resetar o sistema.");
+ WIPE_MODE=mode;
+ $("wipe-desc").textContent=mode==="all"
+  ?"Resetar TUDO: vendas, recebimentos, despesas, caixa, estoque e histórico de compras. Também remove produtos, clientes e fornecedores. Mantém a empresa, usuários, nome da loja, chave Pix e PIN."
+  :"Apagar o histórico operacional: vendas, fiados/recebimentos, despesas, caixa, movimentações de estoque e compras. Mantém produtos, clientes e fornecedores. O estoque dos produtos será zerado.";
+ $("wipe-in").value="";$("wipe-ok").disabled=true;$("wipe-ok").textContent=isCompanyWorkspace()?"Resetar no servidor":"Apagar definitivamente";
+ $("wipedlg").showModal();
+}
 $("wipe-hist").onclick=()=>wipeOpen("hist");$("wipe-all").onclick=()=>wipeOpen("all");
-$("wipe-in").oninput=()=>{$("wipe-ok").disabled=$("wipe-in").value.trim().toUpperCase()!=="APAGAR"};
+$("wipe-in").oninput=()=>{$("wipe-ok").disabled=$("wipe-in").value.trim().toUpperCase()!=="APAGAR"||wipeRunning};
 $("wipe-x").onclick=()=>$("wipedlg").close();
 $("wipe-bk").onclick=()=>{$("wipedlg").close();$("bk-copy").click()};
-$("wipe-ok").onclick=()=>{if(isCompanyWorkspace()||$("wipe-in").value.trim().toUpperCase()!=="APAGAR")return;
- S.tx=[];S.rc=[];S.cx={};S.stock_pending=[];S.purchase_pending=[];if(WIPE_MODE==="all"){S.pr=[];S.cl=[]}
- save();try{localStorage.removeItem("m7:onb-hidden")}catch(e){}$("wipedlg").close();render();toast(WIPE_MODE==="all"?"Tudo foi apagado.":"Vendas e caixa apagados.")};
+$("wipe-ok").onclick=async()=>{
+ if(wipeRunning||$("wipe-in").value.trim().toUpperCase()!=="APAGAR")return;
+ if(isCompanyWorkspace()&&!['owner','admin'].includes(activeCompanyRole))return toast("Permissão insuficiente.");
+ wipeRunning=true;$("wipe-ok").disabled=true;$("wipe-ok").textContent="Processando…";
+ try{
+  if(isCompanyWorkspace()){
+   if(!sb)throw new Error("Conexão indisponível. Entre novamente e tente com internet.");
+   const companyId=activeStorageKey.slice("m7c:v2:company:".length);
+   if(!companyId)throw new Error("Empresa não identificada.");
+   const {data,error}=await sb.rpc("reset_company_data_v1",{p_company_id:companyId,p_mode:WIPE_MODE});
+   if(error)throw error;
+   if(data===false)throw new Error("O servidor não confirmou a operação.");
+  }
+  const keep={shop:S.shop||"",pix:S.pix||{key:"",name:"",city:""},pin:S.pin};
+  const next=emptyState();Object.assign(next,keep);
+  if(WIPE_MODE==="hist"){
+   next.pr=Array.isArray(S.pr)?S.pr:[];next.cl=Array.isArray(S.cl)?S.cl:[];
+   // Estoque deve refletir o reset também no catálogo local.
+   next.pr=next.pr.map(p=>({...p,stock:0,current_stock:0}));
+  }
+  S=next;save();
+  try{localStorage.removeItem("m7:onb-hidden")}catch(e){}
+  $("wipedlg").close();render();
+  if(isCompanyWorkspace()){
+   // Atualiza o cache local após confirmação remota; não altera o escopo da empresa.
+   try{await refreshRemoteSalesLedger(companyId)}catch(e){console.warn("Atualização após reset",e)}
+  }
+  toast(WIPE_MODE==="all"?"Sistema resetado com sucesso.":"Histórico operacional apagado.");
+ }catch(e){console.error("Falha no reset do M7",e);toast("Reset não concluído: "+(e.message||"erro no servidor"));}
+ finally{wipeRunning=false;$("wipe-ok").textContent=isCompanyWorkspace()?"Resetar no servidor":"Apagar definitivamente";$("wipe-ok").disabled=$("wipe-in").value.trim().toUpperCase()!=="APAGAR";}
+};
 wipeSync();
 
 $("bk-copy").onclick=()=>{
