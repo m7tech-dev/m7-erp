@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#059669">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://tedauuvxjgouyqvzztlx.supabase.co wss://tedauuvxjgouyqvzztlx.supabase.co https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>M7 ERP</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
@@ -157,6 +159,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
  <div class="card"><h2>Segurança</h2><label for="pin-n">PIN de acesso (4 a 6 números)</label><input id="pin-n" type="password" inputmode="numeric" maxlength="6" autocomplete="off"><div class="row2"><button id="pin-set">Definir PIN</button><button class="gh" id="pin-off">Remover</button><button class="gh" id="pin-lock">Bloquear</button></div><p class="k" id="pin-st"></p></div>
  <div class="card" id="master-card" style="display:none"><h2>Administração da plataforma</h2><p class="k">Área exclusiva do administrador M7 TECH: cadastre e gerencie os comércios clientes.</p><div class="row2"><button class="gh" id="mc-refresh" type="button">Atualizar lista</button><button id="mc-new" type="button">+ Novo comércio</button></div><div id="mc-last" style="margin-top:8px"></div><div id="mc-list"></div></div>
  <div class="card" id="wipe-card"><h2>Resetar sistema</h2><p class="k" id="wipe-note"></p><div class="row2" id="wipe-btns"><button class="gh" id="wipe-hist" type="button">Apagar histórico</button><button class="red" id="wipe-all" type="button">Resetar tudo</button></div></div>
+ <div class="card" id="audit-card" style="display:none"><h2>Registro de auditoria</h2><p class="k">Operações sensíveis feitas nesta empresa. Somente leitura: ninguém pode editar ou apagar.</p><div class="row2"><button class="gh" id="audit-load" type="button">Ver registro</button></div><div id="audit-list"></div></div>
  <div class="card"><h2>Suporte e informações</h2><p class="k" id="app-ver"></p><div class="row2"><button id="sup-wa" type="button" style="display:none">💬 Falar com o suporte</button><button class="gh" id="sup-terms" type="button">Termos e Privacidade</button></div></div>
 </section>
 </main>
@@ -188,7 +191,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
 <dialog id="pixdlg"><h2>📲 Pix</h2><div style="text-align:center"><canvas id="pix-qr" width="260" height="260" style="width:260px;max-width:100%;height:auto;background:#fff;border-radius:8px;image-rendering:pixelated"></canvas><div class="k" id="pix-info" style="margin:6px 0 10px"></div></div><label for="pix-code">Pix copia e cola</label><textarea id="pix-code" readonly rows="4" style="width:100%;font:12px/1.4 ui-monospace,monospace"></textarea><p class="k">Confira o recebimento no aplicativo do seu banco antes de entregar. O M7 ERP não confirma o pagamento.</p><div class="row2"><button class="gh" id="pix-x" type="button">Fechar</button><button id="pix-copy" type="button">Copiar código</button></div></dialog>
 <dialog id="rdlg"><h2>🧾 Recibo</h2><pre id="rc-body" style="white-space:pre-wrap;font:14px/1.5 ui-monospace,monospace;background:var(--bg);padding:12px;border-radius:10px;margin:0"></pre><div class="noprint"><label for="rc-tel">WhatsApp do cliente</label><input id="rc-tel" inputmode="tel"><div class="row2"><button class="gh" id="rc-x">Fechar</button><button class="gh" id="rc-pr">Imprimir</button><button id="rc-wa">WhatsApp</button></div></div></dialog>
 <div class="toast" id="toast"></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" crossorigin="anonymous"></script>
 <script>
 const SUPABASE_URL="https://tedauuvxjgouyqvzztlx.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_dZOk7GvffyRJ-bHwIodj0w_BRG7ClWD";
@@ -204,7 +207,7 @@ function authMsg(e){const m=String((e&&e.message)||e||""),st=e&&e.status;
  if(/same password|different from the old/i.test(m))return"A nova senha precisa ser diferente da atual.";
  if(/password/i.test(m)&&/(least|short|weak|characters|pwned|known to be)/i.test(m))return"Senha fraca ou curta demais. Use pelo menos 8 caracteres, misturando letras e números.";
  if(/failed to fetch|network|timeout|tempo limite|load failed/i.test(m))return"Sem conexão com o servidor. Verifique a internet e tente de novo.";
- return m||"Não foi possível concluir. Tente novamente."}
+ if(m)console.warn("Erro de autenticação:",m);return"Não foi possível concluir. Tente novamente."}
 function openPwDialog(){const d=document.getElementById("pwdlg");if(!d)return;["pw-new","pw-new2"].forEach(i=>document.getElementById(i).value="");document.getElementById("pw-msg").textContent="";if(!d.open)d.showModal()}
 const SB_TIMEOUT_MS=30000;
 function sbFetch(input,init){
@@ -1348,7 +1351,7 @@ function fillProd(){const p=S.pr.find(x=>x.id===$("e-prod").value);if(!p)return;
 $("e-prod").onchange=fillProd;$("e-qty").onchange=()=>{if($("e-prod").value)fillProd()};
 let CART=[];
 function drawCart(){const sub=sum(CART.map(i=>i.price*i.qty)),dc=parseFloat($("e-disc").value)||0;
- $("e-cart").innerHTML=CART.length?CART.map((i,x)=>`<div class="it"><div>${i.qty}x ${esc(i.name)}<small>${R(i.price)} cada</small></div><div class="amt">${R(i.price*i.qty)} <button class="sm gh" data-ci="${x}">✕</button></div></div>`).join("")+`<div class="it"><b>Subtotal</b><b>${R(sub)}</b></div>`:"";
+ $("e-cart").innerHTML=CART.length?CART.map((i,x)=>`<div class="it"><div>${Number(i.qty)}x ${esc(i.name)}<small>${R(i.price)} cada</small></div><div class="amt">${R(i.price*i.qty)} <button class="sm gh" data-ci="${x}">✕</button></div></div>`).join("")+`<div class="it"><b>Subtotal</b><b>${R(sub)}</b></div>`:"";
  if(CART.length){$("e-desc").value=CART.map(i=>`${i.qty}x ${i.name}`).join(", ");$("e-val").value=Math.max(0,sub-dc).toFixed(2)}}
 $("e-add").onclick=()=>{const p=S.pr.find(x=>x.id===$("e-prod").value);if(!p)return toast("Escolha um produto");const q=positiveInteger($("e-qty").value);if(!q)return toast("A quantidade deve ser um número inteiro maior que zero.");const f=CART.find(i=>i.id===p.id);if(f)f.qty+=q;else CART.push({id:p.id,name:p.name,price:p.price,cost:p.cost,qty:q});$("e-prod").value="";$("e-qty").value=1;drawCart()};
 $("e-cart").onclick=e=>{const b=e.target.closest("[data-ci]");if(b){CART.splice(+b.dataset.ci,1);drawCart()}};
@@ -2460,24 +2463,45 @@ $("e-code").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault(
 
 // Reset controlado: no modo conectado, a exclusão é transacional no servidor por empresa.
 let WIPE_MODE=null, wipeRunning=false;
+const AUDIT_ACTIONS={reset_company_data:"Reset de dados"};
+const AUDIT_MODES={hist:"Apagou o histórico",all:"Resetou tudo"};
+function auditSync(){const c=$("audit-card");if(!c)return;const show=isCompanyWorkspace()&&["owner","admin"].includes(activeCompanyRole);c.style.display=show?"block":"none";if(!show)$("audit-list").innerHTML=""}
+async function auditLoad(){
+ const box=$("audit-list"),btn=$("audit-load");
+ if(!sb||!isCompanyWorkspace())return;
+ const companyId=activeStorageKey.slice("m7c:v2:company:".length);
+ btn.disabled=true;box.innerHTML='<p class="k">Carregando…</p>';
+ try{
+  const{data,error}=await sb.from("company_audit_log").select("action,user_id,details,created_at").eq("company_id",companyId).order("created_at",{ascending:false}).limit(50);
+  if(error)throw error;
+  box.innerHTML=data&&data.length?data.map(r=>{
+   const d=r.details&&typeof r.details==="object"?r.details:{};
+   const del=d.deleted_rows&&typeof d.deleted_rows==="object"?Object.values(d.deleted_rows).reduce((a,n)=>a+(Number(n)||0),0):null;
+   const info=[AUDIT_MODES[d.mode]||"",del===null?"":del+" registros apagados"].filter(Boolean).join(" · ");
+   return `<div class="it"><div><b>${esc(AUDIT_ACTIONS[r.action]||r.action)}</b>${info?`<small>${esc(info)}</small>`:""}<small>${esc(new Date(r.created_at).toLocaleString("pt-BR"))} · responsável ${esc(String(r.user_id||"").slice(0,8))}</small></div></div>`}).join(""):'<div class="empty">Nenhuma operação registrada.</div>';
+ }catch(e){console.warn("Auditoria",e);box.innerHTML='<p class="k">Não foi possível carregar o registro. Tente novamente.</p>'}
+ finally{btn.disabled=false}
+}
+$("audit-load").onclick=auditLoad;
 function wipeSync(){
+ auditSync();
  const connected=isCompanyWorkspace();
- const permitted=!connected||["owner","admin"].includes(activeCompanyRole);
+ const permitted=!connected||activeCompanyRole==="owner";
  $("wipe-btns").style.display=permitted?"flex":"none";
  $("wipe-note").textContent=connected
-  ?(permitted?"Empresa conectada. O reset será executado no servidor e afetará somente este comércio. Disponível para proprietário e administrador.":"Somente o proprietário ou administrador pode resetar os dados deste comércio.")
+  ?(permitted?"Empresa conectada. O reset será executado no servidor e afetará somente este comércio. Disponível somente para o proprietário. A operação fica registrada em auditoria.":"Somente o proprietário pode resetar os dados deste comércio.")
   :"Apaga dados locais deste aparelho. Faça um backup antes: a operação é definitiva.";
 }
 function wipeErr(m){const e=$("wipe-err");if(!e)return;e.textContent=m||"";e.style.display=m?"block":"none"}
 function wipeErrText(e){
  const raw=String((e&&(e.message||e.details))||e||"");
  if(e&&(e.code==="PGRST202"||e.code==="42883"||/could not find the function|does not exist/i.test(raw)))return"A função reset_company_data_v1 não existe no servidor (Supabase). É preciso criá-la no banco.";
- if(e&&(e.code==="42501"||/permission denied|not authorized|forbidden|row-level security/i.test(raw)))return"O servidor negou a permissão para resetar. Confirme que seu usuário é proprietário/administrador desta empresa.";
+ if(e&&(e.code==="42501"||/permission denied|not authorized|forbidden|row-level security/i.test(raw)))return"O servidor negou a permissão para resetar. Somente o proprietário da empresa pode resetar.";
  if(/failed to fetch|networkerror|load failed/i.test(raw)||!navigator.onLine)return"Sem conexão com o servidor. Verifique a internet e tente novamente.";
  return raw||"Erro no servidor.";
 }
 function wipeOpen(mode){
- if(isCompanyWorkspace()&&!['owner','admin'].includes(activeCompanyRole))return toast("Apenas proprietário ou administrador pode resetar o sistema.");
+ if(isCompanyWorkspace()&&activeCompanyRole!=="owner")return toast("Apenas o proprietário pode resetar o sistema.");
  WIPE_MODE=mode;
  $("wipe-desc").textContent=mode==="all"
   ?"Resetar TUDO: vendas, recebimentos, despesas, caixa, estoque e histórico de compras. Também remove produtos, clientes e fornecedores. Mantém a empresa, usuários, nome da loja, chave Pix e PIN."
@@ -2492,7 +2516,7 @@ $("wipe-x").onclick=()=>$("wipedlg").close();
 $("wipe-bk").onclick=()=>{$("wipedlg").close();$("bk-copy").click()};
 $("wipe-ok").onclick=async()=>{
  if(wipeRunning||$("wipe-in").value.trim().toUpperCase()!=="APAGAR")return;
- if(isCompanyWorkspace()&&!['owner','admin'].includes(activeCompanyRole))return toast("Permissão insuficiente.");
+ if(isCompanyWorkspace()&&activeCompanyRole!=="owner")return toast("Permissão insuficiente.");
  wipeRunning=true;wipeErr("");$("wipe-ok").disabled=true;$("wipe-ok").textContent="Processando…";
  try{
   if(isCompanyWorkspace()){
@@ -2513,7 +2537,7 @@ $("wipe-ok").onclick=async()=>{
   S=next;save();
   try{localStorage.removeItem("m7:onb-hidden")}catch(e){}
   $("wipedlg").close();render();
-  if(isCompanyWorkspace()){
+  if(isCompanyWorkspace()){auditLoad();
    // Atualiza o cache local após confirmação remota; não altera o escopo da empresa.
    try{await refreshRemoteSalesLedger(companyId)}catch(e){console.warn("Atualização após reset",e)}
   }

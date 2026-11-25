@@ -1,6 +1,6 @@
-const CACHE_NAME = "m7-controle-v41";
+const CACHE_NAME = "m7-controle-v44";
 const APP_ASSETS = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png", "./stock-ledger.js", "./purchases.js", "./payables.js", "./purchase-returns.js"];
-const SUPABASE_LIB = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+const SUPABASE_LIB = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";
 const APP_ASSET_PATHS = new Set(APP_ASSETS.map(asset => new URL(asset, self.location.href).pathname));
 
 self.addEventListener("install", event => {
@@ -26,7 +26,7 @@ self.addEventListener("fetch", event => {
   const request = event.request;
   if (request.method !== "GET") return;
 
-  // supabase-js: rede primeiro (mantém @2 atualizado); cache como fallback offline.
+  // supabase-js: versão fixada (2.45.4); rede primeiro, cache como fallback offline.
   if (request.url === SUPABASE_LIB) {
     event.respondWith(
       fetch(request).then(response => {
