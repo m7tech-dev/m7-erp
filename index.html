@@ -4,8 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#059669">
-<meta name="description" content="M7 ERP: gestão comercial integrada com vendas, estoque, compras e financeiro.">
-<meta name="application-name" content="M7 ERP">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://tedauuvxjgouyqvzztlx.supabase.co wss://tedauuvxjgouyqvzztlx.supabase.co https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>M7 ERP</title>
@@ -15,7 +13,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="M7 ERP">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <style>
 :root{--bg:#f3f5f7;--card:#fff;--tx:#1f2937;--mu:#6b7280;--bd:#e5e7eb;--g:#059669;--gl:#d1fae5;--r:#e5484d;--rl:#fee2e2;--a:#d97706;--al:#fef3c7;--b:#2563eb;--bl:#dbeafe;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1417;--card:#192024;--tx:#e8edf0;--mu:#97a3ab;--bd:#2a343a;--gl:#0b3b2e;--rl:#42191b;--al:#43300d;--bl:#13284f;color-scheme:dark}}
@@ -66,13 +63,6 @@ dialog::backdrop{background:#0008}
 #tenant-loading{display:none;position:fixed;inset:0;z-index:100;background:var(--bg);align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:24px;text-align:center}body.tenant-switching #tenant-loading{display:flex}body.tenant-switching main,body.tenant-switching nav,body.tenant-switching footer{visibility:hidden}
 #lock{position:fixed;inset:0;background:var(--bg);z-index:99;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:24px;text-align:center}#lock input{max-width:220px;text-align:center;font-size:22px;letter-spacing:6px}
 footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
-footer a,.k a{color:var(--g);font-weight:600;text-decoration:none}footer a:hover,.k a:hover{text-decoration:underline}
-.foot-brand{font-weight:600}.foot-links{margin-top:2px}
-.sup-list{display:grid;gap:8px;margin:10px 0}
-.sup-link{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--tx);text-decoration:none;min-width:0}
-.sup-link>span{font-size:22px;flex:none}.sup-link div{min-width:0}.sup-link b{display:block;font-size:14px}
-.sup-link small{display:block;color:var(--mu);font-size:13px;overflow-wrap:anywhere}
-.sup-link:hover,.sup-link:focus-visible{border-color:var(--g)}
 .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:99px;font-size:14px;display:none;z-index:9}
 @media print{body.pr main,body.pr footer{display:none!important}dialog{border:0!important}header,nav,.noprint,.tab:not(#t-rel),footer{display:none!important}.tab#t-rel{display:block!important}body{background:#fff;padding:0}.card{break-inside:avoid}}
 </style>
@@ -158,24 +148,60 @@ footer a,.k a{color:var(--g);font-weight:600;text-decoration:none}footer a:hover
  <div class="card"><h2>💳 Contas a pagar — fornecedores</h2><p class="k">Cada recebimento confirmado gera um título e suas parcelas. Pagamentos e compensações ficam registrados no histórico. Créditos de devolução não movimentam dinheiro.</p><div id="purchase-payables-list"></div><p class="k" id="purchase-payables-status"></p><h3>Créditos de devoluções</h3><div id="purchase-supplier-credits-list"></div></div>
  <div class="card"><h2>↩️ Devoluções de compras</h2><p class="k">A devolução deve apontar para o recebimento original. O sistema valida o saldo devolvível, registra a saída no livro de estoque e gera crédito auditável do fornecedor sem apagar pagamentos anteriores.</p><label for="purchase-return-receipt">Recebimento original</label><select id="purchase-return-receipt"><option value="">Selecione um recebimento</option></select><div id="purchase-return-items"></div><div class="f2"><div><label for="purchase-return-date">Data da devolução</label><input id="purchase-return-date" type="date"></div><div><label for="purchase-return-reason">Motivo</label><input id="purchase-return-reason" maxlength="500" placeholder="Ex.: produto avariado / divergência"></div></div><div class="row2"><button id="purchase-return-save" type="button">Registrar devolução</button><button class="gh" id="purchase-return-refresh" type="button">Atualizar</button></div><p class="k" id="purchase-return-form-status" aria-live="polite">O crédito fica registrado para compensação ou reembolso em operação própria.</p><h3>Histórico de devoluções</h3><div id="purchase-returns-history"></div><p class="k" id="purchase-returns-status"></p></div>
 </section>
+
+<section class="tab" id="t-nf">
+ <h2>Cadastro de Notas Fiscais</h2>
+ <div class="card">
+  <h3>Importar ou cadastrar nota</h3>
+  <p class="k">Importe XML, DANFE em PDF ou cole o texto. Todos os dados extraídos devem ser conferidos antes de salvar. Não há comunicação com a SEFAZ.</p>
+  <label for="nf-file">Arquivo XML ou PDF</label><input id="nf-file" type="file" accept=".xml,.pdf,application/xml,application/pdf">
+  <label for="nf-text">Texto da nota (extraído ou colado manualmente)</label><textarea id="nf-text" rows="5" placeholder="Cole aqui o texto do DANFE ou os dados da nota..."></textarea>
+  <div class="row2"><button type="button" class="gh" id="nf-extract">Extrair do texto</button><button type="button" class="gh" id="nf-clear">Limpar formulário</button></div>
+  <div id="nf-file-msg" class="k" role="status"></div>
+  <input type="hidden" id="nf-edit-id">
+  <div class="grid">
+   <div><label for="nf-number">Número da nota</label><input id="nf-number" inputmode="numeric"></div>
+   <div><label for="nf-key">Chave de acesso (44 dígitos, opcional)</label><input id="nf-key" inputmode="numeric" maxlength="44" placeholder="44 dígitos"></div>
+   <div><label for="nf-date">Data de emissão</label><input id="nf-date" type="date"></div>
+   <div><label for="nf-supplier">Fornecedor</label><input id="nf-supplier"></div>
+   <div><label for="nf-doc">CNPJ/CPF</label><input id="nf-doc" inputmode="numeric"></div>
+   <div><label for="nf-type">Tipo</label><select id="nf-type"><option value="ENTRADA">ENTRADA</option><option value="DEVOLUCAO">DEVOLUCAO</option></select></div>
+   <div><label for="nf-total">Valor total (R$)</label><input id="nf-total" type="number" min="0" step="0.01" inputmode="decimal"></div>
+  </div>
+  <p class="k" id="nf-review-note">Confira todos os campos antes de salvar.</p>
+  <button type="button" id="nf-save">Salvar nota revisada</button>
+ </div>
+ <div class="card">
+  <h3>Relatório para o Contador</h3>
+  <div class="row2">
+   <div><label for="nf-month">Mês</label><select id="nf-month"><option value="">Todos</option><option value="01">Janeiro</option><option value="02">Fevereiro</option><option value="03">Março</option><option value="04">Abril</option><option value="05">Maio</option><option value="06">Junho</option><option value="07">Julho</option><option value="08">Agosto</option><option value="09">Setembro</option><option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option></select></div>
+   <div><label for="nf-year">Ano</label><input id="nf-year" type="number" min="2000" max="2100" placeholder="Todos"></div>
+  </div>
+  <label for="nf-search">Buscar número, fornecedor, CNPJ/CPF ou chave</label><input id="nf-search" placeholder="Digite para filtrar...">
+  <div class="row2"><button type="button" id="nf-csv">Exportar CSV do lote</button><button type="button" class="gh" id="nf-print">Imprimir / PDF</button><button type="button" class="gh" id="nf-xmls">Baixar XMLs do lote</button></div>
+  <p class="k" id="nf-export-msg"></p>
+  <div class="grid" style="margin:12px 0"><div class="card"><div class="k">Notas no lote</div><strong id="nf-count">0</strong></div><div class="card"><div class="k">Total geral</div><strong id="nf-sum">R$ 0,00</strong></div></div>
+  <div style="overflow:auto"><table id="nf-table"><thead><tr><th>Número</th><th>Chave de acesso</th><th>Emissão</th><th>Fornecedor</th><th>CNPJ/CPF</th><th>Tipo</th><th>Valor</th><th>Contador</th><th>Ações</th></tr></thead><tbody id="nf-rows"></tbody></table></div>
+ </div>
+</section>
 <section class="tab" id="t-cad">
- <div class="card"><h2>Minha loja</h2><label for="s-name">Nome (aparece no recibo)</label><input id="s-name" placeholder="Nome da sua loja"></div>
+ <div class="card"><h2>Minha loja</h2><label for="s-name">Nome (aparece no recibo)</label><input id="s-name" placeholder="Ex.: Mercadinho do João"></div>
  <div class="card"><h2>Pix (QR na venda)</h2><label for="pix-key">Chave Pix</label><input id="pix-key" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="CPF, CNPJ, e-mail, +55 e telefone ou chave aleatória">
   <div class="f2"><div><label for="pix-name">Nome no Pix (opcional)</label><input id="pix-name" maxlength="25" placeholder="Usa o nome da loja"></div><div><label for="pix-city">Cidade (opcional)</label><input id="pix-city" maxlength="15" placeholder="Ex.: São Paulo"></div></div>
   <p class="k" id="pix-status" aria-live="polite"></p><p class="k">O QR cobra o valor da venda e leva o cliente direto ao seu Pix. O app não confirma o pagamento: confira o recebimento no aplicativo do seu banco.</p></div>
  <div class="card"><h2>Clientes</h2><div class="f2"><div><label for="c-n">Nome</label><input id="c-n" placeholder="Nome do cliente"></div><div><label for="c-t">WhatsApp</label><input id="c-t" inputmode="tel" placeholder="(11) 99999-9999"></div></div><div class="row2"><button id="c-add">Adicionar cliente</button><button class="gh" id="c-cancel" style="display:none">Cancelar</button></div><input id="c-q" type="search" autocomplete="off" placeholder="Buscar cliente por nome ou WhatsApp" style="margin-top:10px"><div id="c-list"></div></div>
  <div class="card"><h2>Produtos</h2><div class="f2"><div><label for="pr-n">Nome</label><input id="pr-n"></div><div><label for="pr-p">Preço (R$)</label><input id="pr-p" type="number" min="0" step="0.01" inputmode="decimal"></div></div><div class="f2"><div><label for="pr-sku">Código / SKU (opcional)</label><input id="pr-sku" maxlength="40" autocomplete="off" autocapitalize="characters"></div><div><label for="pr-bar">Código de barras (opcional)</label><input id="pr-bar" inputmode="numeric" maxlength="14" autocomplete="off" placeholder="Só números"></div></div><div class="f2"><div><label for="pr-unit">Unidade</label><select id="pr-unit"><option>UN</option><option>KG</option><option>G</option><option>L</option><option>ML</option><option>M</option><option>CX</option><option>PCT</option><option>DZ</option></select></div><div><label for="pr-desc">Descrição (opcional)</label><input id="pr-desc" maxlength="120"></div></div><div class="f2"><div><label for="pr-c">Custo (R$, opcional)</label><input id="pr-c" type="number" min="0" step="0.01" inputmode="decimal"><p class="k" id="pr-cost-help">Para produto remoto, o custo é atualizado pelo recebimento de compras.</p></div><div><label for="pr-s">Estoque inicial (opcional)</label><input id="pr-s" type="number" min="0" inputmode="numeric"><p class="k" id="pr-stock-help"></p></div></div><div class="row2"><button id="pr-add">Adicionar produto</button><button class="gh" id="pr-cancel" style="display:none">Cancelar</button></div><input id="pr-q" type="search" autocomplete="off" placeholder="Buscar produto por nome ou código" style="margin-top:10px"><div id="pr-list"></div></div>
- <div class="card"><h2>Acesso à conta</h2><p class="k">Entre com o e-mail e a senha da sua empresa para guardar vendas, recebimentos, produtos, clientes, despesas e fechamentos de caixa com segurança na nuvem.</p><p id="sb-status" class="k">Verificando disponibilidade da conexão…</p><label for="sb-email">E-mail da conta</label><input id="sb-email" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" placeholder="seu@email.com"><label for="sb-pass">Senha</label><div style="display:flex;gap:8px"><input id="sb-pass" type="password" autocomplete="current-password" placeholder="Sua senha" style="flex:1;min-width:0"><button class="gh" id="sb-eye" type="button" aria-label="Mostrar senha" aria-pressed="false" style="width:auto;flex:none;padding:0 16px">👁</button></div><div class="row2"><button id="sb-login" type="button">Entrar na conta</button><button class="gh" id="sb-logout" type="button">Sair</button></div><div class="row2" style="margin-top:8px"><button class="gh" id="sb-forgot" type="button">Esqueci minha senha</button><button class="gh" id="sb-chpw" type="button">Alterar senha</button></div><p class="k">Precisa de ajuda para entrar? Fale com o suporte pelo <a href="https://wa.me/5548991637371" target="_blank" rel="noopener noreferrer">WhatsApp (48) 99163-7371</a> ou em <a href="mailto:suporte@m7tech.app.br">suporte@m7tech.app.br</a>.</p><p id="sb-user" class="k">Não conectado</p><div class="row2"><button id="sb-sync" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar clientes">Sincronizar clientes</button><button id="sb-sync-products" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar o catálogo">Sincronizar produtos</button></div><p id="sb-sync-status" class="k">Entre na conta e valide a empresa para sincronizar clientes com segurança.</p><p id="sb-product-sync-status" class="k">Entre na conta e valide a empresa para sincronizar o catálogo com segurança.</p><div class="row2"><button id="sb-sync-expenses" type="button" class="gh" disabled>Sincronizar despesas</button></div><p id="sb-expense-sync-status" class="k">As despesas antigas só serão enviadas quando você solicitar a sincronização.</p></div>
+ <div class="card"><h2>Conexão M7 ERP</h2><p class="k">Entre com o e-mail e a senha da sua empresa para guardar vendas, recebimentos, produtos, clientes, despesas e fechamentos de caixa com segurança na nuvem.</p><p id="sb-status" class="k">Verificando disponibilidade da conexão…</p><label for="sb-email">E-mail da conta</label><input id="sb-email" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" placeholder="seu@email.com"><label for="sb-pass">Senha</label><div style="display:flex;gap:8px"><input id="sb-pass" type="password" autocomplete="current-password" placeholder="Sua senha" style="flex:1;min-width:0"><button class="gh" id="sb-eye" type="button" aria-label="Mostrar senha" aria-pressed="false" style="width:auto;flex:none;padding:0 16px">👁</button></div><div class="row2"><button id="sb-login" type="button">Entrar na conta</button><button class="gh" id="sb-logout" type="button">Sair</button></div><div class="row2" style="margin-top:8px"><button class="gh" id="sb-forgot" type="button">Esqueci minha senha</button><button class="gh" id="sb-chpw" type="button">Alterar senha</button></div><p id="sb-user" class="k">Não conectado</p><div class="row2"><button id="sb-sync" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar clientes">Sincronizar clientes</button><button id="sb-sync-products" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar o catálogo">Sincronizar produtos</button></div><p id="sb-sync-status" class="k">Entre na conta e valide a empresa para sincronizar clientes com segurança.</p><p id="sb-product-sync-status" class="k">Entre na conta e valide a empresa para sincronizar o catálogo com segurança.</p><div class="row2"><button id="sb-sync-expenses" type="button" class="gh" disabled>Sincronizar despesas</button></div><p id="sb-expense-sync-status" class="k">As despesas antigas só serão enviadas quando você solicitar a sincronização.</p></div>
  <div class="card"><h2>Segurança</h2><label for="pin-n">PIN de acesso (4 a 6 números)</label><input id="pin-n" type="password" inputmode="numeric" maxlength="6" autocomplete="off"><div class="row2"><button id="pin-set">Definir PIN</button><button class="gh" id="pin-off">Remover</button><button class="gh" id="pin-lock">Bloquear</button></div><p class="k" id="pin-st"></p></div>
  <div class="card" id="master-card" style="display:none"><h2>Administração da plataforma</h2><p class="k">Área exclusiva do administrador M7 TECH: cadastre e gerencie os comércios clientes.</p><div class="row2"><button class="gh" id="mc-refresh" type="button">Atualizar lista</button><button id="mc-new" type="button">+ Novo comércio</button></div><div id="mc-last" style="margin-top:8px"></div><div id="mc-list"></div></div>
  <div class="card" id="wipe-card"><h2>Resetar sistema</h2><p class="k" id="wipe-note"></p><div class="row2" id="wipe-btns"><button class="gh" id="wipe-hist" type="button">Apagar histórico</button><button class="red" id="wipe-all" type="button">Resetar tudo</button></div></div>
  <div class="card" id="audit-card" style="display:none"><h2>Registro de auditoria</h2><p class="k">Operações sensíveis feitas nesta empresa. Somente leitura: ninguém pode editar ou apagar.</p><div class="row2"><button class="gh" id="audit-load" type="button">Ver registro</button></div><div id="audit-list"></div></div>
- <div class="card" id="sup-card"><h2>Suporte e contato</h2><p class="k">Dúvidas, dificuldade de acesso ou ajuda para usar o M7 ERP? Fale com a nossa equipe.</p><div class="sup-list"><a class="sup-link" id="sup-wa" href="https://wa.me/5548991637371" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">💬</span><div><b>WhatsApp de suporte</b><small>(48) 99163-7371</small></div></a><a class="sup-link" href="mailto:suporte@m7tech.app.br"><span aria-hidden="true">🛠️</span><div><b>Suporte técnico e operacional</b><small>suporte@m7tech.app.br</small></div></a><a class="sup-link" href="mailto:contato@m7tech.app.br"><span aria-hidden="true">✉️</span><div><b>Comercial e institucional</b><small>contato@m7tech.app.br</small></div></a></div><div class="row2"><button class="gh" id="sup-terms" type="button">Termos e Privacidade</button></div></div>
+ <div class="card"><h2>Suporte e informações</h2><p class="k" id="app-ver"></p><div class="row2"><button id="sup-wa" type="button" style="display:none">💬 Falar com o suporte</button><button class="gh" id="sup-terms" type="button">Termos e Privacidade</button></div></div>
 </section>
 </main>
-<footer class="noprint"><div class="row2 bk" style="max-width:420px;margin:0 auto 10px"><button class="sm gh" id="bk-copy">Copiar backup</button><button class="sm gh" id="bk-load">Restaurar backup</button></div><div class="foot-brand">M7 ERP · desenvolvido pela M7 TECH</div><div class="foot-links"><a href="mailto:contato@m7tech.app.br">contato@m7tech.app.br</a></div></footer>
+<footer class="noprint"><div class="row2 bk" style="max-width:420px;margin:0 auto 10px"><button class="sm gh" id="bk-copy">Copiar backup</button><button class="sm gh" id="bk-load">Restaurar backup</button></div>M7 ERP · desenvolvido pela M7 TECH · histórico local e vendas remotas quando conectado</footer>
 <nav id="nav">
- <button class="on" data-go="res"><span>📊</span>Resumo</button><button data-go="ent"><span>💰</span>Entradas</button><button data-go="rec"><span>⏳</span>Fiados</button><button data-go="gas"><span>💸</span>Gastos</button><button data-go="rel"><span>📈</span>Relatórios</button><button data-go="comp"><span>🛒</span>Compras</button><button data-go="cad"><span>👥</span>Cadastros</button>
+ <button class="on" data-go="res"><span>📊</span>Resumo</button><button data-go="ent"><span>💰</span>Entradas</button><button data-go="rec"><span>⏳</span>Fiados</button><button data-go="gas"><span>💸</span>Gastos</button><button data-go="rel"><span>📈</span>Relatórios</button><button data-go="comp"><span>🛒</span>Compras</button><button data-go="nf"><span>🧾</span>Notas Fiscais</button><button data-go="cad"><span>👥</span>Cadastros</button>
 </nav>
 <div id="lock"><div style="font-size:42px">🔒</div><h2>M7 ERP</h2><p class="k">Digite o PIN para entrar</p><input id="lk-in" type="password" inputmode="numeric" maxlength="6" autocomplete="off"><button id="lk-ok">Entrar</button></div>
 <dialog id="dlg"><h2 id="dl-t">Confirmar recebimento</h2><p class="k" id="dl-i"></p>
@@ -308,7 +334,7 @@ function readLocalState(key){
 function normalizeState(){
  const plain=o=>o!==null&&typeof o==="object"&&!Array.isArray(o);
  S=plain(S)?S:emptyState();
- for(const key of ["tx","rc","cl","pr","stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"]){
+ for(const key of ["tx","rc","cl","pr","stock_pending","purchase_pending","invoices","cl_deleted","cl_archived_remote","pr_deleted"]){
   if(S[key]!==undefined&&!Array.isArray(S[key]))S[key]=[];
   if(Array.isArray(S[key]))S[key]=S[key].filter(plain);
  }
@@ -318,6 +344,7 @@ function normalizeState(){
  S.cl=Array.isArray(S.cl)?S.cl:[]; S.pr=Array.isArray(S.pr)?S.pr:[];
  S.shop=typeof S.shop==="string"?S.shop:"";
  S.stock_pending=Array.isArray(S.stock_pending)?S.stock_pending.filter(x=>plain(x)&&typeof x.product_id==="string"&&typeof x.operation_id==="string"&&plain(x.payload)&&typeof x.payload.type==="string"&&Number.isFinite(Number(x.payload.quantity))&&typeof x.payload.reason_code==="string"&&typeof x.payload.reason==="string"):[];
+ S.invoices=Array.isArray(S.invoices)?S.invoices.filter(plain):[];
  S.purchase_pending=Array.isArray(S.purchase_pending)?S.purchase_pending.filter(x=>plain(x)&&["supplier","create","receive","payable_payment","payable_credit","payable_cancel","purchase_return","credit_refund"].includes(x.kind)&&typeof x.operation_id==="string"&&/^[0-9a-f-]{36}$/i.test(x.operation_id)&&plain(x.payload)):[];
  if(S.pendingSale!==undefined&&(!S.pendingSale||typeof S.pendingSale!=="object"||!S.pendingSale.payload||!S.pendingSale.input))delete S.pendingSale;
  if(S.pendingReceipt!==undefined&&(!S.pendingReceipt||typeof S.pendingReceipt!=="object"||!S.pendingReceipt.payload||!S.pendingReceipt.receivable_id))delete S.pendingReceipt;
@@ -1137,7 +1164,7 @@ $("p-copy").onclick=()=>{
 function canVoidExpenses(){return ["owner","admin","manager"].includes(activeCompanyRole)}
 function mov(t){const pos=t.type==="in",voided=t.status==="void";return `<div class="it"><div><b>${esc(t.desc)}</b><small>${esc(D(t.date))} · ${pos?esc(t.method||"Entrada"):esc(t.cat)}${t.client?" · "+esc(t.client):""}${voided?" · ESTORNADA":""}</small>${voided&&t.void_reason?`<small>Motivo: ${esc(t.void_reason)}</small>`:""}<span class="acts" style="margin-top:4px">${pos?`<button class="sm gh" data-rec="${esc(t.id)}">🧾 Recibo</button>`:""}${!voided&&(t.sale_id||t.receivable_id||t.items?.length)?"":(!voided&&!t.remote_expense?`<button class="sm gh" data-edit="${esc(t.id)}">✎ Editar</button>`:"")}${t.remote_expense&&!voided&&canVoidExpenses()?`<button class="sm gh" data-void-expense="${esc(t.id)}">Estornar</button>`:""}</span></div><div class="amt ${pos?"g":voided?"a":"r"}">${pos?"+":voided?"":"– "}${R(t.amount)}</div></div>`}
 
-function render(){if(typeof renderOnb==="function"){renderOnb();fillStmt();wipeSync();listFilter("pr-list","pr-q");listFilter("c-list","c-q")}
+function render(){if(typeof renderInvoices==="function")renderInvoices();if(typeof renderOnb==="function"){renderOnb();fillStmt();wipeSync();listFilter("pr-list","pr-q");listFilter("c-list","c-q")}
  updatePendingSaleUI();updatePendingReceiptUI();
  const td=today(),mo=td.slice(0,7);cad();cx(true);
  const inn=S.tx.filter(t=>t.type==="in"),allOut=S.tx.filter(t=>t.type==="out"),out=allOut.filter(t=>t.status!=="void");
@@ -2334,9 +2361,10 @@ pixLoadFields();syncPixBtn();
 
 
 /* ===== Comercial: termos, primeiros passos, suporte, extrato do cliente e planilha CSV ===== */
-const M7_SUPPORT_WHATS="5548991637371";
+const APP_VERSION="v39";let M7_SUPPORT_WHATS="";
 const TERMS_KEY="m7:terms:v1";
-const TERMS_HTML=`<h3>Termos de Uso</h3><p><b>1. O que é o M7 ERP.</b> Aplicativo de gestão para pequenos comércios (vendas, estoque, fiado, gastos e caixa), fornecido pela M7 TECH.</p>
+const TERMS_HTML=`<h3>Termos de Uso</h3><p><small>Versão 1</small></p>
+<p><b>1. O que é o M7 ERP.</b> Aplicativo de gestão para pequenos comércios (vendas, estoque, fiado, gastos e caixa), fornecido pela M7 TECH.</p>
 <p><b>2. Conta e acesso.</b> O acesso na nuvem é feito com e-mail e senha fornecidos pela M7 TECH. Guarde sua senha e o PIN do aparelho: tudo que for feito com eles é considerado feito por você.</p>
 <p><b>3. Seus dados.</b> Os registros que você lança são seus. Sem login, ficam somente neste aparelho, e o backup é sua responsabilidade (use "Copiar backup" em Cadastros). Com login, são guardados também no servidor da sua empresa.</p>
 <p><b>4. Pix.</b> O app gera o QR de cobrança com a chave que você informa. Confira a chave com atenção. O app não confirma pagamentos: confira o recebimento no aplicativo do seu banco antes de entregar a mercadoria.</p>
@@ -2353,10 +2381,8 @@ const TERMS_HTML=`<h3>Termos de Uso</h3><p><b>1. O que é o M7 ERP.</b> Aplicati
 <p><b>Onde ficam.</b> No seu aparelho e, quando você entra na conta, em servidor de nuvem contratado pela M7 TECH, com acesso separado por empresa e comunicação criptografada (HTTPS).</p>
 <p><b>Com quem compartilhamos.</b> Não vendemos dados. O armazenamento usa um provedor de nuvem; o WhatsApp só é aberto quando você toca para enviar uma mensagem; a biblioteca de conexão é carregada de um servidor de distribuição (jsDelivr).</p>
 <p><b>Por quanto tempo.</b> Enquanto a conta estiver ativa e conforme combinado em contrato e na lei.</p>
-<p><b>Seus direitos.</b> Você pode pedir acesso, correção, exportação ou exclusão dos seus dados pelo suporte (Cadastros > Suporte e contato), em <a href="mailto:suporte@m7tech.app.br">suporte@m7tech.app.br</a>. Quanto aos dados dos seus clientes, você atende os pedidos deles e a M7 TECH ajuda no que for técnico.</p>
-<p><b>Segurança.</b> Acesso por login, PIN opcional neste aparelho e separação de dados por empresa. Nenhum sistema é totalmente imune a riscos: avise o suporte se notar algo estranho.</p>
-<h3>Contato</h3>
-<p><b>Suporte técnico e operacional:</b> <a href="mailto:suporte@m7tech.app.br">suporte@m7tech.app.br</a><br><b>WhatsApp de suporte:</b> <a href="https://wa.me/5548991637371" target="_blank" rel="noopener noreferrer">(48) 99163-7371</a><br><b>Comercial e institucional:</b> <a href="mailto:contato@m7tech.app.br">contato@m7tech.app.br</a></p>`;
+<p><b>Seus direitos.</b> Você pode pedir acesso, correção, exportação ou exclusão dos seus dados pelo suporte (Cadastros > Suporte e informações). Quanto aos dados dos seus clientes, você atende os pedidos deles e a M7 TECH ajuda no que for técnico.</p>
+<p><b>Segurança.</b> Acesso por login, PIN opcional neste aparelho e separação de dados por empresa. Nenhum sistema é totalmente imune a riscos: avise o suporte se notar algo estranho.</p>`;
 function termsAccepted(){try{const o=JSON.parse(localStorage.getItem(TERMS_KEY)||"null");return !!(o&&o.v===1)}catch(e){return false}}
 function openTerms(mustAccept){$("terms-body").innerHTML=TERMS_HTML;$("terms-body").scrollTop=0;
  $("terms-acc").style.display=mustAccept?"block":"none";$("terms-close").style.display=mustAccept?"none":"block";
@@ -2376,9 +2402,10 @@ function renderOnb(){const el=$("onb-card");if(!el)return;let hidden=false;try{h
 $("onb-card").onclick=e=>{const g=e.target.closest("[data-go]");if(g)return go(g.dataset.go);if(e.target.closest("#onb-hide")){try{localStorage.setItem("m7:onb-hidden","1")}catch(x){}renderOnb()}};
 
 // Suporte
-const supMsg=()=>"Olá! Preciso de ajuda com o M7 ERP.\nLoja: "+(S.shop||"não informada")+"\nAparelho: "+navigator.userAgent.slice(0,90);
-function supSync(){const a=$("sup-wa");if(a)a.href="https://wa.me/"+M7_SUPPORT_WHATS+"?text="+encodeURIComponent(supMsg())}
-$("sup-wa").addEventListener("click",supSync);
+const supMsg=()=>"Olá! Preciso de ajuda com o M7 ERP.\nVersão: "+APP_VERSION+"\nLoja: "+(S.shop||"não informada")+"\nAparelho: "+navigator.userAgent.slice(0,90);
+function supSync(){$("sup-wa").style.display=M7_SUPPORT_WHATS?"block":"none"}
+$("app-ver").textContent="M7 ERP "+APP_VERSION+" · desenvolvido pela M7 TECH";
+$("sup-wa").onclick=()=>{if(!M7_SUPPORT_WHATS)return toast("Suporte ainda não configurado.");open("https://wa.me/"+M7_SUPPORT_WHATS+"?text="+encodeURIComponent(supMsg()),"_blank","noopener,noreferrer")};
 $("sup-terms").onclick=()=>openTerms(false);
 
 // Extrato do cliente (fiados e valores a receber em aberto)
@@ -2408,7 +2435,7 @@ $("p-csv").onclick=()=>{const[a,b]=range();const rows=S.tx.filter(t=>t.date>=a&&
 supSync();renderOnb();fillStmt();if(!termsAccepted())openTerms(true);
 
 
-/* ===== Administração da plataforma (mestre) e cadastro ===== */
+/* ===== v39: administração da plataforma (mestre), cadastro melhorado e dados de teste ===== */
 var IS_MASTER=false;let MC_ROWS=[],MC_CUR=null,MC_LAST=null;
 const MC_ST={active:"🟢 Ativo",suspended:"🟠 Suspenso",closed:"⚫ Encerrado"};
 const MC_ROLES={owner:"Dono",admin:"Administrador",manager:"Gerente",cashier:"Caixa",salesperson:"Vendedor",stock_operator:"Estoquista",read_only:"Somente leitura"};
@@ -2578,13 +2605,13 @@ $("bk-load").onclick=()=>{
   const plain=o=>o!==null&&typeof o==="object"&&!Array.isArray(o);
   if(!plain(data)||!Array.isArray(data.tx)||!Array.isArray(data.rc))throw Error("Estrutura principal inválida.");
   if(data.pendingSale||data.pendingReceipt)throw Error("Este backup contém uma operação online pendente. Retome-a no aparelho original e gere um novo backup.");
-  for(const key of ["cl","pr","stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"]){if(data[key]!==undefined&&!Array.isArray(data[key]))throw Error("Lista inválida: "+key);}
+  for(const key of ["cl","pr","stock_pending","purchase_pending","invoices","cl_deleted","cl_archived_remote","pr_deleted"]){if(data[key]!==undefined&&!Array.isArray(data[key]))throw Error("Lista inválida: "+key);}
   if(data.cx!==undefined&&!plain(data.cx))throw Error("Dados de caixa inválidos.");
   if(data.shop!==undefined&&typeof data.shop!=="string")throw Error("Nome da empresa inválido.");
    if(data.pix!==undefined&&!plain(data.pix))throw Error("Configuração do Pix inválida.");
-  for(const key of ["tx","rc","cl","pr","stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"]){if(Array.isArray(data[key])&&!data[key].every(plain))throw Error("Registro inválido em "+key+".");}
+  for(const key of ["tx","rc","cl","pr","stock_pending","purchase_pending","invoices","cl_deleted","cl_archived_remote","pr_deleted"]){if(Array.isArray(data[key])&&!data[key].every(plain))throw Error("Registro inválido em "+key+".");}
   const next={tx:data.tx,rc:data.rc,cx:plain(data.cx)?data.cx:{},cl:data.cl||[],pr:data.pr||[],stock_pending:data.stock_pending||[],purchase_pending:data.purchase_pending||[],shop:data.shop||"",pix:data.pix};
-  for(const key of ["stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"])if(Array.isArray(data[key]))next[key]=data[key];
+  for(const key of ["stock_pending","purchase_pending","invoices","cl_deleted","cl_archived_remote","pr_deleted"])if(Array.isArray(data[key]))next[key]=data[key];
   if(S.pin)next.pin=S.pin;
   S=next;normalizeState();$("s-name").value=S.shop;pixLoadFields();save();render();toast("Backup restaurado com validação.");
  }catch(e){toast(e?.message||"Backup inválido. Nenhum dado foi alterado.");}
@@ -2599,6 +2626,6 @@ render();
 <script src="stock-ledger.js"></script>
 <script src="purchases.js"></script>
 <script src="payables.js"></script>
-<script src="purchase-returns.js"></script>
+<script src="purchase-returns.js"></script><script src="invoices.js"></script>
 </body>
 </html>
