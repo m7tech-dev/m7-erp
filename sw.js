@@ -1,4 +1,4 @@
-const CACHE_NAME = "m7-controle-v44";
+const CACHE_NAME = "m7-erp-prod-1";
 const APP_ASSETS = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png", "./stock-ledger.js", "./purchases.js", "./payables.js", "./purchase-returns.js"];
 const SUPABASE_LIB = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";
 const APP_ASSET_PATHS = new Set(APP_ASSETS.map(asset => new URL(asset, self.location.href).pathname));
@@ -15,7 +15,7 @@ self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(names => Promise.all(
       names
-        .filter(name => name.startsWith("m7-controle-") && name !== CACHE_NAME)
+        .filter(name => (name.startsWith("m7-controle-") || name.startsWith("m7-erp-")) && name !== CACHE_NAME)
         .map(name => caches.delete(name))
     ))
   );
