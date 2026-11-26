@@ -1,0 +1,9 @@
+RESTAURAÇÃO DA VERSÃO ORIGINAL DO M7 ERP
+
+1. Faça uma cópia de segurança da pasta atual do sistema.
+2. Copie index.html e sw.js deste pacote para a pasta principal, substituindo os arquivos atuais.
+3. Se existir invoices.js criado pela atualização de Notas Fiscais, ele pode ser removido depois de restaurar o index.html (a versão original não o utiliza).
+4. Publique os arquivos no mesmo local de hospedagem.
+5. Para atualizar o PWA, feche o aplicativo e abra novamente. Se continuar exibindo a versão em cache, limpe os dados/cache do site no navegador e acesse novamente.
+
+Este pacote restaura index.html e sw.js exatamente como estavam no arquivo m7-erp.zip enviado originalmente nesta conversa. Os demais arquivos e dados do sistema não são alterados.

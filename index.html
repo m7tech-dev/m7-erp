@@ -148,42 +148,6 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
  <div class="card"><h2>💳 Contas a pagar — fornecedores</h2><p class="k">Cada recebimento confirmado gera um título e suas parcelas. Pagamentos e compensações ficam registrados no histórico. Créditos de devolução não movimentam dinheiro.</p><div id="purchase-payables-list"></div><p class="k" id="purchase-payables-status"></p><h3>Créditos de devoluções</h3><div id="purchase-supplier-credits-list"></div></div>
  <div class="card"><h2>↩️ Devoluções de compras</h2><p class="k">A devolução deve apontar para o recebimento original. O sistema valida o saldo devolvível, registra a saída no livro de estoque e gera crédito auditável do fornecedor sem apagar pagamentos anteriores.</p><label for="purchase-return-receipt">Recebimento original</label><select id="purchase-return-receipt"><option value="">Selecione um recebimento</option></select><div id="purchase-return-items"></div><div class="f2"><div><label for="purchase-return-date">Data da devolução</label><input id="purchase-return-date" type="date"></div><div><label for="purchase-return-reason">Motivo</label><input id="purchase-return-reason" maxlength="500" placeholder="Ex.: produto avariado / divergência"></div></div><div class="row2"><button id="purchase-return-save" type="button">Registrar devolução</button><button class="gh" id="purchase-return-refresh" type="button">Atualizar</button></div><p class="k" id="purchase-return-form-status" aria-live="polite">O crédito fica registrado para compensação ou reembolso em operação própria.</p><h3>Histórico de devoluções</h3><div id="purchase-returns-history"></div><p class="k" id="purchase-returns-status"></p></div>
 </section>
-
-<section class="tab" id="t-nf">
- <h2>Cadastro de Notas Fiscais</h2>
- <div class="card">
-  <h3>Importar ou cadastrar nota</h3>
-  <p class="k">Importe XML, DANFE em PDF ou cole o texto. Todos os dados extraídos devem ser conferidos antes de salvar. Não há comunicação com a SEFAZ.</p>
-  <label for="nf-file">Arquivo XML ou PDF</label><input id="nf-file" type="file" accept=".xml,.pdf,application/xml,application/pdf">
-  <label for="nf-text">Texto da nota (extraído ou colado manualmente)</label><textarea id="nf-text" rows="5" placeholder="Cole aqui o texto do DANFE ou os dados da nota..."></textarea>
-  <div class="row2"><button type="button" class="gh" id="nf-extract">Extrair do texto</button><button type="button" class="gh" id="nf-clear">Limpar formulário</button></div>
-  <div id="nf-file-msg" class="k" role="status"></div>
-  <input type="hidden" id="nf-edit-id">
-  <div class="grid">
-   <div><label for="nf-number">Número da nota</label><input id="nf-number" inputmode="numeric"></div>
-   <div><label for="nf-key">Chave de acesso (44 dígitos, opcional)</label><input id="nf-key" inputmode="numeric" maxlength="44" placeholder="44 dígitos"></div>
-   <div><label for="nf-date">Data de emissão</label><input id="nf-date" type="date"></div>
-   <div><label for="nf-supplier">Fornecedor</label><input id="nf-supplier"></div>
-   <div><label for="nf-doc">CNPJ/CPF</label><input id="nf-doc" inputmode="numeric"></div>
-   <div><label for="nf-type">Tipo</label><select id="nf-type"><option value="ENTRADA">ENTRADA</option><option value="DEVOLUCAO">DEVOLUCAO</option></select></div>
-   <div><label for="nf-total">Valor total (R$)</label><input id="nf-total" type="number" min="0" step="0.01" inputmode="decimal"></div>
-  </div>
-  <p class="k" id="nf-review-note">Confira todos os campos antes de salvar.</p>
-  <button type="button" id="nf-save">Salvar nota revisada</button>
- </div>
- <div class="card">
-  <h3>Relatório para o Contador</h3>
-  <div class="row2">
-   <div><label for="nf-month">Mês</label><select id="nf-month"><option value="">Todos</option><option value="01">Janeiro</option><option value="02">Fevereiro</option><option value="03">Março</option><option value="04">Abril</option><option value="05">Maio</option><option value="06">Junho</option><option value="07">Julho</option><option value="08">Agosto</option><option value="09">Setembro</option><option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option></select></div>
-   <div><label for="nf-year">Ano</label><input id="nf-year" type="number" min="2000" max="2100" placeholder="Todos"></div>
-  </div>
-  <label for="nf-search">Buscar número, fornecedor, CNPJ/CPF ou chave</label><input id="nf-search" placeholder="Digite para filtrar...">
-  <div class="row2"><button type="button" id="nf-csv">Exportar CSV do lote</button><button type="button" class="gh" id="nf-print">Imprimir / PDF</button><button type="button" class="gh" id="nf-xmls">Baixar XMLs do lote</button></div>
-  <p class="k" id="nf-export-msg"></p>
-  <div class="grid" style="margin:12px 0"><div class="card"><div class="k">Notas no lote</div><strong id="nf-count">0</strong></div><div class="card"><div class="k">Total geral</div><strong id="nf-sum">R$ 0,00</strong></div></div>
-  <div style="overflow:auto"><table id="nf-table"><thead><tr><th>Número</th><th>Chave de acesso</th><th>Emissão</th><th>Fornecedor</th><th>CNPJ/CPF</th><th>Tipo</th><th>Valor</th><th>Contador</th><th>Ações</th></tr></thead><tbody id="nf-rows"></tbody></table></div>
- </div>
-</section>
 <section class="tab" id="t-cad">
  <div class="card"><h2>Minha loja</h2><label for="s-name">Nome (aparece no recibo)</label><input id="s-name" placeholder="Ex.: Mercadinho do João"></div>
  <div class="card"><h2>Pix (QR na venda)</h2><label for="pix-key">Chave Pix</label><input id="pix-key" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="CPF, CNPJ, e-mail, +55 e telefone ou chave aleatória">
@@ -201,7 +165,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
 </main>
 <footer class="noprint"><div class="row2 bk" style="max-width:420px;margin:0 auto 10px"><button class="sm gh" id="bk-copy">Copiar backup</button><button class="sm gh" id="bk-load">Restaurar backup</button></div>M7 ERP · desenvolvido pela M7 TECH · histórico local e vendas remotas quando conectado</footer>
 <nav id="nav">
- <button class="on" data-go="res"><span>📊</span>Resumo</button><button data-go="ent"><span>💰</span>Entradas</button><button data-go="rec"><span>⏳</span>Fiados</button><button data-go="gas"><span>💸</span>Gastos</button><button data-go="rel"><span>📈</span>Relatórios</button><button data-go="comp"><span>🛒</span>Compras</button><button data-go="nf"><span>🧾</span>Notas Fiscais</button><button data-go="cad"><span>👥</span>Cadastros</button>
+ <button class="on" data-go="res"><span>📊</span>Resumo</button><button data-go="ent"><span>💰</span>Entradas</button><button data-go="rec"><span>⏳</span>Fiados</button><button data-go="gas"><span>💸</span>Gastos</button><button data-go="rel"><span>📈</span>Relatórios</button><button data-go="comp"><span>🛒</span>Compras</button><button data-go="cad"><span>👥</span>Cadastros</button>
 </nav>
 <div id="lock"><div style="font-size:42px">🔒</div><h2>M7 ERP</h2><p class="k">Digite o PIN para entrar</p><input id="lk-in" type="password" inputmode="numeric" maxlength="6" autocomplete="off"><button id="lk-ok">Entrar</button></div>
 <dialog id="dlg"><h2 id="dl-t">Confirmar recebimento</h2><p class="k" id="dl-i"></p>
@@ -334,7 +298,7 @@ function readLocalState(key){
 function normalizeState(){
  const plain=o=>o!==null&&typeof o==="object"&&!Array.isArray(o);
  S=plain(S)?S:emptyState();
- for(const key of ["tx","rc","cl","pr","stock_pending","purchase_pending","invoices","cl_deleted","cl_archived_remote","pr_deleted"]){
+ for(const key of ["tx","rc","cl","pr","stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"]){
   if(S[key]!==undefined&&!Array.isArray(S[key]))S[key]=[];
   if(Array.isArray(S[key]))S[key]=S[key].filter(plain);
  }
@@ -344,7 +308,6 @@ function normalizeState(){
  S.cl=Array.isArray(S.cl)?S.cl:[]; S.pr=Array.isArray(S.pr)?S.pr:[];
  S.shop=typeof S.shop==="string"?S.shop:"";
  S.stock_pending=Array.isArray(S.stock_pending)?S.stock_pending.filter(x=>plain(x)&&typeof x.product_id==="string"&&typeof x.operation_id==="string"&&plain(x.payload)&&typeof x.payload.type==="string"&&Number.isFinite(Number(x.payload.quantity))&&typeof x.payload.reason_code==="string"&&typeof x.payload.reason==="string"):[];
- S.invoices=Array.isArray(S.invoices)?S.invoices.filter(plain):[];
  S.purchase_pending=Array.isArray(S.purchase_pending)?S.purchase_pending.filter(x=>plain(x)&&["supplier","create","receive","payable_payment","payable_credit","payable_cancel","purchase_return","credit_refund"].includes(x.kind)&&typeof x.operation_id==="string"&&/^[0-9a-f-]{36}$/i.test(x.operation_id)&&plain(x.payload)):[];
  if(S.pendingSale!==undefined&&(!S.pendingSale||typeof S.pendingSale!=="object"||!S.pendingSale.payload||!S.pendingSale.input))delete S.pendingSale;
  if(S.pendingReceipt!==undefined&&(!S.pendingReceipt||typeof S.pendingReceipt!=="object"||!S.pendingReceipt.payload||!S.pendingReceipt.receivable_id))delete S.pendingReceipt;
@@ -1164,7 +1127,7 @@ $("p-copy").onclick=()=>{
 function canVoidExpenses(){return ["owner","admin","manager"].includes(activeCompanyRole)}
 function mov(t){const pos=t.type==="in",voided=t.status==="void";return `<div class="it"><div><b>${esc(t.desc)}</b><small>${esc(D(t.date))} · ${pos?esc(t.method||"Entrada"):esc(t.cat)}${t.client?" · "+esc(t.client):""}${voided?" · ESTORNADA":""}</small>${voided&&t.void_reason?`<small>Motivo: ${esc(t.void_reason)}</small>`:""}<span class="acts" style="margin-top:4px">${pos?`<button class="sm gh" data-rec="${esc(t.id)}">🧾 Recibo</button>`:""}${!voided&&(t.sale_id||t.receivable_id||t.items?.length)?"":(!voided&&!t.remote_expense?`<button class="sm gh" data-edit="${esc(t.id)}">✎ Editar</button>`:"")}${t.remote_expense&&!voided&&canVoidExpenses()?`<button class="sm gh" data-void-expense="${esc(t.id)}">Estornar</button>`:""}</span></div><div class="amt ${pos?"g":voided?"a":"r"}">${pos?"+":voided?"":"– "}${R(t.amount)}</div></div>`}
 
-function render(){if(typeof renderInvoices==="function")renderInvoices();if(typeof renderOnb==="function"){renderOnb();fillStmt();wipeSync();listFilter("pr-list","pr-q");listFilter("c-list","c-q")}
+function render(){if(typeof renderOnb==="function"){renderOnb();fillStmt();wipeSync();listFilter("pr-list","pr-q");listFilter("c-list","c-q")}
  updatePendingSaleUI();updatePendingReceiptUI();
  const td=today(),mo=td.slice(0,7);cad();cx(true);
  const inn=S.tx.filter(t=>t.type==="in"),allOut=S.tx.filter(t=>t.type==="out"),out=allOut.filter(t=>t.status!=="void");
@@ -2605,13 +2568,13 @@ $("bk-load").onclick=()=>{
   const plain=o=>o!==null&&typeof o==="object"&&!Array.isArray(o);
   if(!plain(data)||!Array.isArray(data.tx)||!Array.isArray(data.rc))throw Error("Estrutura principal inválida.");
   if(data.pendingSale||data.pendingReceipt)throw Error("Este backup contém uma operação online pendente. Retome-a no aparelho original e gere um novo backup.");
-  for(const key of ["cl","pr","stock_pending","purchase_pending","invoices","cl_deleted","cl_archived_remote","pr_deleted"]){if(data[key]!==undefined&&!Array.isArray(data[key]))throw Error("Lista inválida: "+key);}
+  for(const key of ["cl","pr","stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"]){if(data[key]!==undefined&&!Array.isArray(data[key]))throw Error("Lista inválida: "+key);}
   if(data.cx!==undefined&&!plain(data.cx))throw Error("Dados de caixa inválidos.");
   if(data.shop!==undefined&&typeof data.shop!=="string")throw Error("Nome da empresa inválido.");
    if(data.pix!==undefined&&!plain(data.pix))throw Error("Configuração do Pix inválida.");
-  for(const key of ["tx","rc","cl","pr","stock_pending","purchase_pending","invoices","cl_deleted","cl_archived_remote","pr_deleted"]){if(Array.isArray(data[key])&&!data[key].every(plain))throw Error("Registro inválido em "+key+".");}
+  for(const key of ["tx","rc","cl","pr","stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"]){if(Array.isArray(data[key])&&!data[key].every(plain))throw Error("Registro inválido em "+key+".");}
   const next={tx:data.tx,rc:data.rc,cx:plain(data.cx)?data.cx:{},cl:data.cl||[],pr:data.pr||[],stock_pending:data.stock_pending||[],purchase_pending:data.purchase_pending||[],shop:data.shop||"",pix:data.pix};
-  for(const key of ["stock_pending","purchase_pending","invoices","cl_deleted","cl_archived_remote","pr_deleted"])if(Array.isArray(data[key]))next[key]=data[key];
+  for(const key of ["stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"])if(Array.isArray(data[key]))next[key]=data[key];
   if(S.pin)next.pin=S.pin;
   S=next;normalizeState();$("s-name").value=S.shop;pixLoadFields();save();render();toast("Backup restaurado com validação.");
  }catch(e){toast(e?.message||"Backup inválido. Nenhum dado foi alterado.");}
@@ -2626,6 +2589,6 @@ render();
 <script src="stock-ledger.js"></script>
 <script src="purchases.js"></script>
 <script src="payables.js"></script>
-<script src="purchase-returns.js"></script><script src="invoices.js"></script>
+<script src="purchase-returns.js"></script>
 </body>
 </html>
