@@ -56,8 +56,6 @@ h2{font-size:17px;margin:4px 0 10px}h3{font-size:14px;margin:14px 0 6px;color:va
 nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--bd);display:flex;justify-content:flex-start;overflow-x:auto;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
 nav button{flex:1 1 0;min-width:54px;max-width:140px;background:none;color:var(--mu);font-size:10px;padding:6px 0;display:flex;flex-direction:column;align-items:center;gap:2px;font-weight:600}
 nav button span{font-size:20px}nav button.on{color:var(--g)}
-[hidden]{display:none!important}
-.sbox{position:relative}.sbox input{padding-left:38px;padding-right:40px}.sbox input::-webkit-search-cancel-button{display:none}.sbox svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:18px;height:18px;stroke:var(--mu);fill:none;stroke-width:2;stroke-linecap:round;pointer-events:none}.sbox .sx{position:absolute;right:4px;top:50%;transform:translateY(-50%);background:none;color:var(--mu);padding:6px 10px;border-radius:99px}
 dialog{border:1px solid var(--bd);border-radius:16px;background:var(--card);color:var(--tx);width:min(92vw,380px)}
 dialog::backdrop{background:#0008}
 #stock-move-dlg,#stock-history-dlg,#purchase-receive-dlg{width:min(94vw,560px);max-height:88vh;overflow:auto}
@@ -101,10 +99,6 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
   <button class="gh" id="e-pix" type="button" style="margin-top:8px">📲 Mostrar QR Pix</button>
   <div id="e-dueBox" style="display:none"><label for="e-due">Data de vencimento (obrigatória)</label><input id="e-due" type="date"><div id="e-parBox" style="display:none"><label for="e-par">Nº de parcelas (vencimentos mensais)</label><input id="e-par" type="number" min="1" max="24" value="1" inputmode="numeric"></div><p class="k">Fica em Recebimentos e só entra no caixa quando for pago.</p></div>
   <div class="row2"><button id="e-save">Salvar entrada</button></div><div class="row2" id="e-pending-row" style="display:none"><button id="e-retry" class="amb" type="button">↻ Retomar venda pendente</button></div><p class="k" id="e-remote-status" aria-live="polite">No modo conectado, a confirmação da venda é feita no servidor antes de entrar no caixa.</p>
- </div>
- <div class="card" id="sh-card"><h2>Histórico de vendas</h2>
-  <div class="sbox"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="sh-q" type="text" inputmode="search" enterkeyhint="search" autocomplete="off" spellcheck="false" placeholder="Cliente, nº, produto, data ou estado" aria-label="Pesquisar vendas"><button class="sx" id="sh-clear" type="button" aria-label="Limpar filtro" hidden>✕</button></div>
-  <p class="k" id="sh-count" aria-live="polite"></p><div id="sh-list"></div>
  </div>
 </section>
 
@@ -154,29 +148,6 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
  <div class="card"><h2>💳 Contas a pagar — fornecedores</h2><p class="k">Cada recebimento confirmado gera um título e suas parcelas. Pagamentos e compensações ficam registrados no histórico. Créditos de devolução não movimentam dinheiro.</p><div id="purchase-payables-list"></div><p class="k" id="purchase-payables-status"></p><h3>Créditos de devoluções</h3><div id="purchase-supplier-credits-list"></div></div>
  <div class="card"><h2>↩️ Devoluções de compras</h2><p class="k">A devolução deve apontar para o recebimento original. O sistema valida o saldo devolvível, registra a saída no livro de estoque e gera crédito auditável do fornecedor sem apagar pagamentos anteriores.</p><label for="purchase-return-receipt">Recebimento original</label><select id="purchase-return-receipt"><option value="">Selecione um recebimento</option></select><div id="purchase-return-items"></div><div class="f2"><div><label for="purchase-return-date">Data da devolução</label><input id="purchase-return-date" type="date"></div><div><label for="purchase-return-reason">Motivo</label><input id="purchase-return-reason" maxlength="500" placeholder="Ex.: produto avariado / divergência"></div></div><div class="row2"><button id="purchase-return-save" type="button">Registrar devolução</button><button class="gh" id="purchase-return-refresh" type="button">Atualizar</button></div><p class="k" id="purchase-return-form-status" aria-live="polite">O crédito fica registrado para compensação ou reembolso em operação própria.</p><h3>Histórico de devoluções</h3><div id="purchase-returns-history"></div><p class="k" id="purchase-returns-status"></p></div>
 </section>
-<section class="tab" id="t-ord">
- <h2>Orçamentos e Encomendas</h2>
- <div class="chips" id="qo-fk" role="group" aria-label="Tipo de registro"><button class="chip on" type="button" data-k="all">Todos</button><button class="chip" type="button" data-k="quote">Orçamentos</button><button class="chip" type="button" data-k="order">Encomendas</button></div>
- <div class="chips" id="qo-fs" role="group" aria-label="Estado"><button class="chip on" type="button" data-s="all">Todos</button><button class="chip" type="button" data-s="open">Em aberto</button><button class="chip" type="button" data-s="approved">Aprovados</button><button class="chip" type="button" data-s="done">Concluídos</button><button class="chip" type="button" data-s="ended">Encerrados</button></div>
- <div class="row2"><button id="qo-new" type="button">+ Novo registro</button></div>
- <div class="card" id="qo-form" style="display:none"><h2 id="qo-form-title">Novo registro</h2>
-  <div class="f2"><div><label for="qo-kind-sel">Tipo</label><select id="qo-kind-sel"><option value="quote">Orçamento</option><option value="order">Encomenda</option></select></div><div><label for="qo-ptype">Para</label><select id="qo-ptype"><option value="supplier">Fornecedor</option><option value="customer">Cliente</option></select></div></div>
-  <label for="qo-party" id="qo-party-label">Fornecedor cadastrado</label><select id="qo-party"><option value="">—</option></select>
-  <label for="qo-pname">Ou digite o nome</label><input id="qo-pname" maxlength="180" autocomplete="off">
-  <div class="f2"><div id="qo-valid-box"><label for="qo-valid">Validade do orçamento</label><input id="qo-valid" type="date"></div><div><label for="qo-exp">Previsão de entrega</label><input id="qo-exp" type="date"></div></div>
-  <label for="qo-status-sel">Estado</label><select id="qo-status-sel"></select>
-  <h3>Itens</h3>
-  <div class="f2"><div><label for="qo-product">Produto</label><select id="qo-product"><option value="">Selecione</option></select></div><div><label for="qo-qty">Quantidade</label><input id="qo-qty" type="number" min="0.001" step="0.001" inputmode="decimal"></div></div>
-  <div class="f2"><div><label for="qo-price" id="qo-price-label">Custo unitário (R$)</label><input id="qo-price" type="number" min="0" step="0.01" inputmode="decimal"></div><div style="display:flex;align-items:flex-end"><button class="gh" id="qo-add" type="button" style="width:100%">+ Adicionar item</button></div></div>
-  <div id="qo-cart"></div><div class="v" id="qo-total">Total: R$ 0,00</div>
-  <label for="qo-notes">Observações</label><input id="qo-notes" maxlength="500">
-  <div class="row2"><button class="gh" id="qo-cancel" type="button">Cancelar</button><button id="qo-save" type="button">Salvar registro</button></div>
-  <p class="k" id="qo-msg" aria-live="polite"></p>
- </div>
- <p class="k" id="qo-count" aria-live="polite"></p><p class="k" id="qo-info" aria-live="polite"></p>
- <div id="qo-list"></div>
- <p class="k">Registros de fornecedor aprovados podem ser convertidos em pedido de compra: o estoque e o título a pagar só são gerados quando a mercadoria é recebida em Compras.</p>
-</section>
 <section class="tab" id="t-cad">
  <div class="card"><h2>Minha loja</h2><label for="s-name">Nome (aparece no recibo)</label><input id="s-name" placeholder="Ex.: Mercadinho do João"></div>
  <div class="card"><h2>Pix (QR na venda)</h2><label for="pix-key">Chave Pix</label><input id="pix-key" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="CPF, CNPJ, e-mail, +55 e telefone ou chave aleatória">
@@ -194,7 +165,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
 </main>
 <footer class="noprint"><div class="row2 bk" style="max-width:420px;margin:0 auto 10px"><button class="sm gh" id="bk-copy">Copiar backup</button><button class="sm gh" id="bk-load">Restaurar backup</button></div>M7 ERP · desenvolvido pela M7 TECH · histórico local e vendas remotas quando conectado</footer>
 <nav id="nav">
- <button class="on" data-go="res"><span>📊</span>Resumo</button><button data-go="ent"><span>💰</span>Entradas</button><button data-go="rec"><span>⏳</span>Fiados</button><button data-go="gas"><span>💸</span>Gastos</button><button data-go="rel"><span>📈</span>Relatórios</button><button data-go="comp"><span>🛒</span>Compras</button><button data-go="ord"><span>📝</span>Orçamentos</button><button data-go="cad"><span>👥</span>Cadastros</button>
+ <button class="on" data-go="res"><span>📊</span>Resumo</button><button data-go="ent"><span>💰</span>Entradas</button><button data-go="rec"><span>⏳</span>Fiados</button><button data-go="gas"><span>💸</span>Gastos</button><button data-go="rel"><span>📈</span>Relatórios</button><button data-go="comp"><span>🛒</span>Compras</button><button data-go="cad"><span>👥</span>Cadastros</button>
 </nav>
 <div id="lock"><div style="font-size:42px">🔒</div><h2>M7 ERP</h2><p class="k">Digite o PIN para entrar</p><input id="lk-in" type="password" inputmode="numeric" maxlength="6" autocomplete="off"><button id="lk-ok">Entrar</button></div>
 <dialog id="dlg"><h2 id="dl-t">Confirmar recebimento</h2><p class="k" id="dl-i"></p>
@@ -313,7 +284,7 @@ const CATS=["Fornecedores","Aluguel/Contas","Pessoal","Manutenção","Outros"];
 // Armazenamento local versionado por empresa. A chave antiga "m7c" é preservada.
 const LEGACY_OWNER_USER_ID="ac3a6011-3238-4ed1-9ead-3aa71a6b441d";
 const LEGACY_OWNER_COMPANY_ID="5c2dcc98-9640-42a2-ba98-936535e560a6";
-const emptyState=()=>({tx:[],rc:[],cx:{},cl:[],pr:[],stock_pending:[],quotes:[],shop:""});
+const emptyState=()=>({tx:[],rc:[],cx:{},cl:[],pr:[],stock_pending:[],shop:""});
 const companyStorageKey=companyId=>"m7c:v2:company:"+companyId;
 // Antes de validar uma sessão, o app abre somente o espaço local de visitante.
 // Nunca restaura a última empresa automaticamente na inicialização.
@@ -327,7 +298,7 @@ function readLocalState(key){
 function normalizeState(){
  const plain=o=>o!==null&&typeof o==="object"&&!Array.isArray(o);
  S=plain(S)?S:emptyState();
- for(const key of ["tx","rc","cl","pr","stock_pending","purchase_pending","quotes","cl_deleted","cl_archived_remote","pr_deleted"]){
+ for(const key of ["tx","rc","cl","pr","stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"]){
   if(S[key]!==undefined&&!Array.isArray(S[key]))S[key]=[];
   if(Array.isArray(S[key]))S[key]=S[key].filter(plain);
  }
@@ -2597,13 +2568,13 @@ $("bk-load").onclick=()=>{
   const plain=o=>o!==null&&typeof o==="object"&&!Array.isArray(o);
   if(!plain(data)||!Array.isArray(data.tx)||!Array.isArray(data.rc))throw Error("Estrutura principal inválida.");
   if(data.pendingSale||data.pendingReceipt)throw Error("Este backup contém uma operação online pendente. Retome-a no aparelho original e gere um novo backup.");
-  for(const key of ["cl","pr","stock_pending","purchase_pending","quotes","cl_deleted","cl_archived_remote","pr_deleted"]){if(data[key]!==undefined&&!Array.isArray(data[key]))throw Error("Lista inválida: "+key);}
+  for(const key of ["cl","pr","stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"]){if(data[key]!==undefined&&!Array.isArray(data[key]))throw Error("Lista inválida: "+key);}
   if(data.cx!==undefined&&!plain(data.cx))throw Error("Dados de caixa inválidos.");
   if(data.shop!==undefined&&typeof data.shop!=="string")throw Error("Nome da empresa inválido.");
    if(data.pix!==undefined&&!plain(data.pix))throw Error("Configuração do Pix inválida.");
-  for(const key of ["tx","rc","cl","pr","stock_pending","purchase_pending","quotes","cl_deleted","cl_archived_remote","pr_deleted"]){if(Array.isArray(data[key])&&!data[key].every(plain))throw Error("Registro inválido em "+key+".");}
+  for(const key of ["tx","rc","cl","pr","stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"]){if(Array.isArray(data[key])&&!data[key].every(plain))throw Error("Registro inválido em "+key+".");}
   const next={tx:data.tx,rc:data.rc,cx:plain(data.cx)?data.cx:{},cl:data.cl||[],pr:data.pr||[],stock_pending:data.stock_pending||[],purchase_pending:data.purchase_pending||[],shop:data.shop||"",pix:data.pix};
-  for(const key of ["stock_pending","purchase_pending","quotes","cl_deleted","cl_archived_remote","pr_deleted"])if(Array.isArray(data[key]))next[key]=data[key];
+  for(const key of ["stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"])if(Array.isArray(data[key]))next[key]=data[key];
   if(S.pin)next.pin=S.pin;
   S=next;normalizeState();$("s-name").value=S.shop;pixLoadFields();save();render();toast("Backup restaurado com validação.");
  }catch(e){toast(e?.message||"Backup inválido. Nenhum dado foi alterado.");}
@@ -2619,7 +2590,5 @@ render();
 <script src="purchases.js"></script>
 <script src="payables.js"></script>
 <script src="purchase-returns.js"></script>
-<script src="sales-search.js"></script>
-<script src="quotes-orders.js"></script>
 </body>
 </html>
