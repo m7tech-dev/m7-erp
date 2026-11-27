@@ -1,4 +1,4 @@
-const CACHE_NAME = "m7-controle-v49";
+const CACHE_NAME = "m7-controle-v50";
 const APP_ASSETS = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png", "./stock-ledger.js", "./purchases.js", "./payables.js", "./purchase-returns.js"];
 const SUPABASE_LIB = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";
 const APP_ASSET_PATHS = new Set(APP_ASSETS.map(asset => new URL(asset, self.location.href).pathname));
@@ -45,6 +45,20 @@ self.addEventListener("fetch", event => {
   if (url.origin !== self.location.origin) return;
   // Cache only the explicit static app shell; never cache dynamic same-origin API routes.
   if (!APP_ASSET_PATHS.has(url.pathname)) return;
+
+  // HTML/páginas: rede primeiro (garante que o domínio sempre receba a versão mais nova); cache só offline.
+  if (request.mode === "navigate") {
+    event.respondWith(
+      fetch(request).then(response => {
+        if (response && response.ok) {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(new URL("./index.html", self.location.href).toString(), copy));
+        }
+        return response;
+      }).catch(() => caches.match(new URL("./index.html", self.location.href).toString()))
+    );
+    return;
+  }
 
   event.respondWith(
     caches.match(request, { ignoreSearch: true }).then(cached => {

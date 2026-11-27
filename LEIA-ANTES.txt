@@ -1,9 +1,21 @@
-RESTAURAÇÃO DA VERSÃO ORIGINAL DO M7 ERP
+M7 ERP — ATUALIZAÇÃO v41
 
-1. Faça uma cópia de segurança da pasta atual do sistema.
-2. Copie index.html e sw.js deste pacote para a pasta principal, substituindo os arquivos atuais.
-3. Se existir invoices.js criado pela atualização de Notas Fiscais, ele pode ser removido depois de restaurar o index.html (a versão original não o utiliza).
-4. Publique os arquivos no mesmo local de hospedagem.
-5. Para atualizar o PWA, feche o aplicativo e abra novamente. Se continuar exibindo a versão em cache, limpe os dados/cache do site no navegador e acesse novamente.
+Novidades desta atualização:
+- Novo módulo Orçamentos / Encomendas no menu lateral.
+- Permite criar orçamento ou encomenda para cliente cadastrado ou avulso.
+- Permite incluir produtos do catálogo e itens/serviços avulsos com categoria, quantidade e preço.
+- Categorias avulsas podem ser criadas e removidas.
+- Lista de registros com situação (em aberto, aprovado, recusado, concluído ou cancelado).
+- Impressão do orçamento/encomenda.
+- Os registros ficam salvos no armazenamento local separado por empresa e são incluídos no backup/restauração.
+- A linha inferior de informações não exibe número de versão.
 
-Este pacote restaura index.html e sw.js exatamente como estavam no arquivo m7-erp.zip enviado originalmente nesta conversa. Os demais arquivos e dados do sistema não são alterados.
+PUBLICAÇÃO:
+1. Extraia o ZIP.
+2. Abra a pasta m7-erp-main.
+3. Envie/substitua o conteúdo na raiz do repositório GitHub.
+4. Faça commit/push e aguarde a Vercel concluir o deploy.
+5. Se o celular continuar exibindo a versão antiga, feche e abra o app; se necessário, limpe os dados/cache do site ou reinstale o PWA.
+
+IMPORTANTE:
+Orçamentos/encomendas são armazenados localmente no espaço da empresa neste release. Eles não são enviados automaticamente ao Supabase nem compartilhados entre dispositivos. Faça backup antes de trocar de aparelho. A sincronização em nuvem requer implantação complementar no banco e nas políticas de acesso.
