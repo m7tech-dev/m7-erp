@@ -153,6 +153,22 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
  <div class="card"><h2>💳 Contas a pagar — fornecedores</h2><p class="k">Cada recebimento confirmado gera um título e suas parcelas. Pagamentos e compensações ficam registrados no histórico. Créditos de devolução não movimentam dinheiro.</p><div id="purchase-payables-list"></div><p class="k" id="purchase-payables-status"></p><h3>Créditos de devoluções</h3><div id="purchase-supplier-credits-list"></div></div>
  <div class="card"><h2>↩️ Devoluções de compras</h2><p class="k">A devolução deve apontar para o recebimento original. O sistema valida o saldo devolvível, registra a saída no livro de estoque e gera crédito auditável do fornecedor sem apagar pagamentos anteriores.</p><label for="purchase-return-receipt">Recebimento original</label><select id="purchase-return-receipt"><option value="">Selecione um recebimento</option></select><div id="purchase-return-items"></div><div class="f2"><div><label for="purchase-return-date">Data da devolução</label><input id="purchase-return-date" type="date"></div><div><label for="purchase-return-reason">Motivo</label><input id="purchase-return-reason" maxlength="500" placeholder="Ex.: produto avariado / divergência"></div></div><div class="row2"><button id="purchase-return-save" type="button">Registrar devolução</button><button class="gh" id="purchase-return-refresh" type="button">Atualizar</button></div><p class="k" id="purchase-return-form-status" aria-live="polite">O crédito fica registrado para compensação ou reembolso em operação própria.</p><h3>Histórico de devoluções</h3><div id="purchase-returns-history"></div><p class="k" id="purchase-returns-status"></p></div>
 </section>
+<section class="tab" id="t-orc">
+ <div class="card"><h2>Orçamentos e encomendas</h2><p class="k">Monte uma proposta com produtos do catálogo ou itens/serviços avulsos. Salve, acompanhe e imprima para enviar ao cliente.</p>
+  <div class="f2"><div><label for="oq-type">Tipo</label><select id="oq-type"><option value="quote">Orçamento</option><option value="order">Encomenda</option></select></div><div><label for="oq-client">Cliente</label><select id="oq-client"><option value="">Cliente avulso / não cadastrado</option></select></div></div>
+  <div class="f2"><div><label for="oq-name">Nome do cliente</label><input id="oq-name" maxlength="120" placeholder="Nome para identificar"></div><div><label for="oq-contact">Contato (WhatsApp/e-mail)</label><input id="oq-contact" maxlength="120" placeholder="Opcional"></div></div>
+  <h3>Adicionar produto do catálogo</h3><div class="f2"><div><label for="oq-product">Produto</label><select id="oq-product"><option value="">Selecione um produto</option></select></div><div><label for="oq-pqty">Quantidade</label><input id="oq-pqty" type="number" min="0.001" step="0.001" value="1" inputmode="decimal"></div></div>
+  <div class="row2"><button class="gh" id="oq-add-product" type="button">Adicionar produto</button></div>
+  <h3>Adicionar item ou serviço avulso</h3><div class="f2"><div><label for="oq-category">Categoria</label><select id="oq-category"></select></div><div><label for="oq-custom-name">Produto / serviço</label><input id="oq-custom-name" maxlength="120" placeholder="Ex.: Instalação, entrega"></div></div>
+  <div class="f2"><div><label for="oq-custom-price">Preço unitário (R$)</label><input id="oq-custom-price" type="number" min="0" step="0.01" inputmode="decimal"></div><div><label for="oq-custom-qty">Quantidade</label><input id="oq-custom-qty" type="number" min="0.001" step="0.001" value="1" inputmode="decimal"></div></div>
+  <div class="row2"><button class="gh" id="oq-add-custom" type="button">Adicionar item avulso</button></div>
+  <div id="oq-cart"><div class="empty">Nenhum item adicionado.</div></div><div class="it"><b>Total estimado</b><b id="oq-total">R$ 0,00</b></div>
+  <label for="oq-notes">Observações / condições</label><textarea id="oq-notes" rows="3" maxlength="1000" style="width:100%;font:inherit;padding:11px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx)" placeholder="Prazo, validade, forma de pagamento, entrega..."></textarea>
+  <div class="row2"><button id="oq-save" type="button">Salvar orçamento</button><button id="oq-clear" class="gh" type="button">Limpar</button></div><p class="k" id="oq-status" aria-live="polite">Os registros ficam salvos neste aparelho/ambiente da empresa. A sincronização com a nuvem depende de integração específica.</p>
+ </div>
+ <div class="card"><h2>Categorias avulsas</h2><p class="k">Cadastre categorias para organizar serviços e itens que não fazem parte do catálogo de produtos.</p><div class="f2"><div><label for="oq-new-category">Nova categoria</label><input id="oq-new-category" maxlength="50" placeholder="Ex.: Serviços, Instalação"></div><div style="display:flex;align-items:end"><button id="oq-category-add" type="button" style="width:100%">Adicionar categoria</button></div></div><div id="oq-category-list"></div></div>
+ <div class="card"><h2>Orçamentos e encomendas salvos</h2><div class="f2"><div><label for="oq-filter-type">Tipo</label><select id="oq-filter-type"><option value="all">Todos</option><option value="quote">Orçamentos</option><option value="order">Encomendas</option></select></div><div><label for="oq-filter-status">Situação</label><select id="oq-filter-status"><option value="all">Todas</option><option value="draft">Em aberto</option><option value="approved">Aprovado</option><option value="rejected">Recusado</option><option value="completed">Concluído</option><option value="cancelled">Cancelado</option></select></div></div><div id="oq-list"></div></div>
+</section>
 <section class="tab" id="t-cad">
  <div class="card"><h2>Minha loja</h2><label for="s-name">Nome (aparece no recibo)</label><input id="s-name" placeholder="Ex.: Mercadinho do João"></div>
  <div class="card"><h2>Pix (QR na venda)</h2><label for="pix-key">Chave Pix</label><input id="pix-key" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="CPF, CNPJ, e-mail, +55 e telefone ou chave aleatória">
@@ -176,7 +192,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
  <div class="nav-caption">Visão geral</div>
  <button class="on" data-go="res"><span>📊</span>Resumo</button>
  <div class="nav-caption">Operação</div>
- <button data-go="ent"><span>💰</span>Entradas</button><button data-go="rec"><span>⏳</span>Fiados</button><button data-go="gas"><span>💸</span>Gastos</button><button data-go="comp"><span>🛒</span>Compras</button>
+ <button data-go="ent"><span>💰</span>Entradas</button><button data-go="rec"><span>⏳</span>Fiados</button><button data-go="gas"><span>💸</span>Gastos</button><button data-go="comp"><span>🛒</span>Compras</button><button data-go="orc"><span>🧾</span>Orçamentos / Encomendas</button>
  <div class="nav-caption">Análises e gestão</div>
  <button data-go="rel"><span>📈</span>Relatórios</button><button data-go="cad"><span>👥</span>Cadastros e integrações</button>
 </nav>
@@ -297,7 +313,7 @@ const CATS=["Fornecedores","Aluguel/Contas","Pessoal","Manutenção","Outros"];
 // Armazenamento local versionado por empresa. A chave antiga "m7c" é preservada.
 const LEGACY_OWNER_USER_ID="ac3a6011-3238-4ed1-9ead-3aa71a6b441d";
 const LEGACY_OWNER_COMPANY_ID="5c2dcc98-9640-42a2-ba98-936535e560a6";
-const emptyState=()=>({tx:[],rc:[],cx:{},cl:[],pr:[],stock_pending:[],shop:""});
+const emptyState=()=>({tx:[],rc:[],cx:{},cl:[],pr:[],stock_pending:[],quotes:[],quote_categories:["Serviços","Instalação","Entrega","Personalizado"],shop:""});
 const companyStorageKey=companyId=>"m7c:v2:company:"+companyId;
 // Antes de validar uma sessão, o app abre somente o espaço local de visitante.
 // Nunca restaura a última empresa automaticamente na inicialização.
@@ -320,6 +336,9 @@ function normalizeState(){
  S.pix=plain(S.pix)?{key:typeof S.pix.key==="string"?S.pix.key:"",name:typeof S.pix.name==="string"?S.pix.name:"",city:typeof S.pix.city==="string"?S.pix.city:""}:{key:"",name:"",city:""};
  S.cl=Array.isArray(S.cl)?S.cl:[]; S.pr=Array.isArray(S.pr)?S.pr:[];
  S.shop=typeof S.shop==="string"?S.shop:"";
+ S.quotes=Array.isArray(S.quotes)?S.quotes.filter(plain):[];
+ S.quote_categories=Array.isArray(S.quote_categories)?[...new Set(S.quote_categories.filter(x=>typeof x==="string"&&x.trim()).map(x=>x.trim()))]:["Serviços","Instalação","Entrega","Personalizado"];
+ if(!S.quote_categories.length)S.quote_categories=["Serviços","Personalizado"];
  S.stock_pending=Array.isArray(S.stock_pending)?S.stock_pending.filter(x=>plain(x)&&typeof x.product_id==="string"&&typeof x.operation_id==="string"&&plain(x.payload)&&typeof x.payload.type==="string"&&Number.isFinite(Number(x.payload.quantity))&&typeof x.payload.reason_code==="string"&&typeof x.payload.reason==="string"):[];
  S.purchase_pending=Array.isArray(S.purchase_pending)?S.purchase_pending.filter(x=>plain(x)&&["supplier","create","receive","payable_payment","payable_credit","payable_cancel","purchase_return","credit_refund"].includes(x.kind)&&typeof x.operation_id==="string"&&/^[0-9a-f-]{36}$/i.test(x.operation_id)&&plain(x.payload)):[];
  if(S.pendingSale!==undefined&&(!S.pendingSale||typeof S.pendingSale!=="object"||!S.pendingSale.payload||!S.pendingSale.input))delete S.pendingSale;
@@ -1017,7 +1036,7 @@ function toast(m){const t=$("toast");t.textContent=m;t.style.display="block";cle
 // navegação
 function closeNav(){document.body.classList.remove("nav-open");const b=$("nav-toggle");if(b)b.setAttribute("aria-expanded","false")}
 function go(t){document.body.dataset.tab=t;if(typeof syncPixBtn==="function")syncPixBtn();document.querySelectorAll(".tab").forEach(e=>e.classList.toggle("on",e.id==="t-"+t));
- document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.go===t));closeNav();scrollTo(0,0);render()}
+ document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.go===t));closeNav();scrollTo(0,0);if(t==="orc"&&typeof oqRefresh==="function")oqRefresh();render()}
 $("nav-toggle").onclick=()=>{const open=!document.body.classList.contains("nav-open");document.body.classList.toggle("nav-open",open);$("nav-toggle").setAttribute("aria-expanded",String(open))};
 $("nav-backdrop").onclick=closeNav;
 document.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g)go(g.dataset.go)});
@@ -1145,7 +1164,7 @@ $("p-copy").onclick=()=>{
 function canVoidExpenses(){return ["owner","admin","manager"].includes(activeCompanyRole)}
 function mov(t){const pos=t.type==="in",voided=t.status==="void";return `<div class="it"><div><b>${esc(t.desc)}</b><small>${esc(D(t.date))} · ${pos?esc(t.method||"Entrada"):esc(t.cat)}${t.client?" · "+esc(t.client):""}${voided?" · ESTORNADA":""}</small>${voided&&t.void_reason?`<small>Motivo: ${esc(t.void_reason)}</small>`:""}<span class="acts" style="margin-top:4px">${pos?`<button class="sm gh" data-rec="${esc(t.id)}">🧾 Recibo</button>`:""}${!voided&&(t.sale_id||t.receivable_id||t.items?.length)?"":(!voided&&!t.remote_expense?`<button class="sm gh" data-edit="${esc(t.id)}">✎ Editar</button>`:"")}${t.remote_expense&&!voided&&canVoidExpenses()?`<button class="sm gh" data-void-expense="${esc(t.id)}">Estornar</button>`:""}</span></div><div class="amt ${pos?"g":voided?"a":"r"}">${pos?"+":voided?"":"– "}${R(t.amount)}</div></div>`}
 
-function render(){if(typeof renderOnb==="function"){renderOnb();fillStmt();wipeSync();listFilter("pr-list","pr-q");listFilter("c-list","c-q")}
+function render(){if(document.body.dataset.tab==="orc"&&typeof oqRefresh==="function")oqRefresh();if(typeof renderOnb==="function"){renderOnb();fillStmt();wipeSync();listFilter("pr-list","pr-q");listFilter("c-list","c-q")}
  updatePendingSaleUI();updatePendingReceiptUI();
  const td=today(),mo=td.slice(0,7);cad();cx(true);
  const inn=S.tx.filter(t=>t.type==="in"),allOut=S.tx.filter(t=>t.type==="out"),out=allOut.filter(t=>t.status!=="void");
@@ -2419,7 +2438,7 @@ pixLoadFields();syncPixBtn();
 
 
 /* ===== Comercial: termos, primeiros passos, suporte, extrato do cliente e planilha CSV ===== */
-const APP_VERSION="v40";let M7_SUPPORT_WHATS="";
+const APP_VERSION="v41";let M7_SUPPORT_WHATS="";
 const TERMS_KEY="m7:terms:v1";
 const TERMS_HTML=`<h3>Termos de Uso</h3><p><small>Versão 1</small></p>
 <p><b>1. O que é o M7 ERP.</b> Aplicativo de gestão para pequenos comércios (vendas, estoque, fiado, gastos e caixa), fornecido pela M7 TECH.</p>
@@ -2462,7 +2481,7 @@ $("onb-card").onclick=e=>{const g=e.target.closest("[data-go]");if(g)return go(g
 // Suporte
 const supMsg=()=>"Olá! Preciso de ajuda com o M7 ERP.\nVersão: "+APP_VERSION+"\nLoja: "+(S.shop||"não informada")+"\nAparelho: "+navigator.userAgent.slice(0,90);
 function supSync(){$("sup-wa").style.display=M7_SUPPORT_WHATS?"block":"none"}
-$("app-ver").textContent="M7 ERP "+APP_VERSION+" · desenvolvido pela M7 TECH";
+$("app-ver").textContent="M7 ERP · desenvolvido pela M7 TECH";
 $("sup-wa").onclick=()=>{if(!M7_SUPPORT_WHATS)return toast("Suporte ainda não configurado.");open("https://wa.me/"+M7_SUPPORT_WHATS+"?text="+encodeURIComponent(supMsg()),"_blank","noopener,noreferrer")};
 $("sup-terms").onclick=()=>openTerms(false);
 
@@ -2493,7 +2512,7 @@ $("p-csv").onclick=()=>{const[a,b]=range();const rows=S.tx.filter(t=>t.date>=a&&
 supSync();renderOnb();fillStmt();if(!termsAccepted())openTerms(true);
 
 
-/* ===== v39: administração da plataforma (mestre), cadastro melhorado e dados de teste ===== */
+/* ===== Administração da plataforma (mestre) ===== */
 var IS_MASTER=false;let MC_ROWS=[],MC_CUR=null,MC_LAST=null;
 const MC_ST={active:"🟢 Ativo",suspended:"🟠 Suspenso",closed:"⚫ Encerrado"};
 const MC_ROLES={owner:"Dono",admin:"Administrador",manager:"Gerente",cashier:"Caixa",salesperson:"Vendedor",stock_operator:"Estoquista",read_only:"Somente leitura"};
@@ -2727,12 +2746,44 @@ $("bk-load").onclick=()=>{
   if(data.shop!==undefined&&typeof data.shop!=="string")throw Error("Nome da empresa inválido.");
    if(data.pix!==undefined&&!plain(data.pix))throw Error("Configuração do Pix inválida.");
   for(const key of ["tx","rc","cl","pr","stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"]){if(Array.isArray(data[key])&&!data[key].every(plain))throw Error("Registro inválido em "+key+".");}
-  const next={tx:data.tx,rc:data.rc,cx:plain(data.cx)?data.cx:{},cl:data.cl||[],pr:data.pr||[],stock_pending:data.stock_pending||[],purchase_pending:data.purchase_pending||[],shop:data.shop||"",pix:data.pix};
+  const next={tx:data.tx,rc:data.rc,cx:plain(data.cx)?data.cx:{},cl:data.cl||[],pr:data.pr||[],stock_pending:data.stock_pending||[],purchase_pending:data.purchase_pending||[],quotes:Array.isArray(data.quotes)?data.quotes:[],quote_categories:Array.isArray(data.quote_categories)?data.quote_categories:["Serviços","Personalizado"],shop:data.shop||"",pix:data.pix};
   for(const key of ["stock_pending","purchase_pending","cl_deleted","cl_archived_remote","pr_deleted"])if(Array.isArray(data[key]))next[key]=data[key];
   if(S.pin)next.pin=S.pin;
   S=next;normalizeState();$("s-name").value=S.shop;pixLoadFields();save();render();toast("Backup restaurado com validação.");
  }catch(e){toast(e?.message||"Backup inválido. Nenhum dado foi alterado.");}
 };
+// Orçamentos, encomendas e itens avulsos: persistência isolada no estado da empresa atual.
+let OQ_CART=[];
+const oqMoney=n=>Number(n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const oqId=()=>"oq-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8);
+function oqFillSelectors(){
+ const c=$("oq-client"),p=$("oq-product"),cat=$("oq-category");if(!c||!p||!cat)return;
+ const cv=c.value,pv=p.value,ct=cat.value;
+ c.innerHTML='<option value="">Cliente avulso / não cadastrado</option>'+S.cl.filter(x=>x.status!=="inactive").map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join("");c.value=cv;
+ p.innerHTML='<option value="">Selecione um produto</option>'+S.pr.filter(x=>x.status!=="inactive").map(x=>`<option value="${esc(x.id)}">${esc(x.name)} · ${oqMoney(x.price)}</option>`).join("");p.value=pv;
+ cat.innerHTML=S.quote_categories.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("");if(S.quote_categories.includes(ct))cat.value=ct;
+ $("oq-category-list").innerHTML=S.quote_categories.map(x=>`<div class="it"><span>${esc(x)}</span><button class="sm gh" type="button" data-oq-cat-del="${esc(x)}">Remover</button></div>`).join("");
+}
+function oqRenderCart(){const box=$("oq-cart");if(!box)return;const total=OQ_CART.reduce((a,x)=>a+x.qty*x.price,0);$("oq-total").textContent=oqMoney(total);
+ box.innerHTML=OQ_CART.length?OQ_CART.map((x,i)=>`<div class="it"><div><b>${esc(x.name)}</b><small>${esc(x.category||"Produto")} · ${x.qty} × ${oqMoney(x.price)}</small></div><div class="amt">${oqMoney(x.qty*x.price)}<div><button class="sm gh" type="button" data-oq-remove="${i}">Remover</button></div></div></div>`).join(""):'<div class="empty">Nenhum item adicionado.</div>';
+}
+function oqRenderList(){const box=$("oq-list");if(!box)return;const ft=$("oq-filter-type").value,fs=$("oq-filter-status").value;const labels={draft:"Em aberto",approved:"Aprovado",rejected:"Recusado",completed:"Concluído",cancelled:"Cancelado"};const rows=(S.quotes||[]).filter(x=>(ft==="all"||x.type===ft)&&(fs==="all"||x.status===fs)).sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)));
+ box.innerHTML=rows.length?rows.map(x=>`<div class="it"><div><b>${x.type==="order"?"Encomenda":"Orçamento"} · ${esc(x.number||x.id)}</b><small>${esc(x.client_name||"Cliente avulso")} · ${new Date(x.created_at).toLocaleString("pt-BR")}</small><small>${x.items.length} item(ns) · ${oqMoney(x.total)} · ${labels[x.status]||"Em aberto"}</small><div class="acts"><button class="sm gh" data-oq-print="${esc(x.id)}">Imprimir</button>${x.status==="draft"?`<button class="sm gh" data-oq-state="approved" data-oq-id="${esc(x.id)}">Aprovar</button><button class="sm gh" data-oq-state="rejected" data-oq-id="${esc(x.id)}">Recusar</button>`:""}${x.status!=="completed"&&x.status!=="cancelled"?`<button class="sm gh" data-oq-state="completed" data-oq-id="${esc(x.id)}">Concluir</button><button class="sm red" data-oq-state="cancelled" data-oq-id="${esc(x.id)}">Cancelar</button>`:""}</div></div></div>`).join(""):'<div class="empty">Nenhum orçamento ou encomenda encontrado.</div>';
+}
+function oqClear(){OQ_CART=[];["oq-name","oq-contact","oq-notes","oq-custom-name","oq-custom-price"].forEach(id=>$(id).value="");$("oq-custom-qty").value="1";$("oq-pqty").value="1";$("oq-client").value="";$("oq-type").value="quote";oqRenderCart();}
+$("oq-add-product").onclick=()=>{const p=S.pr.find(x=>String(x.id)===$("oq-product").value),qty=Number($("oq-pqty").value);if(!p)return toast("Selecione um produto do catálogo.");if(!Number.isFinite(qty)||qty<=0)return toast("Informe uma quantidade válida.");OQ_CART.push({kind:"product",product_id:p.id,name:p.name,category:"Produto",qty,price:Number(p.price)||0});oqRenderCart();};
+$("oq-add-custom").onclick=()=>{const name=$("oq-custom-name").value.trim(),price=Number($("oq-custom-price").value),qty=Number($("oq-custom-qty").value),category=$("oq-category").value;if(!name)return toast("Informe o nome do produto ou serviço.");if(!Number.isFinite(price)||price<0||!Number.isFinite(qty)||qty<=0)return toast("Informe preço e quantidade válidos.");OQ_CART.push({kind:"custom",name,category,qty,price});$("oq-custom-name").value="";$("oq-custom-price").value="";$("oq-custom-qty").value="1";oqRenderCart();};
+$("oq-cart").onclick=e=>{const b=e.target.closest("[data-oq-remove]");if(!b)return;OQ_CART.splice(Number(b.dataset.oqRemove),1);oqRenderCart();};
+$("oq-client").onchange=()=>{const c=S.cl.find(x=>String(x.id)===$("oq-client").value);if(c){$("oq-name").value=c.name||"";$("oq-contact").value=c.tel||c.email||"";}};
+$("oq-category-add").onclick=()=>{const name=$("oq-new-category").value.trim();if(!name)return toast("Digite o nome da categoria.");if(S.quote_categories.some(x=>x.toLowerCase()===name.toLowerCase()))return toast("Essa categoria já existe.");S.quote_categories.push(name);$("oq-new-category").value="";save();oqFillSelectors();toast("Categoria adicionada.");};
+$("oq-category-list").onclick=e=>{const b=e.target.closest("[data-oq-cat-del]");if(!b)return;const name=b.dataset.oqCatDel;if(S.quote_categories.length<=1)return toast("Mantenha ao menos uma categoria.");if(!confirm(`Remover a categoria ${name}? Os itens já salvos não serão alterados.`))return;S.quote_categories=S.quote_categories.filter(x=>x!==name);save();oqFillSelectors();};
+$("oq-clear").onclick=oqClear;
+$("oq-save").onclick=()=>{if(!OQ_CART.length)return toast("Adicione ao menos um produto ou serviço.");const clientId=$("oq-client").value,client=S.cl.find(x=>String(x.id)===clientId),name=$("oq-name").value.trim()||(client&&client.name)||"Cliente avulso";const items=OQ_CART.map(x=>({...x}));const total=items.reduce((a,x)=>a+x.qty*x.price,0);const type=$("oq-type").value;const rec={id:oqId(),number:"M7-"+String(Date.now()).slice(-8),type,client_id:clientId||null,client_name:name,contact:$("oq-contact").value.trim(),items,total,notes:$("oq-notes").value.trim(),status:"draft",created_at:new Date().toISOString()};S.quotes=S.quotes||[];S.quotes.push(rec);save();oqRenderList();$("oq-status").textContent=(type==="order"?"Encomenda":"Orçamento")+" salvo com sucesso.";oqClear();toast("Registro salvo.");};
+$("oq-filter-type").onchange=oqRenderList;$("oq-filter-status").onchange=oqRenderList;
+$("oq-list").onclick=e=>{const pr=e.target.closest("[data-oq-print]");if(pr){const x=S.quotes.find(q=>q.id===pr.dataset.oqPrint);if(!x)return;const w=window.open("","_blank");if(!w)return toast("Permita a abertura de janelas para imprimir.");const title=x.type==="order"?"Encomenda":"Orçamento";w.document.write(`<!doctype html><html lang="pt-BR"><meta charset="utf-8"><title>${title} ${esc(x.number)}</title><style>body{font:14px Arial;padding:28px;color:#222}h1{color:#059669}table{width:100%;border-collapse:collapse;margin:20px 0}td,th{padding:9px;border-bottom:1px solid #ddd;text-align:left}.num{text-align:right}.total{text-align:right;font-size:20px;font-weight:bold;margin-top:20px}.muted{color:#666}</style><h1>${esc(S.shop||"M7 ERP")}</h1><h2>${title} ${esc(x.number)}</h2><p>Cliente: ${esc(x.client_name)}<br>Contato: ${esc(x.contact||"—")}<br>Data: ${new Date(x.created_at).toLocaleString("pt-BR")}</p><table><thead><tr><th>Descrição</th><th>Categoria</th><th class="num">Qtd.</th><th class="num">Unitário</th><th class="num">Total</th></tr></thead><tbody>${x.items.map(i=>`<tr><td>${esc(i.name)}</td><td>${esc(i.category||"")}</td><td class="num">${i.qty}</td><td class="num">${oqMoney(i.price)}</td><td class="num">${oqMoney(i.qty*i.price)}</td></tr>`).join("")}</tbody></table><p class="total">Total: ${oqMoney(x.total)}</p><p>${esc(x.notes||"")}</p><p class="muted">Documento gerado pelo M7 ERP. Valores sujeitos à confirmação.</p><script>window.onload=()=>window.print()<\/script></html>`);w.document.close();return;}
+ const st=e.target.closest("[data-oq-state]");if(st){const x=S.quotes.find(q=>q.id===st.dataset.oqId);if(!x)return;x.status=st.dataset.oqState;x.updated_at=new Date().toISOString();save();oqRenderList();toast("Situação atualizada.");}};
+function oqRefresh(){oqFillSelectors();oqRenderCart();oqRenderList();}
+
 window.addEventListener("error",e=>{console.error("Erro não tratado",e.error||e.message)});
 window.addEventListener("unhandledrejection",e=>{console.error("Promessa rejeitada sem tratamento",e.reason);if(typeof toast==="function")toast("Ocorreu um erro inesperado. Tente novamente.")});
 window.addEventListener("offline",()=>toast("Sem internet: o app segue no modo local. Sincronizações ficam indisponíveis."));
