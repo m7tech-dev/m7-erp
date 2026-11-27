@@ -1,4 +1,4 @@
-const CACHE_NAME = "m7-controle-v46";
+const CACHE_NAME = "m7-controle-v47";
 const APP_ASSETS = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png", "./stock-ledger.js", "./purchases.js", "./payables.js", "./purchase-returns.js"];
 const SUPABASE_LIB = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";
 const APP_ASSET_PATHS = new Set(APP_ASSETS.map(asset => new URL(asset, self.location.href).pathname));

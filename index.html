@@ -159,6 +159,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
  <div class="card"><h2>Conexão M7 ERP</h2><p class="k">Entre com o e-mail e a senha da sua empresa para guardar vendas, recebimentos, produtos, clientes, despesas e fechamentos de caixa com segurança na nuvem.</p><p id="sb-status" class="k">Verificando disponibilidade da conexão…</p><label for="sb-email">E-mail da conta</label><input id="sb-email" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" placeholder="seu@email.com"><label for="sb-pass">Senha</label><div style="display:flex;gap:8px"><input id="sb-pass" type="password" autocomplete="current-password" placeholder="Sua senha" style="flex:1;min-width:0"><button class="gh" id="sb-eye" type="button" aria-label="Mostrar senha" aria-pressed="false" style="width:auto;flex:none;padding:0 16px">👁</button></div><div class="row2"><button id="sb-login" type="button">Entrar na conta</button><button class="gh" id="sb-logout" type="button">Sair</button></div><div class="row2" style="margin-top:8px"><button class="gh" id="sb-forgot" type="button">Esqueci minha senha</button><button class="gh" id="sb-chpw" type="button">Alterar senha</button></div><p id="sb-user" class="k">Não conectado</p><div class="row2"><button id="sb-sync" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar clientes">Sincronizar clientes</button><button id="sb-sync-products" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar o catálogo">Sincronizar produtos</button></div><p id="sb-sync-status" class="k">Entre na conta e valide a empresa para sincronizar clientes com segurança.</p><p id="sb-product-sync-status" class="k">Entre na conta e valide a empresa para sincronizar o catálogo com segurança.</p><div class="row2"><button id="sb-sync-expenses" type="button" class="gh" disabled>Sincronizar despesas</button></div><p id="sb-expense-sync-status" class="k">As despesas antigas só serão enviadas quando você solicitar a sincronização.</p></div>
  <div class="card"><h2>Segurança</h2><label for="pin-n">PIN de acesso (4 a 6 números)</label><input id="pin-n" type="password" inputmode="numeric" maxlength="6" autocomplete="off"><div class="row2"><button id="pin-set">Definir PIN</button><button class="gh" id="pin-off">Remover</button><button class="gh" id="pin-lock">Bloquear</button></div><p class="k" id="pin-st"></p></div>
  <div class="card" id="master-card" style="display:none"><h2>Administração da plataforma</h2><p class="k">Área exclusiva do administrador M7 TECH: cadastre e gerencie os comércios clientes.</p><div class="row2"><button class="gh" id="mc-refresh" type="button">Atualizar lista</button><button id="mc-new" type="button">+ Novo comércio</button></div><div id="mc-last" style="margin-top:8px"></div><div id="mc-list"></div></div>
+ <div class="card" id="bill-card"><h2>Assinatura M7 ERP</h2><p class="k" id="bill-note">Entre na sua conta para ver a assinatura.</p><div id="bill-info"></div><div id="bill-form" style="display:none"><label for="bill-type">Forma de pagamento</label><select id="bill-type"><option value="PIX">Pix</option><option value="BOLETO">Boleto</option><option value="CREDIT_CARD">Cartão de crédito</option><option value="UNDEFINED">Escolher na hora de pagar</option></select><label for="bill-doc">CPF ou CNPJ (se o comércio ainda não tiver cadastrado)</label><input id="bill-doc" inputmode="numeric" maxlength="18" autocomplete="off"></div><div class="row2"><button class="gh" id="bill-refresh" type="button">Ver assinatura</button><button id="bill-sub" type="button" style="display:none">Assinar</button><button class="red" id="bill-cancel" type="button" style="display:none">Cancelar assinatura</button></div></div>
  <div class="card" id="wipe-card"><h2>Resetar sistema</h2><p class="k" id="wipe-note"></p><div class="row2" id="wipe-btns"><button class="gh" id="wipe-hist" type="button">Apagar histórico</button><button class="red" id="wipe-all" type="button">Resetar tudo</button></div></div>
  <div class="card" id="audit-card" style="display:none"><h2>Registro de auditoria</h2><p class="k">Operações sensíveis feitas nesta empresa. Somente leitura: ninguém pode editar ou apagar.</p><div class="row2"><button class="gh" id="audit-load" type="button">Ver registro</button></div><div id="audit-list"></div></div>
  <div class="card"><h2>Suporte e informações</h2><p class="k" id="app-ver"></p><div class="row2"><button id="sup-wa" type="button" style="display:none">💬 Falar com o suporte</button><button class="gh" id="sup-terms" type="button">Termos e Privacidade</button></div></div>
@@ -2522,6 +2523,62 @@ $("mu-add").onclick=async()=>{const email=$("mu-email").value.trim().toLowerCase
 $("mu-list").onclick=async e=>{const b=e.target.closest("[data-mu-off],[data-mu-on]");if(!b)return;const off=!!b.dataset.muOff;
  try{const{error}=await sb.rpc("admin_set_member_status_v1",{p_company_id:MC_CUR,p_email:off?b.dataset.muOff:b.dataset.muOn,p_status:off?"disabled":"active"});if(error)throw error;await muLoad();mcLoad()}catch(x){$("mu-msg").textContent=authMsg(x)}};
 $("mu-x").onclick=()=>$("mudlg").close();
+
+/* ===== Assinatura (Asaas) — a chave do Asaas fica só no servidor (Edge Function asaas-billing) ===== */
+const BILL_ST={PENDING:"Aguardando pagamento",CONFIRMED:"Confirmado",RECEIVED:"Pago",RECEIVED_IN_CASH:"Pago",OVERDUE:"Vencido",REFUNDED:"Estornado",DELETED:"Cancelado",CHARGEBACK_REQUESTED:"Contestado"};
+const BILL_TYPE={PIX:"Pix",BOLETO:"Boleto",CREDIT_CARD:"Cartão",UNDEFINED:"A escolher"};
+let BILL_BUSY=false;
+const billMoney=v=>Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const billDate=d=>d?String(d).slice(0,10).split("-").reverse().join("/"):"—";
+const billUrl=u=>/^https:\/\//i.test(u||"")?u:"";
+async function billCall(body){
+ if(!sb)throw Error("Conexão indisponível. Recarregue com internet.");
+ const{data,error}=await sb.functions.invoke("asaas-billing",{body});
+ if(error){let m="";try{m=(await error.context.json()).message}catch(_){}throw Error(m||"Não foi possível falar com o servidor de cobrança.")}
+ return data;
+}
+function billRender(d){
+ const sub=d.subscription,pays=d.payments||[],plan=d.plan,canManage=activeCompanyRole==="owner"||activeCompanyRole==="admin";
+ const active=!!sub&&sub.status!=="canceled";const SUBST={trial:"aguardando 1º pagamento",active:"ativa",past_due:"pagamento em atraso",suspended:"suspensa por falta de pagamento"};
+ $("bill-note").textContent=active?"Assinatura "+(SUBST[sub.status]||sub.status)+": "+billMoney(sub.value)+" · "+(BILL_TYPE[sub.billing_type]||sub.billing_type)+" · próximo vencimento "+billDate(sub.next_due_date)+".":(sub?"Assinatura encerrada.":(plan?"Plano "+plan.name+": "+billMoney(plan.value)+" por mês. Você ainda não assinou.":"Cobrança ainda não configurada no servidor."));
+ $("bill-form").style.display=!active&&canManage&&plan?"block":"none";
+ $("bill-sub").style.display=!active&&canManage&&plan?"":"none";
+ $("bill-cancel").style.display=active&&canManage?"":"none";
+ const box=$("bill-info");box.textContent="";
+ pays.forEach(p=>{
+  const it=document.createElement("div");it.className="it";const w=document.createElement("div");
+  const b=document.createElement("b");b.textContent=billMoney(p.value)+" · vence "+billDate(p.due_date);w.appendChild(b);
+  const sm=document.createElement("small");sm.textContent=(BILL_ST[p.status]||p.status)+" · "+(BILL_TYPE[p.billing_type]||p.billing_type||"");w.appendChild(sm);
+  const open=["PENDING","OVERDUE"].includes(p.status);
+  if(open&&p.pix_payload){
+   if(/^[A-Za-z0-9+\/=]+$/.test(p.pix_qr_image||"")){const im=document.createElement("img");im.alt="QR Code Pix";im.width=180;im.height=180;im.style.cssText="display:block;margin:6px 0";im.src="data:image/png;base64,"+p.pix_qr_image;w.appendChild(im)}
+   const cp=document.createElement("button");cp.type="button";cp.className="sm";cp.textContent="Copiar Pix copia e cola";
+   cp.onclick=()=>navigator.clipboard?navigator.clipboard.writeText(p.pix_payload).then(()=>toast("Código Pix copiado."),()=>toast("Não foi possível copiar.")):toast("Não foi possível copiar.");
+   const a=document.createElement("div");a.className="acts";a.appendChild(cp);w.appendChild(a);
+  }
+  const link=billUrl(open?(p.bank_slip_url&&p.billing_type==="BOLETO"?p.bank_slip_url:p.invoice_url):p.invoice_url);
+  if(link){const a=document.createElement("a");a.href=link;a.target="_blank";a.rel="noopener noreferrer";a.textContent=open?"Abrir cobrança / pagar":"Ver recibo";a.style.cssText="display:inline-block;margin-top:6px";w.appendChild(a)}
+  it.appendChild(w);box.appendChild(it);
+ });
+}
+async function billLoad(){
+ if(BILL_BUSY)return;BILL_BUSY=true;const btn=$("bill-refresh");btn.disabled=true;
+ try{billRender(await billCall({action:"status"}))}catch(e){$("bill-note").textContent=e.message}
+ finally{BILL_BUSY=false;btn.disabled=false}
+}
+$("bill-refresh").onclick=billLoad;
+$("bill-sub").onclick=async()=>{
+ if(BILL_BUSY)return;const doc=$("bill-doc").value.replace(/\D/g,"");
+ if(doc&&!(pixCpfOk(doc)||pixCnpjOk(doc)))return toast("CPF/CNPJ inválido.");
+ BILL_BUSY=true;$("bill-sub").disabled=true;
+ try{billRender(await billCall({action:"subscribe",billingType:$("bill-type").value,cpfCnpj:doc||undefined}));toast("Assinatura criada. Pague a 1ª cobrança abaixo.")}
+ catch(e){toast(e.message)}finally{BILL_BUSY=false;$("bill-sub").disabled=false}
+};
+$("bill-cancel").onclick=async()=>{
+ if(BILL_BUSY)return;if(!confirm("Cancelar a assinatura? O acesso da empresa ao sistema será suspenso."))return;
+ BILL_BUSY=true;$("bill-cancel").disabled=true;
+ try{billRender(await billCall({action:"cancel"}));toast("Assinatura cancelada.")}catch(e){toast(e.message)}finally{BILL_BUSY=false;$("bill-cancel").disabled=false}
+};
 
 // Busca nas listas de produtos e clientes
 function listFilter(listId,qId){const q=(($(qId)||{value:""}).value||"").trim().toLowerCase();document.querySelectorAll("#"+listId+" > .it").forEach(el=>{el.style.display=!q||el.textContent.toLowerCase().includes(q)?"":"none"})}
