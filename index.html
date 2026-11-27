@@ -73,6 +73,7 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
 <main>
 <section class="tab on" id="t-res">
  <div class="card" id="onb-card" style="display:none;margin-bottom:12px"></div>
+ <div class="card"><input id="gs-q" type="search" autocomplete="off" placeholder="🔎 Buscar produto, cliente ou venda…"><div id="gs-out"></div></div>
  <div class="grid">
   <div class="card wide"><div class="k">Saldo realizado no mês</div><div class="v" id="d-saldo">–</div></div>
   <div class="card"><div class="k">Entradas hoje</div><div class="v g" id="d-in">–</div></div>
@@ -153,8 +154,8 @@ footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
  <div class="card"><h2>Pix (QR na venda)</h2><label for="pix-key">Chave Pix</label><input id="pix-key" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="CPF, CNPJ, e-mail, +55 e telefone ou chave aleatória">
   <div class="f2"><div><label for="pix-name">Nome no Pix (opcional)</label><input id="pix-name" maxlength="25" placeholder="Usa o nome da loja"></div><div><label for="pix-city">Cidade (opcional)</label><input id="pix-city" maxlength="15" placeholder="Ex.: São Paulo"></div></div>
   <p class="k" id="pix-status" aria-live="polite"></p><p class="k">O QR cobra o valor da venda e leva o cliente direto ao seu Pix. O app não confirma o pagamento: confira o recebimento no aplicativo do seu banco.</p></div>
- <div class="card"><h2>Clientes</h2><div class="f2"><div><label for="c-n">Nome</label><input id="c-n" placeholder="Nome do cliente"></div><div><label for="c-t">WhatsApp</label><input id="c-t" inputmode="tel" placeholder="(11) 99999-9999"></div></div><div class="row2"><button id="c-add">Adicionar cliente</button><button class="gh" id="c-cancel" style="display:none">Cancelar</button></div><input id="c-q" type="search" autocomplete="off" placeholder="Buscar cliente por nome ou WhatsApp" style="margin-top:10px"><div id="c-list"></div></div>
- <div class="card"><h2>Produtos</h2><div class="f2"><div><label for="pr-n">Nome</label><input id="pr-n"></div><div><label for="pr-p">Preço (R$)</label><input id="pr-p" type="number" min="0" step="0.01" inputmode="decimal"></div></div><div class="f2"><div><label for="pr-sku">Código / SKU (opcional)</label><input id="pr-sku" maxlength="40" autocomplete="off" autocapitalize="characters"></div><div><label for="pr-bar">Código de barras (opcional)</label><input id="pr-bar" inputmode="numeric" maxlength="14" autocomplete="off" placeholder="Só números"></div></div><div class="f2"><div><label for="pr-unit">Unidade</label><select id="pr-unit"><option>UN</option><option>KG</option><option>G</option><option>L</option><option>ML</option><option>M</option><option>CX</option><option>PCT</option><option>DZ</option></select></div><div><label for="pr-desc">Descrição (opcional)</label><input id="pr-desc" maxlength="120"></div></div><div class="f2"><div><label for="pr-c">Custo (R$, opcional)</label><input id="pr-c" type="number" min="0" step="0.01" inputmode="decimal"><p class="k" id="pr-cost-help">Para produto remoto, o custo é atualizado pelo recebimento de compras.</p></div><div><label for="pr-s">Estoque inicial (opcional)</label><input id="pr-s" type="number" min="0" inputmode="numeric"><p class="k" id="pr-stock-help"></p></div></div><div class="row2"><button id="pr-add">Adicionar produto</button><button class="gh" id="pr-cancel" style="display:none">Cancelar</button></div><input id="pr-q" type="search" autocomplete="off" placeholder="Buscar produto por nome ou código" style="margin-top:10px"><div id="pr-list"></div></div>
+ <div class="card"><h2>Clientes</h2><div class="f2"><div><label for="c-n">Nome</label><input id="c-n" placeholder="Nome do cliente"></div><div><label for="c-t">WhatsApp</label><input id="c-t" inputmode="tel" placeholder="(11) 99999-9999"></div></div><div class="f2"><div><label for="c-doc">CPF / CNPJ</label><input id="c-doc" inputmode="numeric" maxlength="18"></div><div><label for="c-em">E-mail</label><input id="c-em" type="email" maxlength="180"></div></div><label for="c-end">Endereço</label><input id="c-end" maxlength="200"><div class="f2"><div><label for="c-lim">Limite de fiado (R$)</label><input id="c-lim" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Sem limite"></div><div><label for="c-obs">Observações</label><input id="c-obs" maxlength="300"></div></div><div class="row2"><button id="c-add">Adicionar cliente</button><button class="gh" id="c-cancel" style="display:none">Cancelar</button></div><input id="c-q" type="search" autocomplete="off" placeholder="Buscar cliente por nome ou WhatsApp" style="margin-top:10px"><div id="c-list"></div></div>
+ <div class="card"><h2>Produtos</h2><div class="f2"><div><label for="pr-n">Nome</label><input id="pr-n"></div><div><label for="pr-p">Preço (R$)</label><input id="pr-p" type="number" min="0" step="0.01" inputmode="decimal"></div></div><div class="f2"><div><label for="pr-sku">Código / SKU (opcional)</label><input id="pr-sku" maxlength="40" autocomplete="off" autocapitalize="characters"></div><div><label for="pr-bar">Código de barras (opcional)</label><input id="pr-bar" inputmode="numeric" maxlength="14" autocomplete="off" placeholder="Só números"></div></div><div class="f2"><div><label for="pr-unit">Unidade</label><select id="pr-unit"><option>UN</option><option>KG</option><option>G</option><option>L</option><option>ML</option><option>M</option><option>CX</option><option>PCT</option><option>DZ</option></select></div><div><label for="pr-desc">Descrição (opcional)</label><input id="pr-desc" maxlength="120"></div></div><div class="f2"><div><label for="pr-c">Custo (R$, opcional)</label><input id="pr-c" type="number" min="0" step="0.01" inputmode="decimal"><p class="k" id="pr-cost-help">Para produto remoto, o custo é atualizado pelo recebimento de compras.</p></div><div><label for="pr-s">Estoque inicial (opcional)</label><input id="pr-s" type="number" min="0" inputmode="numeric"><p class="k" id="pr-stock-help"></p></div></div><div class="f2"><div><label for="pr-cat">Categoria</label><select id="pr-cat"></select></div><div><label for="pr-min">Estoque mínimo</label><input id="pr-min" type="number" min="0" inputmode="numeric" placeholder="Vazio ou 0 = padrão (3)"></div></div><p class="k" id="pr-margin" aria-live="polite"></p><div class="row2"><button id="pr-add">Adicionar produto</button><button class="gh" id="pr-cancel" style="display:none">Cancelar</button></div><input id="pr-q" type="search" autocomplete="off" placeholder="Buscar produto por nome ou código" style="margin-top:10px"><div id="pr-list"></div></div>
  <div class="card"><h2>Conexão M7 ERP</h2><p class="k">Entre com o e-mail e a senha da sua empresa para guardar vendas, recebimentos, produtos, clientes, despesas e fechamentos de caixa com segurança na nuvem.</p><p id="sb-status" class="k">Verificando disponibilidade da conexão…</p><label for="sb-email">E-mail da conta</label><input id="sb-email" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" placeholder="seu@email.com"><label for="sb-pass">Senha</label><div style="display:flex;gap:8px"><input id="sb-pass" type="password" autocomplete="current-password" placeholder="Sua senha" style="flex:1;min-width:0"><button class="gh" id="sb-eye" type="button" aria-label="Mostrar senha" aria-pressed="false" style="width:auto;flex:none;padding:0 16px">👁</button></div><div class="row2"><button id="sb-login" type="button">Entrar na conta</button><button class="gh" id="sb-logout" type="button">Sair</button></div><div class="row2" style="margin-top:8px"><button class="gh" id="sb-forgot" type="button">Esqueci minha senha</button><button class="gh" id="sb-chpw" type="button">Alterar senha</button></div><p id="sb-user" class="k">Não conectado</p><div class="row2"><button id="sb-sync" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar clientes">Sincronizar clientes</button><button id="sb-sync-products" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar o catálogo">Sincronizar produtos</button></div><p id="sb-sync-status" class="k">Entre na conta e valide a empresa para sincronizar clientes com segurança.</p><p id="sb-product-sync-status" class="k">Entre na conta e valide a empresa para sincronizar o catálogo com segurança.</p><div class="row2"><button id="sb-sync-expenses" type="button" class="gh" disabled>Sincronizar despesas</button></div><p id="sb-expense-sync-status" class="k">As despesas antigas só serão enviadas quando você solicitar a sincronização.</p></div>
  <div class="card"><h2>Segurança</h2><label for="pin-n">PIN de acesso (4 a 6 números)</label><input id="pin-n" type="password" inputmode="numeric" maxlength="6" autocomplete="off"><div class="row2"><button id="pin-set">Definir PIN</button><button class="gh" id="pin-off">Remover</button><button class="gh" id="pin-lock">Bloquear</button></div><p class="k" id="pin-st"></p></div>
  <div class="card" id="master-card" style="display:none"><h2>Administração da plataforma</h2><p class="k">Área exclusiva do administrador M7 TECH: cadastre e gerencie os comércios clientes.</p><div class="row2"><button class="gh" id="mc-refresh" type="button">Atualizar lista</button><button id="mc-new" type="button">+ Novo comércio</button></div><div id="mc-last" style="margin-top:8px"></div><div id="mc-list"></div></div>
@@ -380,7 +381,7 @@ async function activateCompanyStorage(session){
   sbStatus("Empresa identificada. Armazenamento local isolado por empresa.");
   const productSyncButton=document.getElementById("sb-sync-products");if(productSyncButton)productSyncButton.disabled=false;const expenseSyncButton=document.getElementById("sb-sync-expenses");if(expenseSyncButton)expenseSyncButton.disabled=false;const customerSyncButton=document.getElementById("sb-sync");if(customerSyncButton)customerSyncButton.disabled=false;const cashCloseButton=document.getElementById("cx-save-remote");if(cashCloseButton)cashCloseButton.disabled=false;
   if(navigator.onLine)setTimeout(async()=>{
-   try{if(S.pendingSale)await executePendingRemoteSale();else if(S.pendingReceipt)await executePendingRemoteReceipt();await refreshRemoteSalesLedger(companyId);await loadRemoteCashClosing($("cx-d").value||today(),true);}
+   try{if(S.pendingSale)await executePendingRemoteSale();else if(S.pendingReceipt)await executePendingRemoteReceipt();await refreshRemoteSalesLedger(companyId);await loadRemoteCashClosing($("cx-d").value||today(),true);refreshCustStats();}
    catch(e){console.warn("Reconciliação remota pendente",e);}
   },0);
  }catch(e){
@@ -528,9 +529,10 @@ async function syncCustomers(){
    if(!c._sync_pending)continue;
    const legacyId=String(c.id),name=String(c.name||"").trim(),phoneSnapshot=c.tel||null,pendingVersion=c._sync_updated_at;
    if(!name)throw Error("Há cliente pendente sem nome; corrija o cadastro antes de sincronizar.");
-   const{data,error}=await sb.rpc("sync_customer_v2",{
+   const{data,error}=await sb.rpc("sync_customer_v3",{
     p_company_id:companyId,p_customer_id:c.remote_id||null,p_legacy_id:legacyId,
     p_name:name,p_phone:phoneSnapshot,p_whatsapp:phoneSnapshot,
+    p_document:c.cpf_cnpj||null,p_email:c.email||null,p_address:c.address||null,p_notes:c.notes||null,p_credit_limit:c.credit_limit==null?null:Number(c.credit_limit),
     p_expected_updated_at:c._remote_updated_at||null
    });
    if(error)throw error;
@@ -539,7 +541,7 @@ async function syncCustomers(){
    c.remote_id=result.customer_id;
    const changedDuringRequest=c._sync_updated_at!==pendingVersion||String(c.name||"").trim()!==name||(c.tel||null)!==phoneSnapshot;
    if(result.sync_status==="conflict"){
-    c._sync_conflict={updated_at:result.updated_at,name:result.server_name,phone:result.server_phone,whatsapp:result.server_whatsapp,status:result.server_status};
+    c._sync_conflict={updated_at:result.updated_at,name:result.server_name,phone:result.server_phone,whatsapp:result.server_whatsapp,status:result.server_status,document:result.server_document,email:result.server_email,address:result.server_address,notes:result.server_notes,credit_limit:result.server_credit_limit};
     conflicts++;save();continue;
    }
    if(!["created","updated","unchanged"].includes(result.sync_status))throw Error("Estado de sincronização não reconhecido: "+result.sync_status);
@@ -549,25 +551,25 @@ async function syncCustomers(){
    save();
   }
   say("Conferindo alterações remotas dos clientes…");
-  const remote=await fetchPagedRows(()=>sb.from("customers").select("id,legacy_id,name,phone,whatsapp,status,updated_at").eq("company_id",companyId).order("name").order("id"));
+  const remote=await fetchPagedRows(()=>sb.from("customers").select("id,legacy_id,name,phone,whatsapp,status,updated_at,document,email,street,notes,credit_limit").eq("company_id",companyId).order("name").order("id"));
   suppressCustomerSync=true;
   for(const r of remote){
    let local=(S.cl||[]).find(x=>String(x.id)===String(r.legacy_id)||x.remote_id===r.id);
    if(r.status==="inactive"){
     if(local&&!local._sync_pending){local.status="inactive";local.remote_id=r.id;local._remote_updated_at=r.updated_at;}
-    else if(local&&local._sync_pending){local.remote_id=r.id;local._sync_conflict={updated_at:r.updated_at,name:r.name,phone:r.phone,whatsapp:r.whatsapp,status:r.status};conflicts++;}
+    else if(local&&local._sync_pending){local.remote_id=r.id;local._sync_conflict={updated_at:r.updated_at,name:r.name,phone:r.phone,whatsapp:r.whatsapp,status:r.status,document:r.document,email:r.email,address:r.street,notes:r.notes,credit_limit:r.credit_limit};conflicts++;}
     continue;
    }
-   if(!local){S.cl.push({id:r.legacy_id||("sb-"+r.id),remote_id:r.id,name:r.name,tel:r.whatsapp||r.phone||"",status:r.status||"active",_remote_updated_at:r.updated_at});received++;continue;}
+   if(!local){S.cl.push({id:r.legacy_id||("sb-"+r.id),remote_id:r.id,name:r.name,tel:r.whatsapp||r.phone||"",status:r.status||"active",_remote_updated_at:r.updated_at,...srvCust(r)});received++;continue;}
    local.remote_id=r.id;
    if(local._sync_pending){
-    if(local._remote_updated_at&&local._remote_updated_at!==r.updated_at&&local._sync_conflict?.updated_at!==r.updated_at){local._sync_conflict={updated_at:r.updated_at,name:r.name,phone:r.phone,whatsapp:r.whatsapp,status:r.status};conflicts++;}
+    if(local._remote_updated_at&&local._remote_updated_at!==r.updated_at&&local._sync_conflict?.updated_at!==r.updated_at){local._sync_conflict={updated_at:r.updated_at,name:r.name,phone:r.phone,whatsapp:r.whatsapp,status:r.status,document:r.document,email:r.email,address:r.street,notes:r.notes,credit_limit:r.credit_limit};conflicts++;}
     continue;
    }
    if(local.name!==r.name||local.tel!==(r.whatsapp||r.phone||"")||local.status!==(r.status||"active"))updated++;
-   local.name=r.name;local.tel=r.whatsapp||r.phone||"";local.status=r.status||"active";local._remote_updated_at=r.updated_at;
+   local.name=r.name;local.tel=r.whatsapp||r.phone||"";local.status=r.status||"active";local._remote_updated_at=r.updated_at;Object.assign(local,srvCust(r));
   }
-  save();render();suppressCustomerSync=false;
+  save();render();suppressCustomerSync=false;refreshCustStats();
   const message=`Sincronização concluída. ${sent} enviado(s)/confirmado(s); ${received} recebido(s); ${updated} atualizado(s); ${deleted} inativado(s); ${conflicts} conflito(s) para revisão.`;
   say(message);return{message,conflicts};
  }finally{suppressCustomerSync=false;customerSyncRunning=false;if(customerSyncReschedule){customerSyncReschedule=false;scheduleCustomerSync();}}
@@ -610,7 +612,7 @@ async function syncProducts(){
    if(!legacyId||legacyId.length>120)throw Error("Identificador local inválido para o produto "+name+".");
    if(!name||name.length>240)throw Error("Nome inválido para o produto.");
    if(!Number.isFinite(initialStock)||initialStock<0||Math.round(initialStock*1000)!==initialStock*1000)throw Error("Estoque inicial inválido para "+name+".");
-   const metadata={name,sku:String(p.sku||"").trim()||null,barcode:String(p.barcode||"").trim()||null,description:String(p.description||"").trim()||null,sale_price:salePrice,unit:String(p.unit||"UN").trim().toUpperCase()||"UN"};
+   const metadata={name,sku:String(p.sku||"").trim()||null,barcode:String(p.barcode||"").trim()||null,description:String(p.description||"").trim()||null,sale_price:salePrice,unit:String(p.unit||"UN").trim().toUpperCase()||"UN",category:String(p.category||"").trim()||null,minimum_stock:Number(p.min_stock)>0?Number(p.min_stock):0};
    let remoteId=p.remote_id;
    if(!remoteId){
     // A chave e o payload ficam persistidos antes da RPC: se a resposta se perder, o retry
@@ -621,6 +623,7 @@ async function syncProducts(){
     const created=Array.isArray(data)?data[0]:data;
     if(!created?.product_id)throw Error("O banco não confirmou o cadastro do produto.");
     remoteId=created.product_id;p.remote_id=remoteId;p._stock_initialized=true;
+    {const{error:ce}=await sb.from("products").update({category:metadata.category,minimum_stock:metadata.minimum_stock}).eq("id",remoteId).eq("company_id",companyId);if(ce)throw ce;}
     if(!created.already_processed&&initialStock>0)movements++;
     delete p._stock_operation_id;delete p._stock_target;
    }else{
@@ -644,7 +647,7 @@ async function syncProducts(){
    p.remote_id=remoteId;delete p._sync_pending;delete p._sync_updated_at;save();sent++;
   }
   say("Buscando catálogo remoto da empresa…");
-  const remote=await fetchPagedRows(()=>sb.from("products").select("id,legacy_id,sku,barcode,name,description,sale_price,cost_price,stock_control,current_stock,minimum_stock,unit,status,updated_at").eq("company_id",companyId).order("name"));
+  const remote=await fetchPagedRows(()=>sb.from("products").select("id,legacy_id,sku,barcode,name,description,sale_price,cost_price,stock_control,current_stock,minimum_stock,category,unit,status,updated_at").eq("company_id",companyId).order("name"));
   suppressProductSync=true;
   for(const r of remote){
    let local=S.pr.find(x=>x.remote_id===r.id)||(r.legacy_id?S.pr.find(x=>String(x.id)===String(r.legacy_id)):null);
@@ -653,16 +656,16 @@ async function syncProducts(){
     continue;
    }
    if(!local){
-    S.pr.push({id:r.legacy_id||("sb-"+r.id),remote_id:r.id,sku:r.sku||"",barcode:r.barcode||"",name:r.name,description:r.description||"",price:Number(r.sale_price)||0,cost:r.cost_price==null?null:Number(r.cost_price),stock:r.stock_control?Number(r.current_stock):null,unit:r.unit||"UN",status:r.status||"active",_stock_initialized:true});received++;
+    S.pr.push({id:r.legacy_id||("sb-"+r.id),remote_id:r.id,sku:r.sku||"",barcode:r.barcode||"",name:r.name,description:r.description||"",price:Number(r.sale_price)||0,cost:r.cost_price==null?null:Number(r.cost_price),stock:r.stock_control?Number(r.current_stock):null,unit:r.unit||"UN",category:r.category||null,min_stock:Number(r.minimum_stock)>0?Number(r.minimum_stock):null,status:r.status||"active",_stock_initialized:true});received++;
     continue;
    }
    local.remote_id=r.id;
    if(!local._sync_pending){
     if(local.name!==r.name||Number(local.price)!==Number(r.sale_price)||Number(local.cost??-1)!==Number(r.cost_price??-1))updated++;
-    local.name=r.name;local.sku=r.sku||"";local.barcode=r.barcode||"";local.description=r.description||"";local.price=Number(r.sale_price)||0;local.cost=r.cost_price==null?null:Number(r.cost_price);local.stock=r.stock_control?Number(r.current_stock):null;local.unit=r.unit||"UN";local.status=r.status||"active";local._stock_initialized=true;
+    local.name=r.name;local.sku=r.sku||"";local.barcode=r.barcode||"";local.description=r.description||"";local.price=Number(r.sale_price)||0;local.cost=r.cost_price==null?null:Number(r.cost_price);local.stock=r.stock_control?Number(r.current_stock):null;local.unit=r.unit||"UN";local.category=r.category||null;local.min_stock=Number(r.minimum_stock)>0?Number(r.minimum_stock):null;local.status=r.status||"active";local._stock_initialized=true;
    }
   }
-  save();render();suppressProductSync=false;
+  S.pcats=[...new Set([...(S.pcats||[]),...S.pr.map(x=>x.category).filter(Boolean)])].sort((a,b)=>a.localeCompare(b,"pt-BR"));save();render();suppressProductSync=false;
   const message=`Catálogo sincronizado. ${sent} enviado(s); ${received} recebido(s); ${updated} atualizado(s); ${deleted} inativado(s); ${movements} movimentação(ões) de estoque.`;
   say(message);return{message};
  }finally{suppressProductSync=false;productSyncRunning=false;}
@@ -768,7 +771,7 @@ async function resolveRemoteSalePayload(input,operationId,companyId,user){
  const due=method==="fiado"||method==="futuro"?String(input.due||""):null;
  const count=method==="futuro"?positiveInteger(input.installments):1;
  const noteParts=[];if(customer&&!customerId)noteParts.push("Cliente informado na venda: "+customer);if(phone)noteParts.push("WhatsApp informado: "+phone);
- return{p_company_id:companyId,p_operation_id:operationId,p_customer_id:customerId,p_description:String(input.description||"").trim(),p_sale_date:String(input.date),p_payment_method:method,p_discount:centsToMoney(moneyToCents(input.discount??0,"Desconto")),p_items:remoteItems,p_installment_count:count||1,p_first_due_date:due,p_notes:noteParts.join(" | ")||null};
+ return{p_company_id:companyId,p_operation_id:operationId,p_customer_id:customerId,p_description:String(input.description||"").trim(),p_sale_date:String(input.date),p_payment_method:method,p_discount:centsToMoney(moneyToCents(input.discount??0,"Desconto")),p_items:remoteItems,p_installment_count:count||1,p_first_due_date:due,p_notes:noteParts.join(" | ")||null,p_credit_override:input.creditOverride===true};
 }
 async function executePendingRemoteSale(){
  if(remoteSaleRunning)return;
@@ -1008,8 +1011,7 @@ document.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g
 $("theme").onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;r.dataset.theme=dark?"light":"dark"};
 
 // inicialização de campos
-CATS.forEach(c=>{$("g-cat").add(new Option(c,c))});
-$("g-fc").add(new Option("Todas",""));CATS.forEach(c=>$("g-fc").add(new Option(c,c)));
+// categorias de gasto: preenchidas por fillCats() (editáveis)
 $("e-date").value=$("g-date").value=today();$("g-fm").value=today().slice(0,7);
 $("e-met").onchange=()=>{$("e-dueBox").style.display=["Fiado","Futuro"].includes($("e-met").value)?"block":"none"};
 
@@ -1037,6 +1039,7 @@ $("e-save").onclick=async()=>{
    phone:$("e-tel").value,
    items
   };
+  if(!creditCheck(saleInput))throw Error("Venda não realizada: limite de fiado excedido.");
   if(isCompanyWorkspace()){
    await startRemoteSale(saleInput);
    ["e-desc","e-val","e-cli","e-cli-sel","e-tel","e-due","e-disc"].forEach(id=>$(id).value="");
@@ -1141,7 +1144,7 @@ function render(){if(typeof renderOnb==="function"){renderOnb();fillStmt();wipeS
  const lim=iso(new Date(Date.now()+3*864e5));
  const al=S.rc.filter(r=>rem(r)>0&&r.due<=lim).sort((a,b)=>a.due<b.due?-1:1);
  $("d-alert").innerHTML=al.length?al.map(r=>`<div class="alert ${late(r)?"late":""}">${late(r)?"⚠ Atrasado":"⏰ Vence em breve"}: <b>${esc(r.client||r.desc)}</b> · ${R(rem(r))} · ${esc(D(r.due))}</div>`).join(""):`<div class="card empty">Nenhum vencimento próximo ou atrasado 🎉</div>`;
- $("d-alert").innerHTML+=S.pr.filter(p=>p.stock!=null&&p.stock<=LOW).map(p=>`<div class="alert">📦 Estoque baixo: <b>${esc(p.name)}</b> · restam ${esc(p.stock)}</div>`).join("");
+ $("d-alert").innerHTML+=S.pr.filter(p=>p.stock!=null&&p.stock<=lowOf(p)).map(p=>`<div class="alert">📦 Estoque baixo: <b>${esc(p.name)}</b> · restam ${esc(p.stock)}</div>`).join("");
  const last=[...S.tx].sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0).slice(0,6);
  $("d-last").innerHTML=last.length?last.map(mov).join(""):`<div class="empty">Ainda sem movimentações.</div>`;
  // recebimentos
@@ -1166,7 +1169,7 @@ function render(){if(typeof renderOnb==="function"){renderOnb();fillStmt();wipeS
  $("p-ll").textContent=luc>=0?"Lucro líquido":"Prejuízo líquido";
  $("p-lu").textContent=R(luc);$("p-lu").className="v "+(luc>=0?"g":"r");
  $("p-pe").textContent=R(pend);
- const bc=CATS.map(c=>[c,sum(outL.filter(t=>t.cat===c).map(t=>t.amount))]).filter(x=>x[1]>0).sort((x,y)=>y[1]-x[1]);
+ const bc=[...new Set([...ecats(),...outL.map(t=>t.cat).filter(Boolean)])].map(c=>[c,sum(outL.filter(t=>t.cat===c).map(t=>t.amount))]).filter(x=>x[1]>0).sort((x,y)=>y[1]-x[1]);
  $("p-cat").innerHTML=bc.length?bc.map(([c,v])=>`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between"><span>${esc(c)}</span><b>${R(v)} <span class="k">(${Math.round(v/outR*100)}%)</span></b></div><div class="bar"><i style="width:${v/outR*100}%"></i></div></div>`).join(""):`<div class="empty">Sem gastos no período.</div>`;
  REP=`*M7 ERP – Resumo*\n${$("p-lab").textContent}\n\n✅ Entradas recebidas: ${R(inR)}\n🔻 Gastos: ${R(outR)}\n${luc>=0?"💰 Lucro":"⚠ Prejuízo"} líquido: ${R(luc)}\n⏳ Pendente a receber: ${R(pend)}`+(bc.length?"\n\n*Gastos por categoria*\n"+bc.map(([c,v])=>`• ${c}: ${R(v)}`).join("\n"):"");
 }
@@ -1192,7 +1195,7 @@ $("b-b").onclick=e=>{const b=e.target.closest("[data-bi]");if(!b)return;const[k,
 // editar lançamentos
 function editTx(id){ET=S.tx.find(x=>x.id===id);if(!ET)return;if(ET.sale_id||ET.receivable_id||ET.items?.length)return toast("Lançamentos vinculados a venda/recebimento não podem ser editados diretamente.");const o=ET.type==="out";
  $("ed-desc").value=ET.desc;$("ed-val").value=ET.amount;$("ed-date").value=ET.date;$("ed-cli").value=ET.client||"";$("ed-clib").style.display=o?"none":"block";
- const ops=o?CATS:["Pix","Dinheiro","Cartão"],cv=(o?ET.cat:ET.method)||ops[0];
+ const ops=o?ecats():["Pix","Dinheiro","Cartão"],cv=(o?ET.cat:ET.method)||ops[0];
  $("ed-sl").textContent=o?"Categoria":"Forma de pagamento";$("ed-method-box").style.display=o?"block":"none";$("ed-method").value=ET.method||"cash";
  $("ed-sel").innerHTML=(ops.includes(cv)?ops:[...ops,cv]).map(x=>`<option>${esc(x)}</option>`).join("");$("ed-sel").value=cv;
  $("edlg").showModal()}
@@ -1314,22 +1317,98 @@ $("cx-d").onchange=async()=>{cx(true);await loadRemoteCashClosing($("cx-d").valu
 $("cx-i").oninput=$("cx-c").oninput=()=>{S.cx[$("cx-d").value||today()]={i:$("cx-i").value,c:$("cx-c").value};save();cx(false)};
 $("cx-save-remote").onclick=saveRemoteCashClosing;
 $("cx-copy").onclick=()=>{if(navigator.clipboard)navigator.clipboard.writeText(CXT).then(()=>toast("Fechamento copiado!"),()=>prompt("Copie:",CXT));else prompt("Copie:",CXT)};
+
+// ---- v45: categorias, estoque mínimo, margem, limite de fiado, histórico e busca ----
+// Obs.: estes campos novos ficam no aparelho; para sincronizar com o Supabase é preciso criar as colunas correspondentes.
+function lowOf(p){return Number(p.min_stock)>0?Number(p.min_stock):LOW}
+function pcats(){return Array.isArray(S.pcats)?S.pcats:(S.pcats=[])}
+function ecats(){return Array.isArray(S.ecats)&&S.ecats.length?S.ecats:CATS}
+function fillCats(){
+ const mk=(id,list,first,mgr)=>{const s=$(id);if(!s)return;const v=s.value;
+  s.innerHTML=(first!=null?`<option value="">${first}</option>`:"")+list.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("")+(mgr?'<option value="__new">⚙ Criar / remover categoria…</option>':"");
+  s.value=[...s.options].some(o=>o.value===v&&v!=="__new")?v:(first!=null?"":list[0])};
+ mk("pr-cat",pcats(),"Sem categoria",true);mk("g-cat",ecats(),null,true);mk("g-fc",ecats(),"Todas",false);
+}
+function setProdCat(c){const s=$("pr-cat");if(c&&![...s.options].some(o=>o.value===c))s.add(new Option(c,c),s.options[s.options.length-1]);s.value=c||""}
+function catManage(kind){
+ const isP=kind==="p",lst=isP?pcats().slice():ecats().slice();
+ const raw=prompt((isP?"Categorias de produto: ":"Categorias de gasto: ")+(lst.join(", ")||"nenhuma")+"\nDigite um nome para criar ou -Nome para remover.");
+ if(raw===null)return;const t=raw.trim();if(!t)return;
+ const rm=t[0]==="-",name=(rm?t.slice(1):t).trim().slice(0,40);if(!name)return;
+ const has=lst.some(x=>x.toLowerCase()===name.toLowerCase());let out;
+ if(rm){if(!has)return toast("Categoria não encontrada.");out=lst.filter(x=>x.toLowerCase()!==name.toLowerCase());if(!isP&&!out.length)return toast("Mantenha ao menos uma categoria de gasto.")}
+ else{if(has)return toast("Essa categoria já existe.");out=lst.concat([name])}
+ if(isP)S.pcats=out;else S.ecats=out;save();fillCats();if(!rm)$(isP?"pr-cat":"g-cat").value=name;
+}
+$("pr-cat").onchange=e=>{if(e.target.value==="__new"){e.target.value="";catManage("p")}};
+$("g-cat").onchange=e=>{if(e.target.value==="__new"){e.target.value=ecats()[0];catManage("e")}};
+function prMargin(){const el=$("pr-margin");if(!el)return;const pr=parseFloat($("pr-p").value),c=parseFloat($("pr-c").value);
+ if(!(pr>0)||$("pr-c").value.trim()===""||!Number.isFinite(c)){el.textContent="";return}
+ const m=(pr-c)/pr*100;el.textContent=`Margem: ${m.toFixed(1).replace(".",",")}% · lucro de ${R(pr-c)} por unidade`+(pr<c?" ⚠ preço abaixo do custo":"");el.style.color=pr<c?"var(--r)":""}
+$("pr-p").addEventListener("input",prMargin);$("pr-c").addEventListener("input",prMargin);
+function clrCust(){["c-doc","c-em","c-end","c-lim","c-obs"].forEach(i=>$(i).value="")}
+function fillCust(c){$("c-doc").value=c.cpf_cnpj||"";$("c-em").value=c.email||"";$("c-end").value=c.address||"";$("c-lim").value=c.credit_limit==null?"":c.credit_limit;$("c-obs").value=c.notes||""}
+function custStats(c){const sid=new Set(),dt=[];let tot=0;
+ S.tx.forEach(t=>{if(t.type==="in"&&t.client===c.name&&t.sale_id&&!t.receivable_id&&t.status!=="void"){tot+=Number(t.amount)||0;sid.add(t.sale_id);dt.push(t.date)}});
+ S.rc.forEach(r=>{if(r.client===c.name&&r.sale_id){tot+=Number(r.total)||0;sid.add(r.sale_id);dt.push(r.date||r.due)}});
+ const n=sid.size;return{n,tot,avg:n?tot/n:0,last:dt.filter(Boolean).sort().pop()||null}}
+function custInfo(c){let st=custStats(c);if(c._stats&&c._stats.n>=st.n)st=c._stats;const a=[];
+ if(st.n)a.push(`${st.n} compra${st.n>1?"s":""} · total ${R(st.tot)} · ticket ${R(st.avg)} · última ${esc(D(st.last))}`);
+ if(c.credit_limit!=null)a.push("limite de fiado "+R(c.credit_limit));
+ if(c.cpf_cnpj)a.push("doc. "+esc(c.cpf_cnpj));if(c.email)a.push(esc(c.email));if(c.address)a.push(esc(c.address));if(c.notes)a.push("obs.: "+esc(c.notes));
+ return a.length?`<small>${a.join(" · ")}</small>`:""}
+function creditCheck(inp){
+ if(inp.method!=="Fiado")return true;
+ const nm=String(inp.customer||"").trim().toLowerCase(),c=S.cl.find(x=>x.status!=="inactive"&&String(x.name||"").trim().toLowerCase()===nm);
+ if(!c||c.credit_limit==null)return true;
+ const lim=Number(c.credit_limit),debt=sum(S.rc.filter(r=>String(r.client||"").trim().toLowerCase()===nm).map(rem)),add=Math.max(0,Number(inp.amount)||0);
+ if(debt+add<=lim+0.005)return true;
+ const msg=`${c.name}: limite de fiado ${R(lim)}. Em aberto ${R(debt)} + esta venda ${R(add)} = ${R(debt+add)}.`;
+ if(!isCompanyWorkspace()||["owner","admin","manager"].includes(activeCompanyRole)){const ok=confirm(msg+"\n\nO limite será ultrapassado. Autorizar mesmo assim?");if(ok)inp.creditOverride=true;return ok}
+ alert(msg+"\n\nVenda bloqueada: peça autorização ao gerente.");return false}
+function srvCust(r){return{cpf_cnpj:r.document||null,email:r.email||null,address:r.street||null,notes:r.notes||null,credit_limit:r.credit_limit==null?null:Number(r.credit_limit)}}
+async function refreshCustStats(){
+ try{if(!sb||!navigator.onLine||!isCompanyWorkspace())return;
+  const companyId=activeStorageKey.slice("m7c:v2:company:".length);
+  const{data,error}=await sb.rpc("customer_purchase_stats_v1",{p_company_id:companyId});if(error)throw error;
+  const m=new Map((data||[]).map(x=>[x.customer_id,x]));
+  S.cl.forEach(c=>{const x=c.remote_id&&m.get(c.remote_id);c._stats=x?{n:Number(x.purchases),tot:Number(x.total_spent),avg:Number(x.avg_ticket),last:x.last_purchase}:null});
+  save();render()}catch(e){console.warn("Estatísticas de clientes",e)}}
+function gsearch(){
+ const q=$("gs-q").value.trim().toLowerCase(),out=$("gs-out");if(q.length<2){out.innerHTML="";return}
+ const has=(...a)=>a.some(x=>String(x||"").toLowerCase().includes(q));
+ const P=S.pr.filter(p=>has(p.name,p.sku,p.barcode,p.category)).slice(0,5),
+  C=S.cl.filter(c=>c.status!=="inactive"&&has(c.name,c.tel,c.cpf_cnpj,c.email)).slice(0,5),
+  V=S.tx.filter(t=>t.type==="in"&&has(t.desc,t.client)).sort((a,b)=>a.date<b.date?1:-1).slice(0,5);
+ const sec=(t,r)=>r.length?`<h3>${t}</h3>`+r.join(""):"";
+ out.innerHTML=sec("Produtos",P.map(p=>`<div class="it"><div><b>${esc(p.name)}</b><small>${p.stock==null?"sem controle de estoque":"Estoque: "+esc(p.stock)}${p.category?" · "+esc(p.category):""}</small></div><div class="amt g">${R(p.price)}</div></div>`))
+  +sec("Clientes",C.map(c=>`<div class="it"><div><b>${esc(c.name)}</b><small>${esc(c.tel||"sem WhatsApp")}</small></div><button class="sm gh" data-gx="${esc(c.id)}">Extrato</button></div>`))
+  +sec("Vendas",V.map(t=>`<div class="it"><div><b>${esc(t.desc)}</b><small>${esc(D(t.date))}${t.client?" · "+esc(t.client):""}${t.status==="void"?" · ESTORNADA":""}</small></div><div class="amt g">${R(t.amount)}</div></div>`))
+  ||'<div class="empty">Nada encontrado.</div>'}
+$("gs-q").addEventListener("input",gsearch);
+$("gs-out").onclick=e=>{const b=e.target.closest("[data-gx]");if(b)extrato(b.dataset.gx)};
 // cadastros, produtos e recibo
 let rcpt=null,RT="",EP=null,CE=null,ET=null;
 function cad(){
+ fillCats();
  $("cl-dl").innerHTML=S.cl.filter(c=>c.status!=="inactive").map(c=>`<option value="${esc(c.name)}">`).join("");
  {const sel=$("e-cli-sel"),keep=sel.value;sel.innerHTML='<option value="">— Escolher cliente cadastrado —</option>'+S.cl.filter(c=>c.status!=="inactive").map(c=>`<option value="${esc(c.name)}">${esc(c.name)}</option>`).join("");sel.value=[...sel.options].some(o=>o.value===keep)?keep:""}
  const pv=$("e-prod").value;$("e-prod").innerHTML='<option value="">—</option>'+S.pr.map(p=>`<option value="${esc(p.id)}">${esc(p.name)} · ${R(p.price)}${p.stock!=null?` · est. ${esc(p.stock)}`:""}</option>`).join("");$("e-prod").value=pv;
- $("c-list").innerHTML=S.cl.length?S.cl.map(c=>{const d=sum(S.rc.filter(r=>r.client===c.name).map(rem));return `<div class="it"><div><b>${esc(c.name)}</b><small>${esc(c.tel||"sem WhatsApp")}${d>0?` · deve ${R(d)}`:""}${c.status==="inactive"?" · inativo no servidor":""}${c._sync_conflict?" · ⚠ conflito entre dispositivos":""}</small>${c._sync_conflict?`<div class="acts"><button class="sm gh" data-cf-server="${esc(c.id)}">Usar versão do servidor</button>${c._sync_conflict.status!=="inactive"?`<button class="sm gh" data-cf-local="${esc(c.id)}">Manter minha versão</button>`:""}</div>`:""}</div><span class="acts"><button class="sm gh" data-ex="${esc(c.id)}">Extrato</button>${c.status!=="inactive"?`<button class="sm gh" data-ec="${esc(c.id)}">✎ Editar</button><button class="sm gh" data-dc="${esc(c.id)}">Excluir</button>`:""}</span></div>`}).join(""):'<div class="empty">Nenhum cliente ainda. Cadastre acima para escolher o cliente na hora da venda.</div>';
- $("pr-list").innerHTML=S.pr.length?S.pr.map(p=>`<div class="it"><div><b>${esc(p.name)}</b><small>${p.cost!=null?`custo ${R(p.cost)} · margem ${p.price>0?Math.round((p.price-p.cost)/p.price*100):0}% · `:""}${p.stock==null?"sem controle de estoque":"Estoque: "+esc(p.stock)}${p.stock!=null&&p.stock<=LOW?" · ⚠ acabando":""}${p.sku?" · cód. "+esc(p.sku):""}${p.barcode?" · 🏷 "+esc(p.barcode):""}${p.unit&&p.unit!=="UN"?" · "+esc(p.unit):""}</small><div class="acts"><button class="sm gh" data-ep="${esc(p.id)}">✎ Editar</button>${p.stock!=null?`<button class="sm gh" data-rp="${esc(p.id)}">+ Repor</button>`:""}<button class="sm gh" data-dp="${esc(p.id)}">Excluir</button></div></div><div class="amt g">${R(p.price)}</div></div>`).join(""):'<div class="empty">Nenhum produto.</div>';
+ $("c-list").innerHTML=S.cl.length?S.cl.map(c=>{const d=sum(S.rc.filter(r=>r.client===c.name).map(rem));return `<div class="it"><div><b>${esc(c.name)}</b><small>${esc(c.tel||"sem WhatsApp")}${d>0?` · deve ${R(d)}`:""}${c.status==="inactive"?" · inativo no servidor":""}${c._sync_conflict?" · ⚠ conflito entre dispositivos":""}</small>${custInfo(c)}${c._sync_conflict?`<div class="acts"><button class="sm gh" data-cf-server="${esc(c.id)}">Usar versão do servidor</button>${c._sync_conflict.status!=="inactive"?`<button class="sm gh" data-cf-local="${esc(c.id)}">Manter minha versão</button>`:""}</div>`:""}</div><span class="acts"><button class="sm gh" data-ex="${esc(c.id)}">Extrato</button>${c.status!=="inactive"?`<button class="sm gh" data-ec="${esc(c.id)}">✎ Editar</button><button class="sm gh" data-dc="${esc(c.id)}">Excluir</button>`:""}</span></div>`}).join(""):'<div class="empty">Nenhum cliente ainda. Cadastre acima para escolher o cliente na hora da venda.</div>';
+ $("pr-list").innerHTML=S.pr.length?S.pr.map(p=>`<div class="it"><div><b>${esc(p.name)}</b><small>${p.cost!=null?`custo ${R(p.cost)} · margem ${p.price>0?Math.round((p.price-p.cost)/p.price*100):0}% · `:""}${p.stock==null?"sem controle de estoque":"Estoque: "+esc(p.stock)}${p.stock!=null&&p.stock<=lowOf(p)?" · ⚠ acabando":""}${p.min_stock!=null?" · mín. "+esc(p.min_stock):""}${p.category?" · 🗂 "+esc(p.category):""}${p.sku?" · cód. "+esc(p.sku):""}${p.barcode?" · 🏷 "+esc(p.barcode):""}${p.unit&&p.unit!=="UN"?" · "+esc(p.unit):""}</small><div class="acts"><button class="sm gh" data-ep="${esc(p.id)}">✎ Editar</button>${p.stock!=null?`<button class="sm gh" data-rp="${esc(p.id)}">+ Repor</button>`:""}<button class="sm gh" data-dp="${esc(p.id)}">Excluir</button></div></div><div class="amt g">${R(p.price)}</div></div>`).join(""):'<div class="empty">Nenhum produto.</div>';
 }
 $("s-name").value=S.shop;$("s-name").oninput=()=>{S.shop=$("s-name").value;save()};
-$("pr-cancel").onclick=()=>{["pr-sku","pr-bar","pr-desc"].forEach(i=>$(i).value="");$("pr-unit").value="UN";EP=null;$("pr-n").value=$("pr-p").value=$("pr-s").value=$("pr-c").value="";$("pr-add").textContent="Adicionar produto";$("pr-cancel").style.display="none"};
-$("c-cancel").onclick=()=>{CE=null;$("c-n").value=$("c-t").value="";$("c-add").textContent="Adicionar cliente";$("c-cancel").style.display="none"};
+$("pr-cancel").onclick=()=>{["pr-sku","pr-bar","pr-desc"].forEach(i=>$(i).value="");$("pr-unit").value="UN";$("pr-cat").value="";$("pr-min").value="";EP=null;prMargin();$("pr-n").value=$("pr-p").value=$("pr-s").value=$("pr-c").value="";$("pr-add").textContent="Adicionar produto";$("pr-cancel").style.display="none"};
+$("c-cancel").onclick=()=>{CE=null;$("c-n").value=$("c-t").value="";clrCust();$("c-add").textContent="Adicionar cliente";$("c-cancel").style.display="none"};
 $("c-add").onclick=()=>{const n=$("c-n").value.trim();if(!n)return toast("Informe o nome");
  const ph=$("c-t").value.trim(),pd=ph.replace(/\D/g,"");if(ph&&(pd.length<10||pd.length>13))return toast("WhatsApp inválido. Use DDD + número, ex.: (11) 99999-9999.");
+ const doc=$("c-doc").value.replace(/\D/g,""),em=$("c-em").value.trim(),lim=$("c-lim").value.trim();
+ if(doc&&!(pixCpfOk(doc)||pixCnpjOk(doc)))return toast("CPF/CNPJ inválido.");
+ if(em&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em))return toast("E-mail inválido.");
+ if(lim!==""&&!(Number(lim)>=0))return toast("Limite de fiado inválido.");
+ const extra={cpf_cnpj:doc||null,email:em||null,address:$("c-end").value.trim()||null,notes:$("c-obs").value.trim()||null,credit_limit:lim===""?null:Number(lim)};
  const dc=S.cl.find(x=>x.id!==CE&&x.status!=="inactive"&&(String(x.name||"").trim().toLowerCase()===n.toLowerCase()||(pd&&String(x.tel||"").replace(/\D/g,"")===pd)));
- if(dc)return toast("Já existe cliente com este "+(String(dc.name).trim().toLowerCase()===n.toLowerCase()?"nome":"WhatsApp")+": "+dc.name+".");if(CE){const c=S.cl.find(x=>x.id===CE);if(c){S.rc.forEach(r=>{if(r.client===c.name){r.client=n;r.tel=$("c-t").value}});S.tx.forEach(t=>{if(t.client===c.name)t.client=n});c.name=n;c.tel=$("c-t").value;markCustomerPending(c)}}else{const c={id:uid(),name:n,tel:$("c-t").value,status:"active"};S.cl.push(c);markCustomerPending(c)}CE=null;$("c-add").textContent="Adicionar cliente";$("c-cancel").style.display="none";save();$("c-n").value=$("c-t").value="";render()};
+ if(dc)return toast("Já existe cliente com este "+(String(dc.name).trim().toLowerCase()===n.toLowerCase()?"nome":"WhatsApp")+": "+dc.name+".");if(CE){const c=S.cl.find(x=>x.id===CE);if(c){S.rc.forEach(r=>{if(r.client===c.name){r.client=n;r.tel=$("c-t").value}});S.tx.forEach(t=>{if(t.client===c.name)t.client=n});c.name=n;c.tel=$("c-t").value;Object.assign(c,extra);markCustomerPending(c)}}else{const c={id:uid(),name:n,tel:$("c-t").value,status:"active",...extra};S.cl.push(c);markCustomerPending(c)}CE=null;$("c-add").textContent="Adicionar cliente";$("c-cancel").style.display="none";save();$("c-n").value=$("c-t").value="";clrCust();render()};
 $("pr-add").onclick=()=>{
  const n=$("pr-n").value.trim(),price=parseFloat($("pr-p").value),costRaw=$("pr-c").value.trim(),stockRaw=$("pr-s").value.trim();
  if(!n||!Number.isFinite(price)||price<0)return toast("Informe nome e preço válido.");
@@ -1337,16 +1416,17 @@ $("pr-add").onclick=()=>{
  const stockValue=stockRaw===""?null:Number(stockRaw);if(stockValue!==null&&(!Number.isInteger(stockValue)||stockValue<0))return toast("O estoque deve ser um número inteiro maior ou igual a zero.");
  const sku=$("pr-sku").value.trim(),barcode=$("pr-bar").value.trim(),description=$("pr-desc").value.trim(),unit=$("pr-unit").value||"UN";
  if(barcode&&!/^\d{8,14}$/.test(barcode))return toast("Código de barras inválido: use de 8 a 14 números.");
+ const minRaw=$("pr-min").value.trim(),minStock=minRaw===""?null:Number(minRaw);if(minStock!==null&&(!Number.isInteger(minStock)||minStock<0))return toast("O estoque mínimo deve ser um inteiro maior ou igual a zero.");
  const dp=S.pr.find(x=>x.id!==EP&&x.status!=="inactive"&&(String(x.name||"").trim().toLowerCase()===n.toLowerCase()||(sku&&String(x.sku||"").toLowerCase()===sku.toLowerCase())||(barcode&&x.barcode===barcode)));
  if(dp)return toast("Já existe produto com "+(String(dp.name).trim().toLowerCase()===n.toLowerCase()?"este nome":(barcode&&dp.barcode===barcode?"este código de barras":"este código/SKU"))+": "+dp.name+".");
  const ix=S.pr.findIndex(x=>x.id===EP),old=ix>=0?S.pr[ix]:null;
- const p={...(old||{}),id:old?.id||uid(),name:n,price,cost,stock:stockValue,sku:sku||null,barcode:barcode||null,description:description||null,unit};
+ const p={...(old||{}),id:old?.id||uid(),name:n,price,cost,stock:stockValue,sku:sku||null,barcode:barcode||null,description:description||null,unit,category:$("pr-cat").value||null,min_stock:minStock};
  if(old&&old.remote_id&&stockValue!==old.stock&&stockValue!=null){p._stock_target=stockValue;p._stock_operation_id=crypto.randomUUID();}
  else if(!old&&stockValue!=null){p._stock_target=stockValue;p._stock_operation_id=crypto.randomUUID();}
- if(ix<0)S.pr.push(p);else S.pr[ix]=p;markProductPending(p);save();$("pr-n").value=$("pr-p").value=$("pr-s").value=$("pr-c").value="";["pr-sku","pr-bar","pr-desc"].forEach(i=>$(i).value="");$("pr-unit").value="UN";EP=null;$("pr-add").textContent="Adicionar produto";$("pr-cancel").style.display="none";render();
+ if(ix<0)S.pr.push(p);else S.pr[ix]=p;markProductPending(p);save();$("pr-n").value=$("pr-p").value=$("pr-s").value=$("pr-c").value="";["pr-sku","pr-bar","pr-desc"].forEach(i=>$(i).value="");$("pr-unit").value="UN";$("pr-cat").value="";$("pr-min").value="";EP=null;prMargin();$("pr-add").textContent="Adicionar produto";$("pr-cancel").style.display="none";render();
 };
-$("c-list").onclick=e=>{const ex=e.target.closest("[data-ex]");if(ex)return extrato(ex.dataset.ex);const ed=e.target.closest("[data-ec]");if(ed){const c=S.cl.find(x=>x.id===ed.dataset.ec);if(!c||c.status==="inactive")return toast("Cliente inativo não pode ser editado.");CE=c.id;$("c-n").value=c.name;$("c-t").value=c.tel||"";$("c-add").textContent="Salvar alterações";$("c-cancel").style.display="";$("c-n").scrollIntoView({block:"center"});$("c-n").focus();return}const useServer=e.target.closest("[data-cf-server]");if(useServer){const c=S.cl.find(x=>x.id===useServer.dataset.cfServer);if(c&&c._sync_conflict){const v=c._sync_conflict;c.name=v.name||c.name;c.tel=v.whatsapp||v.phone||"";c.status=v.status||c.status;c._remote_updated_at=v.updated_at;delete c._sync_pending;delete c._sync_updated_at;delete c._sync_conflict;save();render();toast("Versão do servidor aplicada ao aparelho.");}return}const useLocal=e.target.closest("[data-cf-local]");if(useLocal){const c=S.cl.find(x=>x.id===useLocal.dataset.cfLocal);if(c&&c._sync_conflict){c._remote_updated_at=c._sync_conflict.updated_at;delete c._sync_conflict;c._sync_pending=true;c._sync_updated_at=new Date().toISOString();save();render();toast("Sua versão foi mantida. Sincronize novamente para confirmar a substituição no servidor.");}return}const b=e.target.closest("[data-dc]");if(b&&confirm("Excluir cliente? O cadastro será inativado no servidor para preservar o histórico.")){const c=S.cl.find(x=>x.id===b.dataset.dc);if(c){S.cl_deleted=S.cl_deleted||[];S.cl_deleted.push({remote_id:c.remote_id||null,legacy_id:c.id});}S.cl=S.cl.filter(c=>c.id!==b.dataset.dc);save();scheduleCustomerSync();render()}};
-$("pr-list").onclick=e=>{const ed=e.target.closest("[data-ep]");if(ed){const p=S.pr.find(x=>x.id===ed.dataset.ep);EP=p.id;$("pr-n").value=p.name;$("pr-p").value=p.price;$("pr-c").value=p.cost==null?"":p.cost;$("pr-s").value=p.stock==null?"":p.stock;$("pr-sku").value=p.sku||"";$("pr-bar").value=p.barcode||"";$("pr-desc").value=p.description||"";$("pr-unit").value=p.unit||"UN";$("pr-add").textContent="Salvar alterações";$("pr-cancel").style.display="";$("pr-n").scrollIntoView({block:"center"});$("pr-n").focus();return}const r=e.target.closest("[data-rp]");if(r){const p=S.pr.find(x=>x.id===r.dataset.rp),raw=prompt("Quantas unidades entraram no estoque?");if(raw===null)return;const q=positiveInteger(raw);if(!q)return toast("Informe uma quantidade inteira maior que zero.");p.stock=(p.stock||0)+q;if(p.remote_id){p._stock_target=p.stock;p._stock_operation_id=crypto.randomUUID()}markProductPending(p);save();render();return}const b=e.target.closest("[data-dp]");if(b&&confirm("Inativar produto? O histórico será preservado no servidor.")){const p=S.pr.find(c=>c.id===b.dataset.dp);if(p)S.pr_deleted=(S.pr_deleted||[]).concat([{remote_id:p.remote_id||null,legacy_id:p.id}]);S.pr=S.pr.filter(c=>c.id!==b.dataset.dp);save();scheduleProductSync();render()}};
+$("c-list").onclick=e=>{const ex=e.target.closest("[data-ex]");if(ex)return extrato(ex.dataset.ex);const ed=e.target.closest("[data-ec]");if(ed){const c=S.cl.find(x=>x.id===ed.dataset.ec);if(!c||c.status==="inactive")return toast("Cliente inativo não pode ser editado.");CE=c.id;$("c-n").value=c.name;$("c-t").value=c.tel||"";fillCust(c);$("c-add").textContent="Salvar alterações";$("c-cancel").style.display="";$("c-n").scrollIntoView({block:"center"});$("c-n").focus();return}const useServer=e.target.closest("[data-cf-server]");if(useServer){const c=S.cl.find(x=>x.id===useServer.dataset.cfServer);if(c&&c._sync_conflict){const v=c._sync_conflict;c.name=v.name||c.name;c.tel=v.whatsapp||v.phone||"";c.status=v.status||c.status;Object.assign(c,{cpf_cnpj:v.document||null,email:v.email||null,address:v.address||null,notes:v.notes||null,credit_limit:v.credit_limit==null?null:Number(v.credit_limit)});c._remote_updated_at=v.updated_at;delete c._sync_pending;delete c._sync_updated_at;delete c._sync_conflict;save();render();toast("Versão do servidor aplicada ao aparelho.");}return}const useLocal=e.target.closest("[data-cf-local]");if(useLocal){const c=S.cl.find(x=>x.id===useLocal.dataset.cfLocal);if(c&&c._sync_conflict){c._remote_updated_at=c._sync_conflict.updated_at;delete c._sync_conflict;c._sync_pending=true;c._sync_updated_at=new Date().toISOString();save();render();toast("Sua versão foi mantida. Sincronize novamente para confirmar a substituição no servidor.");}return}const b=e.target.closest("[data-dc]");if(b&&confirm("Excluir cliente? O cadastro será inativado no servidor para preservar o histórico.")){const c=S.cl.find(x=>x.id===b.dataset.dc);if(c){S.cl_deleted=S.cl_deleted||[];S.cl_deleted.push({remote_id:c.remote_id||null,legacy_id:c.id});}S.cl=S.cl.filter(c=>c.id!==b.dataset.dc);save();scheduleCustomerSync();render()}};
+$("pr-list").onclick=e=>{const ed=e.target.closest("[data-ep]");if(ed){const p=S.pr.find(x=>x.id===ed.dataset.ep);EP=p.id;$("pr-n").value=p.name;$("pr-p").value=p.price;$("pr-c").value=p.cost==null?"":p.cost;$("pr-s").value=p.stock==null?"":p.stock;$("pr-sku").value=p.sku||"";$("pr-bar").value=p.barcode||"";$("pr-desc").value=p.description||"";$("pr-unit").value=p.unit||"UN";setProdCat(p.category);$("pr-min").value=p.min_stock==null?"":p.min_stock;prMargin();$("pr-add").textContent="Salvar alterações";$("pr-cancel").style.display="";$("pr-n").scrollIntoView({block:"center"});$("pr-n").focus();return}const r=e.target.closest("[data-rp]");if(r){const p=S.pr.find(x=>x.id===r.dataset.rp),raw=prompt("Quantas unidades entraram no estoque?");if(raw===null)return;const q=positiveInteger(raw);if(!q)return toast("Informe uma quantidade inteira maior que zero.");p.stock=(p.stock||0)+q;if(p.remote_id){p._stock_target=p.stock;p._stock_operation_id=crypto.randomUUID()}markProductPending(p);save();render();return}const b=e.target.closest("[data-dp]");if(b&&confirm("Inativar produto? O histórico será preservado no servidor.")){const p=S.pr.find(c=>c.id===b.dataset.dp);if(p)S.pr_deleted=(S.pr_deleted||[]).concat([{remote_id:p.remote_id||null,legacy_id:p.id}]);S.pr=S.pr.filter(c=>c.id!==b.dataset.dp);save();scheduleProductSync();render()}};
 function fillProd(){const p=S.pr.find(x=>x.id===$("e-prod").value);if(!p)return;const q=positiveInteger($("e-qty").value);if(!q)return toast("A quantidade deve ser um número inteiro maior que zero.");$("e-desc").value=q>1?`${q}x ${p.name}`:p.name;$("e-val").value=(p.price*q).toFixed(2)}
 $("e-prod").onchange=fillProd;$("e-qty").onchange=()=>{if($("e-prod").value)fillProd()};
 let CART=[];
