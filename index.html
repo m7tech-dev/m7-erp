@@ -378,6 +378,7 @@ async function activateCompanyStorage(session){
   }
   localStorage.setItem("m7c:last_user_id",user.id);
   document.body.classList.remove("tenant-switching");
+  if(navigator.onLine&&typeof billLoad==="function")setTimeout(()=>billLoad(),0);
   sbUser("Conectado: "+(user.email||"usuário autenticado")+" · dados separados por empresa");
   sbStatus("Empresa identificada. Armazenamento local isolado por empresa.");
   const productSyncButton=document.getElementById("sb-sync-products");if(productSyncButton)productSyncButton.disabled=false;const expenseSyncButton=document.getElementById("sb-sync-expenses");if(expenseSyncButton)expenseSyncButton.disabled=false;const customerSyncButton=document.getElementById("sb-sync");if(customerSyncButton)customerSyncButton.disabled=false;const cashCloseButton=document.getElementById("cx-save-remote");if(cashCloseButton)cashCloseButton.disabled=false;
@@ -2448,7 +2449,7 @@ $("onb-card").onclick=e=>{const g=e.target.closest("[data-go]");if(g)return go(g
 // Suporte
 const supMsg=()=>"Olá! Preciso de ajuda com o M7 ERP.\nVersão: "+APP_VERSION+"\nLoja: "+(S.shop||"não informada")+"\nAparelho: "+navigator.userAgent.slice(0,90);
 function supSync(){$("sup-wa").style.display=M7_SUPPORT_WHATS?"block":"none"}
-$("app-ver").textContent="M7 ERP "+APP_VERSION+" · desenvolvido pela M7 TECH";
+$("app-ver").textContent="M7 ERP · desenvolvido pela M7 TECH";
 $("sup-wa").onclick=()=>{if(!M7_SUPPORT_WHATS)return toast("Suporte ainda não configurado.");open("https://wa.me/"+M7_SUPPORT_WHATS+"?text="+encodeURIComponent(supMsg()),"_blank","noopener,noreferrer")};
 $("sup-terms").onclick=()=>openTerms(false);
 
@@ -2534,7 +2535,14 @@ const billUrl=u=>/^https:\/\//i.test(u||"")?u:"";
 async function billCall(body){
  if(!sb)throw Error("Conexão indisponível. Recarregue com internet.");
  const{data,error}=await sb.functions.invoke("asaas-billing",{body});
- if(error){let m="";try{m=(await error.context.json()).message}catch(_){}throw Error(m||"Não foi possível falar com o servidor de cobrança.")}
+ if(error){
+  let m="",st=0;
+  try{st=error.context.status;const j=await error.context.json();m=j.message||j.msg||j.error||""}catch(_){}
+  if(!m&&st===404)m="Função de cobrança não encontrada no servidor (asaas-billing não publicada).";
+  else if(!m&&(st===401||st===403))m="Sessão sem permissão para a cobrança. Saia e entre novamente.";
+  else if(!m&&!st)m="Sem resposta do servidor de cobrança (função fora do ar ou origem não autorizada em BILLING_ALLOWED_ORIGINS).";
+  throw Error(m||"Não foi possível falar com o servidor de cobrança.")
+ }
  return data;
 }
 function billRender(d){
