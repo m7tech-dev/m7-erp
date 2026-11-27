@@ -19,10 +19,10 @@
 :root[data-theme="dark"]{--bg:#0f1417;--card:#192024;--tx:#e8edf0;--mu:#97a3ab;--bd:#2a343a;--gl:#0b3b2e;--rl:#42191b;--al:#43300d;--bl:#13284f;color-scheme:dark}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:84px}
-header{background:var(--g);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:0}
+header{background:var(--g);color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:66px;position:sticky;top:0;z-index:20;box-shadow:0 2px 12px #00000012}
 header b{font-size:20px;letter-spacing:.2px}header small{opacity:.88;display:block;font-size:11px}.brand{display:flex;flex-direction:column;gap:1px}.brand b{line-height:1.15}
-main{max-width:960px;margin:0 auto;padding:14px}
+main{max-width:1180px;margin:0 auto;padding:22px}
 .tab{display:none}.tab.on{display:block}
 .grid{display:grid;gap:10px;grid-template-columns:1fr 1fr}
 @media(min-width:720px){.grid{grid-template-columns:repeat(3,1fr)}}
@@ -53,51 +53,26 @@ h2{font-size:17px;margin:4px 0 10px}h3{font-size:14px;margin:14px 0 6px;color:va
 .alert.late{background:var(--rl);border-color:var(--r)}
 .bar{height:9px;border-radius:9px;background:var(--bd);overflow:hidden;margin-top:4px}.bar i{display:block;height:100%;background:var(--r)}
 .empty{text-align:center;color:var(--mu);padding:18px}
-nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--bd);display:flex;justify-content:flex-start;overflow-x:auto;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
-nav button{flex:1 1 0;min-width:54px;max-width:140px;background:none;color:var(--mu);font-size:10px;padding:6px 0;display:flex;flex-direction:column;align-items:center;gap:2px;font-weight:600}
-nav button span{font-size:20px}nav button.on{color:var(--g)}
+#nav{position:fixed;z-index:30;left:0;top:0;bottom:0;width:244px;background:var(--card);border-right:1px solid var(--bd);display:flex;flex-direction:column;gap:5px;overflow-y:auto;padding:18px 12px calc(18px + env(safe-area-inset-bottom,0px));box-shadow:8px 0 28px #00000008}
+.nav-brand{display:flex;align-items:center;gap:10px;padding:4px 9px 18px;margin-bottom:8px;border-bottom:1px solid var(--bd);color:var(--tx)}.nav-mark{width:38px;height:38px;border-radius:12px;background:var(--g);color:#fff;display:grid;place-items:center;font-weight:900;font-size:17px}.nav-brand b{display:block;font-size:16px}.nav-brand small{display:block;color:var(--mu);font-size:11px}.nav-caption{padding:12px 10px 5px;color:var(--mu);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+#nav button{width:100%;max-width:none;min-width:0;flex:none;background:transparent;color:var(--mu);font-size:13px;padding:11px 12px;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:12px;font-weight:650;text-align:left;border-radius:11px}#nav button span{font-size:19px;width:24px;text-align:center}#nav button.on{color:var(--g);background:var(--gl)}#nav button:hover{background:var(--bg);color:var(--tx)}
+#nav-toggle{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;padding:0;background:#ffffff20;color:#fff;font-size:20px;flex:none}#nav-backdrop{display:none}
+@media(min-width:800px){header,main,footer{margin-left:244px}header{padding-left:24px}main{max-width:none;padding:24px clamp(20px,3vw,44px)}footer{padding:16px}}
+@media(max-width:799px){#nav{width:min(82vw,290px);transform:translateX(-105%);transition:transform .22s ease;box-shadow:12px 0 36px #0003}body.nav-open #nav{transform:translateX(0)}#nav-backdrop{position:fixed;inset:0;z-index:25;background:#0007}body.nav-open #nav-backdrop{display:block}main{padding:14px}header{padding:10px 13px}footer{padding-bottom:18px}}
+@media(min-width:800px){#nav-toggle{display:none}}
 dialog{border:1px solid var(--bd);border-radius:16px;background:var(--card);color:var(--tx);width:min(92vw,380px)}
 dialog::backdrop{background:#0008}
 #stock-move-dlg,#stock-history-dlg,#purchase-receive-dlg{width:min(94vw,560px);max-height:88vh;overflow:auto}
 .stock-row{padding:10px 0;border-bottom:1px solid var(--bd)}.stock-row:last-child{border:0}
-#tenant-loading{display:none;position:fixed;inset:0;z-index:100;background:var(--bg);align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:24px;text-align:center}body.tenant-switching #tenant-loading{display:flex}body.tenant-switching main,body.tenant-switching nav,body.tenant-switching footer{visibility:hidden}
+#tenant-loading{display:none;position:fixed;inset:0;z-index:100;background:var(--bg);align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:24px;text-align:center}body.tenant-switching #tenant-loading{display:flex}body.tenant-switching main,body.tenant-switching #nav,body.tenant-switching footer{visibility:hidden}
 #lock{position:fixed;inset:0;background:var(--bg);z-index:99;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:24px;text-align:center}#lock input{max-width:220px;text-align:center;font-size:22px;letter-spacing:6px}
 footer{text-align:center;color:var(--mu);font-size:12px;padding:14px}
-.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:99px;font-size:14px;display:none;z-index:9}
-@media print{body.pr main,body.pr footer{display:none!important}dialog{border:0!important}header,nav,.noprint,.tab:not(#t-rel),footer{display:none!important}.tab#t-rel{display:block!important}body{background:#fff;padding:0}.card{break-inside:avoid}}
-
-/* M7 UI refresh: navegação lateral responsiva, mantendo a paleta original */
-body{padding-bottom:0}
-header{position:sticky;top:0;z-index:20;min-height:66px;padding:12px 22px;gap:14px}
-#nav-toggle{display:none;background:#ffffff24;color:#fff;border:1px solid #ffffff40;font-size:18px;min-width:40px}
-#nav{position:fixed;z-index:30;top:66px;bottom:0;left:0;right:auto;width:236px;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:5px;overflow-y:auto;overflow-x:hidden;padding:18px 12px calc(18px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:0;border-right:1px solid var(--bd)}
-#nav button{flex:none;width:100%;max-width:none;min-height:44px;flex-direction:row;justify-content:flex-start;gap:12px;text-align:left;padding:10px 13px;border-radius:10px;font-size:14px;color:var(--mu)}
-#nav button span{width:24px;text-align:center;font-size:18px}
-#nav button.on{color:var(--g);background:var(--gl);font-weight:700}
-.nav-heading{padding:10px 12px 4px;color:var(--mu);font-size:10px;font-weight:800;letter-spacing:.11em}
-.nav-footer{margin-top:auto;padding:18px 12px 4px;border-top:1px solid var(--bd);color:var(--mu);font-size:11px}
-main{max-width:1280px;margin:0 0 0 236px;padding:22px 26px;min-height:calc(100vh - 66px)}
-header{padding-left:258px}
-footer{margin-left:236px}
-.toast{bottom:22px}
-#nav-backdrop{display:none}
-@media(max-width:760px){
- header{padding:10px 14px;min-height:60px;padding-left:14px}
- #nav-toggle{display:inline-flex;align-items:center;justify-content:center}
- #nav{top:0;left:0;bottom:0;width:min(82vw,290px);padding-top:calc(20px + env(safe-area-inset-top,0px));transform:translateX(-105%);transition:transform .22s ease;box-shadow:12px 0 32px #0002}
- body.nav-open #nav{transform:translateX(0)}
- #nav-backdrop{display:block;position:fixed;inset:0;background:#0007;z-index:25;opacity:0;pointer-events:none;transition:opacity .22s ease}
- body.nav-open #nav-backdrop{opacity:1;pointer-events:auto}
- main{margin:0;padding:14px;min-height:calc(100vh - 60px)}
- footer{margin-left:0}
- .toast{bottom:18px}
-}
-@media print{#nav,#nav-backdrop,#nav-toggle{display:none!important}main,footer{margin:0!important;padding:0!important}}
-
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:99px;font-size:14px;display:none;z-index:9}
+@media print{body.pr main,body.pr footer{display:none!important}dialog{border:0!important}header,#nav,#nav-backdrop,.noprint,.tab:not(#t-rel),footer{display:none!important}.tab#t-rel{display:block!important}body{background:#fff;padding:0}.card{break-inside:avoid}}
 </style>
 </head>
 <body>
-<header><button id="nav-toggle" class="sm gh" type="button" aria-label="Abrir menu" aria-expanded="false">☰</button><div class="brand"><b>M7 ERP</b><small>Gestão integrada · M7 TECH</small></div><button class="sm gh" id="theme" aria-label="Alternar tema">🌓</button></header>
+<header><button id="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">☰</button><div class="brand"><b>M7 ERP</b><small>Gestão integrada · M7 TECH</small></div><button class="sm gh" id="theme" aria-label="Alternar tema">🌓</button></header>
 <div id="tenant-loading"><div style="font-size:38px">🔐</div><h2>Validando empresa</h2><p class="k" id="tenant-loading-msg">Aguarde enquanto carregamos os dados da conta correta…</p><button id="tenant-logout" type="button" class="gh">Sair da conta</button></div>
 <main>
 <section class="tab on" id="t-res">
@@ -187,7 +162,7 @@ footer{margin-left:236px}
  <div class="card"><h2>Produtos</h2><div class="f2"><div><label for="pr-n">Nome</label><input id="pr-n"></div><div><label for="pr-p">Preço (R$)</label><input id="pr-p" type="number" min="0" step="0.01" inputmode="decimal"></div></div><div class="f2"><div><label for="pr-sku">Código / SKU (opcional)</label><input id="pr-sku" maxlength="40" autocomplete="off" autocapitalize="characters"></div><div><label for="pr-bar">Código de barras (opcional)</label><input id="pr-bar" inputmode="numeric" maxlength="14" autocomplete="off" placeholder="Só números"></div></div><div class="f2"><div><label for="pr-unit">Unidade</label><select id="pr-unit"><option>UN</option><option>KG</option><option>G</option><option>L</option><option>ML</option><option>M</option><option>CX</option><option>PCT</option><option>DZ</option></select></div><div><label for="pr-desc">Descrição (opcional)</label><input id="pr-desc" maxlength="120"></div></div><div class="f2"><div><label for="pr-c">Custo (R$, opcional)</label><input id="pr-c" type="number" min="0" step="0.01" inputmode="decimal"><p class="k" id="pr-cost-help">Para produto remoto, o custo é atualizado pelo recebimento de compras.</p></div><div><label for="pr-s">Estoque inicial (opcional)</label><input id="pr-s" type="number" min="0" inputmode="numeric"><p class="k" id="pr-stock-help"></p></div></div><div class="f2"><div><label for="pr-cat">Categoria</label><select id="pr-cat"></select></div><div><label for="pr-min">Estoque mínimo</label><input id="pr-min" type="number" min="0" inputmode="numeric" placeholder="Vazio ou 0 = padrão (3)"></div></div><p class="k" id="pr-margin" aria-live="polite"></p><div class="row2"><button id="pr-add">Adicionar produto</button><button class="gh" id="pr-cancel" style="display:none">Cancelar</button></div><input id="pr-q" type="search" autocomplete="off" placeholder="Buscar produto por nome ou código" style="margin-top:10px"><div id="pr-list"></div></div>
  <div class="card"><h2>Conexão M7 ERP</h2><p class="k">Entre com o e-mail e a senha da sua empresa para guardar vendas, recebimentos, produtos, clientes, despesas e fechamentos de caixa com segurança na nuvem.</p><p id="sb-status" class="k">Verificando disponibilidade da conexão…</p><label for="sb-email">E-mail da conta</label><input id="sb-email" type="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" placeholder="seu@email.com"><label for="sb-pass">Senha</label><div style="display:flex;gap:8px"><input id="sb-pass" type="password" autocomplete="current-password" placeholder="Sua senha" style="flex:1;min-width:0"><button class="gh" id="sb-eye" type="button" aria-label="Mostrar senha" aria-pressed="false" style="width:auto;flex:none;padding:0 16px">👁</button></div><div class="row2"><button id="sb-login" type="button">Entrar na conta</button><button class="gh" id="sb-logout" type="button">Sair</button></div><div class="row2" style="margin-top:8px"><button class="gh" id="sb-forgot" type="button">Esqueci minha senha</button><button class="gh" id="sb-chpw" type="button">Alterar senha</button></div><p id="sb-user" class="k">Não conectado</p><div class="row2"><button id="sb-sync" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar clientes">Sincronizar clientes</button><button id="sb-sync-products" type="button" class="gh" disabled title="Entre em uma empresa para sincronizar o catálogo">Sincronizar produtos</button></div><p id="sb-sync-status" class="k">Entre na conta e valide a empresa para sincronizar clientes com segurança.</p><p id="sb-product-sync-status" class="k">Entre na conta e valide a empresa para sincronizar o catálogo com segurança.</p><div class="row2"><button id="sb-sync-expenses" type="button" class="gh" disabled>Sincronizar despesas</button></div><p id="sb-expense-sync-status" class="k">As despesas antigas só serão enviadas quando você solicitar a sincronização.</p></div>
  <div class="card"><h2>Segurança</h2><label for="pin-n">PIN de acesso (4 a 6 números)</label><input id="pin-n" type="password" inputmode="numeric" maxlength="6" autocomplete="off"><div class="row2"><button id="pin-set">Definir PIN</button><button class="gh" id="pin-off">Remover</button><button class="gh" id="pin-lock">Bloquear</button></div><p class="k" id="pin-st"></p></div>
- <div class="card" id="master-card" style="display:none"><h2>Administração da plataforma</h2><p class="k">Área exclusiva do administrador M7 TECH: cadastre e gerencie os comércios clientes.</p><div class="row2"><button class="gh" id="mc-refresh" type="button">Atualizar lista</button><button id="mc-new" type="button">+ Novo comércio</button></div><label for="mc-filter">Exibir empresas</label><select id="mc-filter"><option value="all">Todas as empresas</option><option value="active">Ativas</option><option value="suspended">Inativas / suspensas</option><option value="closed">Arquivadas / removidas</option></select><div id="mc-last" style="margin-top:8px"></div><div id="mc-list"></div></div>
+ <div class="card" id="master-card" style="display:none"><h2>Administração da plataforma</h2><p class="k">Área exclusiva do administrador M7 TECH: cadastre e gerencie os comércios clientes.</p><div class="row2"><button class="gh" id="mc-refresh" type="button">Atualizar lista</button><button id="mc-new" type="button">+ Novo comércio</button></div><div id="mc-last" style="margin-top:8px"></div><div id="mc-list"></div></div>
  <div class="card" id="bill-card"><h2>Assinatura M7 ERP</h2><p class="k" id="bill-note">Entre na sua conta para ver a assinatura.</p><div id="bill-info"></div><div id="bill-form" style="display:none"><label for="bill-type">Forma de pagamento</label><select id="bill-type"><option value="PIX">Pix</option><option value="BOLETO">Boleto</option><option value="CREDIT_CARD">Cartão de crédito</option><option value="UNDEFINED">Escolher na hora de pagar</option></select><label for="bill-doc">CPF ou CNPJ (se o comércio ainda não tiver cadastrado)</label><input id="bill-doc" inputmode="numeric" maxlength="18" autocomplete="off"></div><div class="row2"><button class="gh" id="bill-refresh" type="button">Ver assinatura</button><button id="bill-sub" type="button" style="display:none">Assinar</button><button class="red" id="bill-cancel" type="button" style="display:none">Cancelar assinatura</button></div></div>
  <div class="card" id="wipe-card"><h2>Resetar sistema</h2><p class="k" id="wipe-note"></p><div class="row2" id="wipe-btns"><button class="gh" id="wipe-hist" type="button">Apagar histórico</button><button class="red" id="wipe-all" type="button">Resetar tudo</button></div></div>
  <div class="card" id="audit-card" style="display:none"><h2>Registro de auditoria</h2><p class="k">Operações sensíveis feitas nesta empresa. Somente leitura: ninguém pode editar ou apagar.</p><div class="row2"><button class="gh" id="audit-load" type="button">Ver registro</button></div><div id="audit-list"></div></div>
@@ -195,7 +170,16 @@ footer{margin-left:236px}
 </section>
 </main>
 <footer class="noprint"><div class="row2 bk" style="max-width:420px;margin:0 auto 10px"><button class="sm gh" id="bk-copy">Copiar backup</button><button class="sm gh" id="bk-load">Restaurar backup</button></div>M7 ERP · desenvolvido pela M7 TECH · histórico local e vendas remotas quando conectado</footer>
-<div id="nav-backdrop" aria-hidden="true"></div><nav id="nav" aria-label="Navegação principal"><div class="nav-heading">MENU PRINCIPAL</div><button class="on" data-go="res"><span>📊</span>Resumo</button><button data-go="ent"><span>💰</span>Entradas</button><button data-go="rec"><span>⏳</span>Fiados</button><button data-go="gas"><span>💸</span>Gastos</button><button data-go="rel"><span>📈</span>Relatórios</button><div class="nav-heading">GESTÃO</div><button data-go="comp"><span>🛒</span>Compras</button><button data-go="cad"><span>👥</span>Cadastros</button><div class="nav-footer">M7 ERP · M7 TECH</div></nav>
+<div id="nav-backdrop" aria-hidden="true"></div>
+<nav id="nav" aria-label="Navegação principal">
+ <div class="nav-brand"><div class="nav-mark">M7</div><div><b>M7 ERP</b><small>Gestão integrada</small></div></div>
+ <div class="nav-caption">Visão geral</div>
+ <button class="on" data-go="res"><span>📊</span>Resumo</button>
+ <div class="nav-caption">Operação</div>
+ <button data-go="ent"><span>💰</span>Entradas</button><button data-go="rec"><span>⏳</span>Fiados</button><button data-go="gas"><span>💸</span>Gastos</button><button data-go="comp"><span>🛒</span>Compras</button>
+ <div class="nav-caption">Análises e gestão</div>
+ <button data-go="rel"><span>📈</span>Relatórios</button><button data-go="cad"><span>👥</span>Cadastros e integrações</button>
+</nav>
 <div id="lock"><div style="font-size:42px">🔒</div><h2>M7 ERP</h2><p class="k">Digite o PIN para entrar</p><input id="lk-in" type="password" inputmode="numeric" maxlength="6" autocomplete="off"><button id="lk-ok">Entrar</button></div>
 <dialog id="dlg"><h2 id="dl-t">Confirmar recebimento</h2><p class="k" id="dl-i"></p>
  <label for="dl-v">Valor recebido (R$)</label><input id="dl-v" type="number" step="0.01" inputmode="decimal">
@@ -1031,8 +1015,12 @@ function buildReceiptPaymentPlan(input,state,idFactory){
 function toast(m){const t=$("toast");t.textContent=m;t.style.display="block";clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display="none",2200)}
 
 // navegação
-function go(t){document.body.dataset.tab=t;document.body.classList.remove("nav-open");const toggle=document.getElementById("nav-toggle");if(toggle)toggle.setAttribute("aria-expanded","false");if(typeof syncPixBtn==="function")syncPixBtn();document.querySelectorAll(".tab").forEach(e=>e.classList.toggle("on",e.id==="t-"+t));document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.go===t));scrollTo(0,0);render()}
-document.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g)go(g.dataset.go)}); $("nav-toggle").addEventListener("click",()=>{const open=!document.body.classList.contains("nav-open");document.body.classList.toggle("nav-open",open);$("nav-toggle").setAttribute("aria-expanded",String(open))});$("nav-backdrop").addEventListener("click",()=>{document.body.classList.remove("nav-open");$("nav-toggle").setAttribute("aria-expanded","false")});
+function closeNav(){document.body.classList.remove("nav-open");const b=$("nav-toggle");if(b)b.setAttribute("aria-expanded","false")}
+function go(t){document.body.dataset.tab=t;if(typeof syncPixBtn==="function")syncPixBtn();document.querySelectorAll(".tab").forEach(e=>e.classList.toggle("on",e.id==="t-"+t));
+ document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.go===t));closeNav();scrollTo(0,0);render()}
+$("nav-toggle").onclick=()=>{const open=!document.body.classList.contains("nav-open");document.body.classList.toggle("nav-open",open);$("nav-toggle").setAttribute("aria-expanded",String(open))};
+$("nav-backdrop").onclick=closeNav;
+document.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g)go(g.dataset.go)});
 
 // tema
 $("theme").onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;r.dataset.theme=dark?"light":"dark"};
@@ -2431,7 +2419,7 @@ pixLoadFields();syncPixBtn();
 
 
 /* ===== Comercial: termos, primeiros passos, suporte, extrato do cliente e planilha CSV ===== */
-const APP_VERSION="v39";let M7_SUPPORT_WHATS="";
+const APP_VERSION="v40";let M7_SUPPORT_WHATS="";
 const TERMS_KEY="m7:terms:v1";
 const TERMS_HTML=`<h3>Termos de Uso</h3><p><small>Versão 1</small></p>
 <p><b>1. O que é o M7 ERP.</b> Aplicativo de gestão para pequenos comércios (vendas, estoque, fiado, gastos e caixa), fornecido pela M7 TECH.</p>
@@ -2514,12 +2502,16 @@ function masterSync(){const c=$("master-card");if(!c)return;c.style.display=IS_M
 async function mcLoad(){const box=$("mc-list");box.innerHTML='<p class="k">Carregando…</p>';
  try{const{data,error}=await sb.rpc("admin_list_companies_v1");if(error)throw error;MC_ROWS=data||[];mcRender()}
  catch(e){box.innerHTML="";const p=document.createElement("p");p.className="k";p.textContent="Não foi possível carregar: "+authMsg(e);box.appendChild(p)}}
-function mcRender(){const filter=$("mc-filter")?.value||"all";const rows=MC_ROWS.filter(r=>filter==="all"||r.status===filter);$("mc-list").innerHTML=rows.length?rows.map(r=>{const on=r.status==="active",closed=r.status==="closed",own=(r.owner_emails||[]).join(", ")||"—",pen=(r.pending_emails||[]).join(", ");return`<div class="it"><div><b>${esc(r.trade_name||r.legal_name)}</b><small>${esc(r.legal_name)}${r.document_number?" · "+esc(r.document_number):""}</small><small>${MC_ST[r.status]||esc(r.status)} · ${Number(r.active_members||0)} usuário(s) · dono: ${esc(own)}${r.pending_invites?` · convite pendente: ${esc(pen)}`:""}</small><div class="acts"><button class="sm gh" type="button" data-mc-users="${esc(r.company_id)}">Usuários</button>${closed?`<button class="sm gh" type="button" data-mc-status="${esc(r.company_id)}" data-to="active">Reabrir</button>`:`<button class="sm gh" type="button" data-mc-status="${esc(r.company_id)}" data-to="${on?"suspended":"active"}">${on?"Suspender":"Reativar"}</button><button class="sm red" type="button" data-mc-status="${esc(r.company_id)}" data-to="closed">Remover / arquivar</button>`}</div></div></div>`}).join(""):'<p class="k">Nenhuma empresa nesta categoria.</p>'}
-$("mc-refresh").onclick=()=>mcLoad();$("mc-filter").addEventListener("change",mcRender);
+function mcRender(){$("mc-list").innerHTML=MC_ROWS.length?MC_ROWS.map(r=>{const on=r.status==="active",closed=r.status==="closed",own=(r.owner_emails||[]).join(", ")||"—",pen=(r.pending_emails||[]).join(", ");
+ const action=closed?`<button class="sm gh" type="button" data-mc-status="${esc(r.company_id)}" data-to="active">Reativar</button>`:`<button class="sm gh" type="button" data-mc-status="${esc(r.company_id)}" data-to="${on?"suspended":"active"}">${on?"Suspender":"Reativar"}</button><button class="sm red" type="button" data-mc-status="${esc(r.company_id)}" data-to="closed">Remover empresa</button>`;
+ return`<div class="it"><div><b>${esc(r.trade_name||r.legal_name)}</b><small>${esc(r.legal_name)}${r.document_number?" · "+esc(r.document_number):""}</small><small>${MC_ST[r.status]||esc(r.status)} · ${Number(r.active_members||0)} usuário(s) · dono: ${esc(own)}${r.pending_invites?` · convite pendente: ${esc(pen)}`:""}</small><div class="acts"><button class="sm gh" type="button" data-mc-users="${esc(r.company_id)}">Usuários</button>${action}</div></div></div>`}).join(""):'<p class="k">Nenhum comércio cadastrado.</p>'}
+$("mc-refresh").onclick=()=>mcLoad();
 $("mc-list").onclick=async e=>{const u=e.target.closest("[data-mc-users]");if(u)return mcUsers(u.dataset.mcUsers);
  const s=e.target.closest("[data-mc-status]");if(!s)return;const r=MC_ROWS.find(x=>x.company_id===s.dataset.mcStatus);if(!r)return;const to=s.dataset.to;
- const actionLabel=to==="closed"?"Arquivar / remover":to==="suspended"?"Suspender":"Reativar";const detail=to==="closed"?"A empresa sairá da operação e ficará na lista de arquivadas. O registro e o histórico serão preservados; não é exclusão física.":to==="suspended"?"Os usuários perderão o acesso até a reativação.":"Os usuários voltarão a ter acesso.";if(!confirm(actionLabel+" "+(r.trade_name||r.legal_name)+"? "+detail))return;
- try{const{error}=await sb.rpc("admin_set_company_status_v1",{p_company_id:r.company_id,p_status:to});if(error)throw error;toast(to==="closed"?"Empresa arquivada e removida da operação.":to==="suspended"?"Comércio suspenso.":"Comércio reativado.");mcLoad()}catch(x){toast(authMsg(x))}};
+ const title=r.trade_name||r.legal_name;
+ const message=to==="closed"?`Remover ${title} da lista de empresas ativas? A empresa será encerrada e perderá o acesso, mas os registros e históricos serão preservados. Esta ação pode ser revertida reativando a empresa.`:to==="suspended"?`Suspender ${title}? Os usuários perdem o acesso até você reativar.`:`Reativar ${title}? Os usuários voltarão a ter acesso.`;
+ if(!confirm(message))return;
+ try{const{error}=await sb.rpc("admin_set_company_status_v1",{p_company_id:r.company_id,p_status:to});if(error)throw error;toast(to==="suspended"?"Empresa suspensa.":to==="closed"?"Empresa encerrada; histórico preservado.":"Empresa reativada.");mcLoad()}catch(x){toast(authMsg(x))}};
 $("mc-new").onclick=()=>{["mc-name","mc-trade","mc-doc","mc-email"].forEach(i=>$(i).value="");$("mc-msg").textContent="";$("mcdlg").showModal()};
 $("mc-x").onclick=()=>$("mcdlg").close();
 $("mc-ok").onclick=async()=>{const name=$("mc-name").value.trim(),trade=$("mc-trade").value.trim(),doc=$("mc-doc").value.replace(/\D/g,""),email=$("mc-email").value.trim().toLowerCase(),m=$("mc-msg");
